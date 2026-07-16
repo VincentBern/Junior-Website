@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionnaire — Junior</title>
+<meta name="description" content="Répondez au questionnaire de diagnostic Junior.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #F6EEDB;
+    --cream-deep: #EFE4CB;
+    --ink: #17140F;
+    --ink-soft: #5B5646;
+    --line: #DCD0AE;
+    --accent: #00A86B;
+    --accent-2: #00895A;
+    --error: #B3261E;
+    --font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono{ letter-spacing: 0.06em; text-transform: uppercase; }
+  .wrap{ max-width: 760px; margin: 0 auto; padding: 0 32px; }
+
+  .top-rule{ border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 14px 0; }
+  .top-rule .wrap{ max-width: 1000px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .top-rule .brand{ display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .top-rule .brand img{ height: 26px; width: auto; display: block; }
+  .top-rule .word{ font-size: 13px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent-2); }
+  .top-rule .tag{ font-size: 11px; color: var(--ink-soft); }
+
+  main{ padding: 56px 0 80px; }
+
+  h1.page-title{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+  p.page-sub{
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0 0 34px;
+    max-width: 56ch;
+  }
+
+  .message-card{
+    background: var(--cream-deep);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 32px;
+    text-align: center;
+  }
+  .message-card p{ margin: 0; font-size: 14px; }
+
+  .dimension{ margin-bottom: 40px; }
+  .dimension h2{
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .question{ margin-bottom: 26px; }
+  .question > .q-label{
+    font-size: 13px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .scale{
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .scale label{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    width: 34px;
+  }
+  .scale input{ margin: 0; accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; }
+  .scale-ends{ display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ink-soft); margin-top: 6px; max-width: 100%; }
+
+  textarea{
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    padding: 12px 14px;
+    background: var(--cream-deep);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--ink);
+    min-height: 90px;
+    resize: vertical;
+  }
+  textarea:focus{ outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    padding: 14px 24px;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+    background: var(--accent);
+    color: var(--cream);
+    border-color: var(--accent);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  }
+  .btn:hover{ background: var(--accent-2); border-color: var(--accent-2); transform: translateY(-1px); }
+  .btn:disabled{ opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .submit-row{ margin-top: 20px; }
+  .form-error{ color: var(--error); font-size: 12.5px; margin-top: 14px; display: none; }
+  .form-error.show{ display: block; }
+
+  #app-loading{ color: var(--ink-soft); font-size: 13px; }
+  [hidden]{ display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top-rule">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="Junior">
+      <span class="word">JUNIOR</span>
+    </a>
+    <span class="mono tag">Questionnaire</span>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="app-loading">Chargement…</div>
+
+  <div id="invalid-view" hidden>
+    <div class="message-card"><p id="invalid-message">Lien invalide.</p></div>
+  </div>
+
+  <div id="already-view" hidden>
+    <div class="message-card"><p>Merci, vos réponses ont déjà été soumises.</p></div>
+  </div>
+
+  <div id="done-view" hidden>
+    <div class="message-card"><p>Merci ! Vos réponses ont été enregistrées.</p></div>
+  </div>
+
+  <div id="form-view" hidden>
+    <h1 class="page-title" id="form-title">Questionnaire</h1>
+    <p class="page-sub" id="form-sub"></p>
+    <form id="questionnaire-form"></form>
+    <div class="form-error" id="submit-error">L'envoi a échoué. Veuillez réessayer.</div>
+  </div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var API_BASE = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    ? "http://localhost:8787"
+    : "https://api.junior.coach";
+
+  function show(id){
+    ["app-loading", "invalid-view", "already-view", "done-view", "form-view"].forEach(function(v){
+      document.getElementById(v).hidden = (v !== id);
+    });
+  }
+
+  var params = new URLSearchParams(location.search);
+  var token = params.get("token");
+
+  if (!token) {
+    document.getElementById("invalid-message").textContent = "Lien invalide.";
+    show("invalid-view");
+    return;
+  }
+
+  var answersKey = "diagnostic_answers_" + token;
+  var answers = {};
+  try {
+    answers = JSON.parse(localStorage.getItem(answersKey)) || {};
+  } catch (e) {
+    answers = {};
+  }
+
+  // TEMPORARY: GET /api/diagnostic/respond/:token isn't built yet (placeholder
+  // API only, see conversation) — bypass the real request so the
+  // questionnaire can be tested locally. Pass ?offer=commercial|strategique
+  // to test a single volet; defaults to "combo" (both). Restore the
+  // commented-out fetch() below once a real endpoint exists.
+  loadQuestions(params.get("offer") || "combo", "Répondant test");
+
+  /*
+  fetch(API_BASE + "/api/diagnostic/respond/" + encodeURIComponent(token))
+    .then(function(res){
+      if (res.status === 404) { showInvalid(); return null; }
+      if (!res.ok) throw new Error("request_failed");
+      return res.json();
+    })
+    .then(function(data){
+      if (!data) return;
+      if (data.alreadySubmitted) {
+        show("already-view");
+        return;
+      }
+      loadQuestions(data.offer, data.respondentName);
+    })
+    .catch(function(){
+      showInvalid();
+    });
+  */
+
+  function showInvalid(){
+    document.getElementById("invalid-message").textContent = "Lien invalide ou expiré.";
+    show("invalid-view");
+  }
+
+  function loadQuestions(offer, respondentName){
+    var files = offer === "combo"
+      ? ["diagnostic-questions/commercial.json", "diagnostic-questions/strategique.json"]
+      : ["diagnostic-questions/" + offer + ".json"];
+
+    Promise.all(files.map(function(f){ return fetch(f).then(function(r){ return r.json(); }); }))
+      .then(function(docs){
+        renderForm(docs, respondentName);
+        show("form-view");
+      })
+      .catch(function(){
+        showInvalid();
+      });
+  }
+
+  function escapeHtml(s){
+    return String(s || "").replace(/[&<>"']/g, function(c){
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function renderForm(docs, respondentName){
+    document.getElementById("form-title").textContent = docs.map(function(d){ return d.title; }).join(" + ");
+    document.getElementById("form-sub").textContent = "Bonjour " + respondentName + ". Répondez à chaque question du mieux que vous pouvez; vos réponses sont sauvegardées automatiquement.";
+
+    var form = document.getElementById("questionnaire-form");
+    form.innerHTML = "";
+
+    docs.forEach(function(doc){
+      if (docs.length > 1) {
+        var volet = document.createElement("h2");
+        volet.style.fontFamily = "var(--font-display)";
+        volet.style.margin = "0 0 20px";
+        volet.textContent = "Volet " + doc.title.replace(/^Diagnostic /, "");
+        form.appendChild(volet);
+      }
+
+      doc.dimensions.forEach(function(dim){
+        var section = document.createElement("section");
+        section.className = "dimension";
+        var h2 = document.createElement("h2");
+        h2.textContent = dim.label;
+        section.appendChild(h2);
+
+        dim.questions.forEach(function(q){
+          var qWrap = document.createElement("div");
+          qWrap.className = "question";
+          var label = document.createElement("div");
+          label.className = "q-label";
+          label.textContent = q.label;
+          qWrap.appendChild(label);
+
+          if (q.type === "scale") {
+            var scale = document.createElement("div");
+            scale.className = "scale";
+            for (var i = 1; i <= 10; i++) {
+              var lbl = document.createElement("label");
+              var input = document.createElement("input");
+              input.type = "radio";
+              input.name = q.id;
+              input.value = String(i);
+              if (String(answers[q.id]) === String(i)) input.checked = true;
+              input.addEventListener("change", function(){
+                answers[q.id] = Number(this.value);
+                persist();
+              });
+              lbl.appendChild(input);
+              var num = document.createElement("span");
+              num.textContent = i;
+              lbl.appendChild(num);
+              scale.appendChild(lbl);
+            }
+            qWrap.appendChild(scale);
+            var ends = document.createElement("div");
+            ends.className = "scale-ends";
+            ends.innerHTML = "<span>1 — Pas du tout</span><span>10 — Totalement</span>";
+            qWrap.appendChild(ends);
+          } else {
+            var textarea = document.createElement("textarea");
+            textarea.name = q.id;
+            textarea.value = answers[q.id] || "";
+            textarea.addEventListener("input", function(){
+              answers[q.id] = this.value;
+              persist();
+            });
+            qWrap.appendChild(textarea);
+          }
+
+          section.appendChild(qWrap);
+        });
+
+        form.appendChild(section);
+      });
+    });
+
+    var submitRow = document.createElement("div");
+    submitRow.className = "submit-row";
+    var submitBtn = document.createElement("button");
+    submitBtn.type = "button";
+    submitBtn.className = "btn";
+    submitBtn.id = "submit-answers-btn";
+    submitBtn.textContent = "Soumettre mes réponses";
+    submitRow.appendChild(submitBtn);
+    form.appendChild(submitRow);
+
+    submitBtn.addEventListener("click", function(){
+      submitAnswers(submitBtn);
+    });
+  }
+
+  function persist(){
+    localStorage.setItem(answersKey, JSON.stringify(answers));
+  }
+
+  function submitAnswers(btn){
+    var errorEl = document.getElementById("submit-error");
+    errorEl.classList.remove("show");
+    btn.disabled = true;
+
+    // TEMPORARY: POST /api/diagnostic/respond/:token isn't built yet
+    // (placeholder API only, see conversation) — bypass the real request so
+    // the flow can be tested locally. Restore the commented-out fetch()
+    // below once a real endpoint exists.
+    setTimeout(function(){
+      localStorage.removeItem(answersKey);
+      show("done-view");
+    }, 250);
+
+    /*
+    fetch(API_BASE + "/api/diagnostic/respond/" + encodeURIComponent(token), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answers: answers })
+    })
+      .then(function(res){
+        if (!res.ok) throw new Error("request_failed");
+        return res.json();
+      })
+      .then(function(){
+        localStorage.removeItem(answersKey);
+        show("done-view");
+      })
+      .catch(function(){
+        errorEl.classList.add("show");
+        btn.disabled = false;
+      });
+    */
+  }
+})();
+</script>
+
+</body>
+</html>

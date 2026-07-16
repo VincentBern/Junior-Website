@@ -1,0 +1,37 @@
+{
+  "offer": "commercial",
+  "title": "Diagnostic Commercial",
+  "placeholder": true,
+  "dimensions": [
+    { "id": "d1", "label": "Connaissance du client (ICP)", "questions": [
+      { "id": "com_d1_q1", "type": "scale", "label": "Dans quelle mesure votre équipe peut-elle décrire précisément votre client idéal (secteur, taille, poste du décideur) ?" },
+      { "id": "com_d1_q2", "type": "scale", "label": "À quel point vos décisions marketing et vente sont-elles basées sur des données réelles sur vos clients plutôt que sur des suppositions ?" },
+      { "id": "com_d1_q3", "type": "scale", "label": "Dans quelle mesure votre équipe est-elle alignée sur qui est (et qui n'est pas) un bon client pour vous ?" },
+      { "id": "com_d1_text", "type": "text", "label": "Décrivez en quelques phrases votre client idéal actuel." }
+    ]},
+    { "id": "d2", "label": "Proposition de valeur", "questions": [
+      { "id": "com_d2_q1", "type": "scale", "label": "Dans quelle mesure votre proposition de valeur est-elle claire et différenciée aux yeux de vos clients ?" },
+      { "id": "com_d2_q2", "type": "scale", "label": "À quel point votre équipe de vente utilise-t-elle un message cohérent d'un représentant à l'autre ?" },
+      { "id": "com_d2_q3", "type": "scale", "label": "Dans quelle mesure vos clients peuvent-ils expliquer, dans leurs mots, pourquoi ils vous ont choisi ?" },
+      { "id": "com_d2_text", "type": "text", "label": "Quel est, selon vous, le principal avantage que vous offrez par rapport à vos concurrents ?" }
+    ]},
+    { "id": "d3", "label": "Positionnement concurrentiel", "questions": [
+      { "id": "com_d3_q1", "type": "scale", "label": "Dans quelle mesure connaissez-vous les forces et faiblesses de vos 2-3 principaux concurrents ?" },
+      { "id": "com_d3_q2", "type": "scale", "label": "À quel point votre positionnement de prix est-il justifié par rapport à la valeur perçue ?" },
+      { "id": "com_d3_q3", "type": "scale", "label": "Dans quelle mesure suivez-vous activement les changements chez vos concurrents ?" },
+      { "id": "com_d3_text", "type": "text", "label": "Nommez un concurrent que vous perdez souvent face à, et pourquoi." }
+    ]},
+    { "id": "d4", "label": "Parcours client & processus de vente", "questions": [
+      { "id": "com_d4_q1", "type": "scale", "label": "Dans quelle mesure votre processus de vente est-il documenté et suivi de façon cohérente ?" },
+      { "id": "com_d4_q2", "type": "scale", "label": "À quel point le parcours d'achat de vos clients est-il fluide, du premier contact à la signature ?" },
+      { "id": "com_d4_q3", "type": "scale", "label": "Dans quelle mesure mesurez-vous les taux de conversion à chaque étape de votre entonnoir ?" },
+      { "id": "com_d4_text", "type": "text", "label": "Où perdez-vous le plus d'opportunités dans votre parcours de vente actuel ?" }
+    ]},
+    { "id": "d5", "label": "Pilotage commercial & prix", "questions": [
+      { "id": "com_d5_q1", "type": "scale", "label": "Dans quelle mesure votre stratégie de prix reflète-t-elle la valeur réelle livrée au client ?" },
+      { "id": "com_d5_q2", "type": "scale", "label": "À quel point suivez-vous des indicateurs de performance commerciale de façon régulière (hebdo/mensuel) ?" },
+      { "id": "com_d5_q3", "type": "scale", "label": "Dans quelle mesure votre équipe utilise-t-elle ces indicateurs pour ajuster ses actions ?" },
+      { "id": "com_d5_text", "type": "text", "label": "Quel indicateur commercial voudriez-vous suivre, mais que vous ne suivez pas encore ?" }
+    ]}
+  ]
+}

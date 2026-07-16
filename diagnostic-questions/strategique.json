@@ -1,0 +1,37 @@
+{
+  "offer": "strategique",
+  "title": "Diagnostic Stratégique",
+  "placeholder": true,
+  "dimensions": [
+    { "id": "d1", "label": "Vision & ambition", "questions": [
+      { "id": "strat_d1_q1", "type": "scale", "label": "Dans quelle mesure l'équipe de direction partage-t-elle une vision commune à 3-5 ans ?" },
+      { "id": "strat_d1_q2", "type": "scale", "label": "À quel point cette vision est-elle connue et comprise par l'ensemble de l'organisation ?" },
+      { "id": "strat_d1_q3", "type": "scale", "label": "Dans quelle mesure vos décisions du quotidien sont-elles alignées avec cette ambition à long terme ?" },
+      { "id": "strat_d1_text", "type": "text", "label": "Résumez en une phrase où vous voulez être dans 3 ans." }
+    ]},
+    { "id": "d2", "label": "Modèle d'affaires", "questions": [
+      { "id": "strat_d2_q1", "type": "scale", "label": "Dans quelle mesure votre modèle de revenus est-il clair et bien compris par toute l'équipe de direction ?" },
+      { "id": "strat_d2_q2", "type": "scale", "label": "À quel point votre modèle d'affaires actuel est-il rentable et scalable ?" },
+      { "id": "strat_d2_q3", "type": "scale", "label": "Dans quelle mesure avez-vous validé vos hypothèses clés de modèle d'affaires avec des données réelles ?" },
+      { "id": "strat_d2_text", "type": "text", "label": "Quelle hypothèse de votre modèle d'affaires vous inquiète le plus en ce moment ?" }
+    ]},
+    { "id": "d3", "label": "Objectifs & indicateurs (OKR/KPI)", "questions": [
+      { "id": "strat_d3_q1", "type": "scale", "label": "Dans quelle mesure vos objectifs annuels sont-ils formalisés et mesurables ?" },
+      { "id": "strat_d3_q2", "type": "scale", "label": "À quel point votre équipe suit-elle ces objectifs de façon régulière (hebdo/mensuel) ?" },
+      { "id": "strat_d3_q3", "type": "scale", "label": "Dans quelle mesure vos KPI actuels vous permettent-ils de détecter un problème avant qu'il devienne critique ?" },
+      { "id": "strat_d3_text", "type": "text", "label": "Quel est votre objectif le plus important cette année, et où en êtes-vous ?" }
+    ]},
+    { "id": "d4", "label": "Exécution & priorisation", "questions": [
+      { "id": "strat_d4_q1", "type": "scale", "label": "Dans quelle mesure votre équipe complète-t-elle ce qui a été planifié, sans dérive constante ?" },
+      { "id": "strat_d4_q2", "type": "scale", "label": "À quel point les priorités sont-elles claires pour chaque membre de l'équipe de direction ?" },
+      { "id": "strat_d4_q3", "type": "scale", "label": "Dans quelle mesure savez-vous dire non à des opportunités qui ne sont pas prioritaires ?" },
+      { "id": "strat_d4_text", "type": "text", "label": "Quel projet ou initiative devrait être arrêté pour libérer de la capacité ?" }
+    ]},
+    { "id": "d5", "label": "Maturité organisationnelle", "questions": [
+      { "id": "strat_d5_q1", "type": "scale", "label": "Dans quelle mesure vos processus internes sont-ils documentés (pas juste dans la tête de quelqu'un) ?" },
+      { "id": "strat_d5_q2", "type": "scale", "label": "À quel point votre organisation pourrait-elle fonctionner efficacement si un membre clé de l'équipe partait demain ?" },
+      { "id": "strat_d5_q3", "type": "scale", "label": "Dans quelle mesure votre structure actuelle supporte-t-elle votre croissance prévue pour les 12 prochains mois ?" },
+      { "id": "strat_d5_text", "type": "text", "label": "Quelle est la plus grande lacune organisationnelle qui freine votre croissance actuellement ?" }
+    ]}
+  ]
+}

@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic — Junior</title>
+<meta name="description" content="Lancez un diagnostic Junior : commercial, stratégique ou combiné.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #F6EEDB;
+    --cream-deep: #EFE4CB;
+    --ink: #17140F;
+    --ink-soft: #5B5646;
+    --line: #DCD0AE;
+    --accent: #00A86B;
+    --accent-2: #00895A;
+    --error: #B3261E;
+    --font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono{ letter-spacing: 0.06em; text-transform: uppercase; }
+  .wrap{ max-width: 760px; margin: 0 auto; padding: 0 32px; }
+
+  .top-rule{ border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 14px 0; }
+  .top-rule .wrap{ max-width: 1000px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .top-rule .brand{ display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .top-rule .brand img{ height: 26px; width: auto; display: block; }
+  .top-rule .word{ font-size: 13px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent-2); }
+  .top-rule .tag{ font-size: 11px; color: var(--ink-soft); }
+
+  main{ padding: 56px 0 80px; }
+
+  .progress{ display: flex; gap: 10px; margin-bottom: 36px; flex-wrap: wrap; }
+  .progress .dot{
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-soft); padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
+  }
+  .progress .dot.current{ color: var(--cream); background: var(--accent); border-color: var(--accent); }
+  .progress .dot.done{ color: var(--accent-2); border-color: var(--accent-2); }
+
+  h1.page-title{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+  p.page-sub{
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0 0 34px;
+    max-width: 56ch;
+  }
+
+  .step{ display: none; }
+  .step.active{ display: block; }
+
+  .offer-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px; }
+  .offer-card{
+    background: var(--cream-deep);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px 18px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .offer-card:hover{ transform: translateY(-2px); }
+  .offer-card.selected{ border-color: var(--accent); border-width: 2px; }
+  .offer-card h3{
+    font-family: var(--font-display);
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .offer-card p{ margin: 0; font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+
+  .field{ margin-bottom: 18px; }
+  .field label{
+    display: block;
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .field input, .field textarea{
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    padding: 11px 13px;
+    background: var(--cream-deep);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--ink);
+  }
+  .field input:focus, .field textarea:focus{ outline: 2px solid var(--accent); outline-offset: 1px; }
+  .field .err{ color: var(--error); font-size: 11.5px; margin-top: 5px; display: none; }
+  .field.invalid .err{ display: block; }
+  .field.invalid input{ border-color: var(--error); }
+
+  .question textarea{
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    padding: 12px 14px;
+    background: var(--cream-deep);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--ink);
+    min-height: 90px;
+    resize: vertical;
+  }
+  .question textarea:focus{ outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .payment-box{
+    background: var(--cream-deep);
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    padding: 22px;
+    margin: 26px 0;
+  }
+  .payment-box h3{ font-family: var(--font-display); margin: 0 0 8px; font-size: 1rem; }
+  .payment-box p{ margin: 0 0 16px; font-size: 12.5px; color: var(--ink-soft); }
+
+  .respondent-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: start;
+    margin-bottom: 14px;
+  }
+  .respondent-row .field{ margin-bottom: 0; }
+  .respondent-row .remove-btn{
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--ink-soft);
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+  }
+  .respondent-row .remove-btn:disabled{ opacity: 0.35; cursor: not-allowed; }
+  .respondent-row .remove-btn:not(:disabled):hover{ border-color: var(--error); color: var(--error); }
+
+  .add-row-btn{
+    background: none;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    color: var(--accent-2);
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    margin-bottom: 26px;
+  }
+  .add-row-btn:hover{ border-color: var(--accent-2); }
+
+  .summary-card{
+    background: var(--cream-deep);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .summary-card h3{ font-family: var(--font-display); margin: 0 0 12px; font-size: 1rem; }
+  .summary-card dl{ margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; }
+  .summary-card dt{ color: var(--ink-soft); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .summary-card dd{ margin: 0; font-size: 13px; }
+  .summary-card .respondent-list{ margin-top: 4px; }
+  .summary-card .respondent-list li{ font-size: 13px; margin-bottom: 4px; }
+
+  .btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    padding: 14px 24px;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+    background: none;
+    color: var(--ink);
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  }
+  .btn-primary{ background: var(--accent); color: var(--cream); border-color: var(--accent); }
+  .btn-primary:hover{ background: var(--accent-2); border-color: var(--accent-2); transform: translateY(-1px); }
+  .btn-primary:disabled{ opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-secondary{ background: transparent; color: var(--ink); }
+  .btn-secondary:hover{ background: var(--ink); color: var(--cream); }
+  .btn:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .btn-row{ display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+
+  .respondent-banner{
+    background: var(--cream-deep);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 30px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .respondent-banner strong{ color: var(--ink); }
+
+  .dimension{ margin-bottom: 40px; }
+  .dimension h2{
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .question{ margin-bottom: 26px; }
+  .question > .q-label{ font-size: 13px; margin-bottom: 12px; line-height: 1.6; }
+
+  .scale{ display: flex; gap: 6px; flex-wrap: wrap; }
+  .scale label{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    width: 34px;
+  }
+  .scale input{ margin: 0; accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; }
+  .scale-ends{ display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ink-soft); margin-top: 6px; max-width: 100%; }
+
+  .form-error{
+    color: var(--error);
+    font-size: 12.5px;
+    margin-top: 14px;
+    display: none;
+  }
+  .form-error.show{ display: block; }
+
+  @media (max-width: 640px){
+    .offer-grid{ grid-template-columns: 1fr; }
+    .respondent-row{ grid-template-columns: 1fr; }
+    .respondent-row .remove-btn{ justify-self: start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-rule">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="Junior">
+      <span class="word">JUNIOR</span>
+    </a>
+    <span class="mono tag">Diagnostic</span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <div class="progress" id="progress">
+    <span class="dot" data-step="1">1. Offre</span>
+    <span class="dot" data-step="2">2. Vos infos</span>
+    <span class="dot" data-step="3">3. Répondants</span>
+    <span class="dot" data-step="4">4. Envoi</span>
+  </div>
+
+  <!-- Step 1: Offer selection -->
+  <section class="step" data-step="1">
+    <h1 class="page-title">Choisissez votre diagnostic</h1>
+    <p class="page-sub">Sélectionnez l'offre qui correspond le mieux à votre besoin. Vous pourrez ajouter un ou plusieurs répondants à l'étape suivante.</p>
+
+    <div class="offer-grid">
+      <button type="button" class="offer-card" data-offer="commercial">
+        <h3>Commercial</h3>
+        <p>Diagnostic centré sur la connaissance client, la proposition de valeur et le processus de vente.</p>
+      </button>
+      <button type="button" class="offer-card" data-offer="strategique">
+        <h3>Stratégique</h3>
+        <p>Diagnostic centré sur la vision, le modèle d'affaires et la maturité organisationnelle.</p>
+      </button>
+      <button type="button" class="offer-card" data-offer="combo">
+        <h3>Combo</h3>
+        <p>Les deux volets, commercial et stratégique, dans un seul diagnostic.</p>
+      </button>
+    </div>
+
+    <div class="form-error" id="offer-error">Veuillez sélectionner une offre.</div>
+  </section>
+
+  <!-- Step 2: Buyer info + payment placeholder -->
+  <section class="step" data-step="2">
+    <h1 class="page-title">Vos informations</h1>
+    <p class="page-sub">Ces informations identifient l'acheteur du diagnostic.</p>
+
+    <div class="field" data-field="name">
+      <label for="buyer-name">Nom complet</label>
+      <input type="text" id="buyer-name" autocomplete="name">
+      <div class="err">Le nom est requis.</div>
+    </div>
+    <div class="field" data-field="title">
+      <label for="buyer-title">Titre / fonction</label>
+      <input type="text" id="buyer-title" autocomplete="organization-title">
+      <div class="err">Le titre est requis.</div>
+    </div>
+    <div class="field" data-field="company">
+      <label for="buyer-company">Entreprise</label>
+      <input type="text" id="buyer-company" autocomplete="organization">
+      <div class="err">L'entreprise est requise.</div>
+    </div>
+    <div class="field" data-field="email">
+      <label for="buyer-email">Courriel</label>
+      <input type="email" id="buyer-email" autocomplete="email">
+      <div class="err">Un courriel valide est requis.</div>
+    </div>
+
+    <div class="payment-box">
+      <h3>Paiement — bientôt disponible</h3>
+      <p>Le paiement en ligne n'est pas encore actif. Cliquez sur « Continuer » pour poursuivre sans frais pour l'instant.</p>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" data-back="1">Retour</button>
+      <button type="button" class="btn btn-primary" id="step2-continue">Continuer</button>
+    </div>
+  </section>
+
+  <!-- Step 3: Respondents -->
+  <section class="step" data-step="3">
+    <h1 class="page-title">Répondants</h1>
+    <p class="page-sub">Ajoutez une ou plusieurs personnes qui répondront au questionnaire. Chacune recevra un lien personnel.</p>
+
+    <div id="respondent-rows"></div>
+    <button type="button" class="add-row-btn" id="add-respondent">+ Ajouter un répondant</button>
+
+    <div class="form-error" id="respondents-error">Chaque répondant doit avoir un nom et un courriel valide.</div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" data-back="2">Retour</button>
+      <button type="button" class="btn btn-primary" id="step3-continue">Continuer</button>
+    </div>
+  </section>
+
+  <!-- Step 4: Review & submit -->
+  <section class="step" data-step="4">
+    <h1 class="page-title">Vérification et envoi</h1>
+    <p class="page-sub">Vérifiez les informations avant d'envoyer les diagnostics.</p>
+
+    <div class="summary-card">
+      <h3>Résumé</h3>
+      <dl id="summary-content"></dl>
+    </div>
+
+    <div class="form-error" id="submit-error">L'envoi a échoué. Veuillez réessayer.</div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" data-back="3">Retour</button>
+      <button type="button" class="btn btn-primary" id="submit-btn">Envoyer les diagnostics</button>
+    </div>
+  </section>
+
+  <!-- Step 5: Inline questionnaire, one respondent at a time -->
+  <section class="step" data-step="5">
+    <h1 class="page-title" id="questionnaire-title">Questionnaire</h1>
+    <p class="page-sub" id="questionnaire-sub"></p>
+
+    <div class="respondent-banner" id="respondent-banner"></div>
+
+    <form id="questionnaire-form"></form>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary" id="questionnaire-continue">Soumettre et continuer</button>
+    </div>
+  </section>
+
+  <!-- Step 6: Done -->
+  <section class="step" data-step="6">
+    <h1 class="page-title">Merci !</h1>
+    <p class="page-sub">Les réponses de tous les répondants ont été enregistrées.</p>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  // TODO: point at wherever the diagnostic service ends up hosted (infra
+  // decision pending — see build spec Part 0). Falls back to localhost for
+  // local development against apps/server-remote.
+  var API_BASE = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    ? "http://localhost:8787"
+    : "https://api.junior.coach";
+
+  // Mirrors diagnostic-questions/commercial.json and strategique.json,
+  // inlined so the embedded questionnaire (step 5) works without a fetch —
+  // fetching local files is blocked by browsers when this page is opened via
+  // file:// instead of http(s)://.
+  var COMMERCIAL_DOC = {
+    "offer": "commercial",
+    "title": "Diagnostic Commercial",
+    "placeholder": true,
+    "dimensions": [
+      { "id": "d1", "label": "Connaissance du client (ICP)", "questions": [
+        { "id": "com_d1_q1", "type": "scale", "label": "Dans quelle mesure votre équipe peut-elle décrire précisément votre client idéal (secteur, taille, poste du décideur) ?" },
+        { "id": "com_d1_q2", "type": "scale", "label": "À quel point vos décisions marketing et vente sont-elles basées sur des données réelles sur vos clients plutôt que sur des suppositions ?" },
+        { "id": "com_d1_q3", "type": "scale", "label": "Dans quelle mesure votre équipe est-elle alignée sur qui est (et qui n'est pas) un bon client pour vous ?" },
+        { "id": "com_d1_text", "type": "text", "label": "Décrivez en quelques phrases votre client idéal actuel." }
+      ]},
+      { "id": "d2", "label": "Proposition de valeur", "questions": [
+        { "id": "com_d2_q1", "type": "scale", "label": "Dans quelle mesure votre proposition de valeur est-elle claire et différenciée aux yeux de vos clients ?" },
+        { "id": "com_d2_q2", "type": "scale", "label": "À quel point votre équipe de vente utilise-t-elle un message cohérent d'un représentant à l'autre ?" },
+        { "id": "com_d2_q3", "type": "scale", "label": "Dans quelle mesure vos clients peuvent-ils expliquer, dans leurs mots, pourquoi ils vous ont choisi ?" },
+        { "id": "com_d2_text", "type": "text", "label": "Quel est, selon vous, le principal avantage que vous offrez par rapport à vos concurrents ?" }
+      ]},
+      { "id": "d3", "label": "Positionnement concurrentiel", "questions": [
+        { "id": "com_d3_q1", "type": "scale", "label": "Dans quelle mesure connaissez-vous les forces et faiblesses de vos 2-3 principaux concurrents ?" },
+        { "id": "com_d3_q2", "type": "scale", "label": "À quel point votre positionnement de prix est-il justifié par rapport à la valeur perçue ?" },
+        { "id": "com_d3_q3", "type": "scale", "label": "Dans quelle mesure suivez-vous activement les changements chez vos concurrents ?" },
+        { "id": "com_d3_text", "type": "text", "label": "Nommez un concurrent que vous perdez souvent face à, et pourquoi." }
+      ]},
+      { "id": "d4", "label": "Parcours client & processus de vente", "questions": [
+        { "id": "com_d4_q1", "type": "scale", "label": "Dans quelle mesure votre processus de vente est-il documenté et suivi de façon cohérente ?" },
+        { "id": "com_d4_q2", "type": "scale", "label": "À quel point le parcours d'achat de vos clients est-il fluide, du premier contact à la signature ?" },
+        { "id": "com_d4_q3", "type": "scale", "label": "Dans quelle mesure mesurez-vous les taux de conversion à chaque étape de votre entonnoir ?" },
+        { "id": "com_d4_text", "type": "text", "label": "Où perdez-vous le plus d'opportunités dans votre parcours de vente actuel ?" }
+      ]},
+      { "id": "d5", "label": "Pilotage commercial & prix", "questions": [
+        { "id": "com_d5_q1", "type": "scale", "label": "Dans quelle mesure votre stratégie de prix reflète-t-elle la valeur réelle livrée au client ?" },
+        { "id": "com_d5_q2", "type": "scale", "label": "À quel point suivez-vous des indicateurs de performance commerciale de façon régulière (hebdo/mensuel) ?" },
+        { "id": "com_d5_q3", "type": "scale", "label": "Dans quelle mesure votre équipe utilise-t-elle ces indicateurs pour ajuster ses actions ?" },
+        { "id": "com_d5_text", "type": "text", "label": "Quel indicateur commercial voudriez-vous suivre, mais que vous ne suivez pas encore ?" }
+      ]}
+    ]
+  };
+  var STRATEGIQUE_DOC = {
+    "offer": "strategique",
+    "title": "Diagnostic Stratégique",
+    "placeholder": true,
+    "dimensions": [
+      { "id": "d1", "label": "Vision & ambition", "questions": [
+        { "id": "strat_d1_q1", "type": "scale", "label": "Dans quelle mesure l'équipe de direction partage-t-elle une vision commune à 3-5 ans ?" },
+        { "id": "strat_d1_q2", "type": "scale", "label": "À quel point cette vision est-elle connue et comprise par l'ensemble de l'organisation ?" },
+        { "id": "strat_d1_q3", "type": "scale", "label": "Dans quelle mesure vos décisions du quotidien sont-elles alignées avec cette ambition à long terme ?" },
+        { "id": "strat_d1_text", "type": "text", "label": "Résumez en une phrase où vous voulez être dans 3 ans." }
+      ]},
+      { "id": "d2", "label": "Modèle d'affaires", "questions": [
+        { "id": "strat_d2_q1", "type": "scale", "label": "Dans quelle mesure votre modèle de revenus est-il clair et bien compris par toute l'équipe de direction ?" },
+        { "id": "strat_d2_q2", "type": "scale", "label": "À quel point votre modèle d'affaires actuel est-il rentable et scalable ?" },
+        { "id": "strat_d2_q3", "type": "scale", "label": "Dans quelle mesure avez-vous validé vos hypothèses clés de modèle d'affaires avec des données réelles ?" },
+        { "id": "strat_d2_text", "type": "text", "label": "Quelle hypothèse de votre modèle d'affaires vous inquiète le plus en ce moment ?" }
+      ]},
+      { "id": "d3", "label": "Objectifs & indicateurs (OKR/KPI)", "questions": [
+        { "id": "strat_d3_q1", "type": "scale", "label": "Dans quelle mesure vos objectifs annuels sont-ils formalisés et mesurables ?" },
+        { "id": "strat_d3_q2", "type": "scale", "label": "À quel point votre équipe suit-elle ces objectifs de façon régulière (hebdo/mensuel) ?" },
+        { "id": "strat_d3_q3", "type": "scale", "label": "Dans quelle mesure vos KPI actuels vous permettent-ils de détecter un problème avant qu'il devienne critique ?" },
+        { "id": "strat_d3_text", "type": "text", "label": "Quel est votre objectif le plus important cette année, et où en êtes-vous ?" }
+      ]},
+      { "id": "d4", "label": "Exécution & priorisation", "questions": [
+        { "id": "strat_d4_q1", "type": "scale", "label": "Dans quelle mesure votre équipe complète-t-elle ce qui a été planifié, sans dérive constante ?" },
+        { "id": "strat_d4_q2", "type": "scale", "label": "À quel point les priorités sont-elles claires pour chaque membre de l'équipe de direction ?" },
+        { "id": "strat_d4_q3", "type": "scale", "label": "Dans quelle mesure savez-vous dire non à des opportunités qui ne sont pas prioritaires ?" },
+        { "id": "strat_d4_text", "type": "text", "label": "Quel projet ou initiative devrait être arrêté pour libérer de la capacité ?" }
+      ]},
+      { "id": "d5", "label": "Maturité organisationnelle", "questions": [
+        { "id": "strat_d5_q1", "type": "scale", "label": "Dans quelle mesure vos processus internes sont-ils documentés (pas juste dans la tête de quelqu'un) ?" },
+        { "id": "strat_d5_q2", "type": "scale", "label": "À quel point votre organisation pourrait-elle fonctionner efficacement si un membre clé de l'équipe partait demain ?" },
+        { "id": "strat_d5_q3", "type": "scale", "label": "Dans quelle mesure votre structure actuelle supporte-t-elle votre croissance prévue pour les 12 prochains mois ?" },
+        { "id": "strat_d5_text", "type": "text", "label": "Quelle est la plus grande lacune organisationnelle qui freine votre croissance actuellement ?" }
+      ]}
+    ]
+  };
+
+  var DRAFT_OFFER_KEY = "diagnostic_draft_offer";
+  var DRAFT_BUYER_KEY = "diagnostic_draft_buyer";
+  var DRAFT_RESPONDENTS_KEY = "diagnostic_draft_respondents";
+
+  function loadJSON(key, fallback){
+    try {
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+  function saveJSON(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  var state = {
+    offer: loadJSON(DRAFT_OFFER_KEY, null),
+    buyer: loadJSON(DRAFT_BUYER_KEY, { name: "", title: "", company: "", email: "" }),
+    respondents: loadJSON(DRAFT_RESPONDENTS_KEY, [{ name: "", email: "" }])
+  };
+  if (!state.respondents.length) state.respondents = [{ name: "", email: "" }];
+
+  var currentStep = 1;
+
+  function setStep(n){
+    currentStep = n;
+    document.querySelectorAll(".step").forEach(function(el){
+      el.classList.toggle("active", Number(el.dataset.step) === n);
+    });
+    document.querySelectorAll("#progress .dot").forEach(function(dot){
+      var s = Number(dot.dataset.step);
+      dot.classList.toggle("current", s === n);
+      dot.classList.toggle("done", s < n);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- Step 1: offer ----------
+  var offerCards = document.querySelectorAll(".offer-card");
+  function renderOffer(){
+    offerCards.forEach(function(card){
+      card.classList.toggle("selected", card.dataset.offer === state.offer);
+    });
+  }
+  offerCards.forEach(function(card){
+    card.addEventListener("click", function(){
+      state.offer = card.dataset.offer;
+      saveJSON(DRAFT_OFFER_KEY, state.offer);
+      renderOffer();
+      document.getElementById("offer-error").classList.remove("show");
+      setStep(2);
+    });
+  });
+
+  // ---------- Step 2: buyer ----------
+  var buyerFields = ["name", "title", "company", "email"];
+  var buyerInputs = {};
+  buyerFields.forEach(function(f){
+    buyerInputs[f] = document.getElementById("buyer-" + f);
+    buyerInputs[f].value = state.buyer[f] || "";
+    buyerInputs[f].addEventListener("input", function(){
+      state.buyer[f] = buyerInputs[f].value;
+      saveJSON(DRAFT_BUYER_KEY, state.buyer);
+    });
+  });
+
+  function isValidEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  function validateBuyer(){
+    var ok = true;
+    buyerFields.forEach(function(f){
+      var fieldEl = buyerInputs[f].closest(".field");
+      var value = (state.buyer[f] || "").trim();
+      var fieldOk = f === "email" ? isValidEmail(value) : value.length > 0;
+      fieldEl.classList.toggle("invalid", !fieldOk);
+      if (!fieldOk) ok = false;
+    });
+    return ok;
+  }
+
+  document.getElementById("step2-continue").addEventListener("click", function(){
+    if (validateBuyer()) setStep(3);
+  });
+
+  // ---------- Step 3: respondents ----------
+  var rowsContainer = document.getElementById("respondent-rows");
+
+  function renderRespondents(){
+    rowsContainer.innerHTML = "";
+    state.respondents.forEach(function(r, i){
+      var row = document.createElement("div");
+      row.className = "respondent-row";
+      row.innerHTML =
+        '<div class="field"><label>Nom</label><input type="text" data-idx="' + i + '" data-key="name"></div>' +
+        '<div class="field"><label>Courriel</label><input type="email" data-idx="' + i + '" data-key="email"></div>' +
+        '<button type="button" class="remove-btn" data-idx="' + i + '" title="Retirer">×</button>';
+      row.querySelector('[data-key="name"]').value = r.name || "";
+      row.querySelector('[data-key="email"]').value = r.email || "";
+      rowsContainer.appendChild(row);
+    });
+
+    rowsContainer.querySelectorAll("input").forEach(function(input){
+      input.addEventListener("input", function(){
+        var idx = Number(input.dataset.idx);
+        state.respondents[idx][input.dataset.key] = input.value;
+        saveJSON(DRAFT_RESPONDENTS_KEY, state.respondents);
+      });
+    });
+
+    var removeBtns = rowsContainer.querySelectorAll(".remove-btn");
+    removeBtns.forEach(function(btn){
+      btn.disabled = state.respondents.length <= 1;
+      btn.addEventListener("click", function(){
+        var idx = Number(btn.dataset.idx);
+        state.respondents.splice(idx, 1);
+        if (!state.respondents.length) state.respondents.push({ name: "", email: "" });
+        saveJSON(DRAFT_RESPONDENTS_KEY, state.respondents);
+        renderRespondents();
+      });
+    });
+  }
+  renderRespondents();
+
+  document.getElementById("add-respondent").addEventListener("click", function(){
+    state.respondents.push({ name: "", email: "" });
+    saveJSON(DRAFT_RESPONDENTS_KEY, state.respondents);
+    renderRespondents();
+  });
+
+  function validateRespondents(){
+    var ok = state.respondents.length > 0;
+    state.respondents.forEach(function(r){
+      if (!(r.name || "").trim() || !isValidEmail(r.email || "")) ok = false;
+    });
+    document.getElementById("respondents-error").classList.toggle("show", !ok);
+    return ok;
+  }
+
+  document.getElementById("step3-continue").addEventListener("click", function(){
+    if (validateRespondents()) {
+      renderSummary();
+      setStep(4);
+    }
+  });
+
+  // ---------- Step 4: review & submit ----------
+  var offerLabels = { commercial: "Commercial", strategique: "Stratégique", combo: "Combo" };
+
+  function renderSummary(){
+    var dl = document.getElementById("summary-content");
+    var respondentItems = state.respondents.map(function(r){
+      return "<li>" + escapeHtml(r.name) + " — " + escapeHtml(r.email) + "</li>";
+    }).join("");
+    dl.innerHTML =
+      "<dt>Offre</dt><dd>" + escapeHtml(offerLabels[state.offer] || state.offer) + "</dd>" +
+      "<dt>Acheteur</dt><dd>" + escapeHtml(state.buyer.name) + " — " + escapeHtml(state.buyer.title) + ", " + escapeHtml(state.buyer.company) + " (" + escapeHtml(state.buyer.email) + ")</dd>" +
+      "<dt>Répondants</dt><dd><ul class=\"respondent-list\">" + respondentItems + "</ul></dd>";
+  }
+
+  function escapeHtml(s){
+    return String(s || "").replace(/[&<>"']/g, function(c){
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  document.getElementById("submit-btn").addEventListener("click", function(){
+    var btn = this;
+    var errorEl = document.getElementById("submit-error");
+    errorEl.classList.remove("show");
+    btn.disabled = true;
+
+    // TEMPORARY: /api/diagnostic/leads isn't built yet (placeholder API only,
+    // see conversation) — bypass the real request so the questionnaire can be
+    // tested locally, right here in the same session. Restore the
+    // commented-out fetch() below once a real endpoint exists.
+    setTimeout(function(){
+      localStorage.removeItem(DRAFT_OFFER_KEY);
+      localStorage.removeItem(DRAFT_BUYER_KEY);
+      localStorage.removeItem(DRAFT_RESPONDENTS_KEY);
+      answersByRespondent = state.respondents.map(function(){ return {}; });
+      currentRespondentIndex = 0;
+      renderQuestionnaireStep();
+      setStep(5);
+    }, 250);
+
+    /*
+    fetch(API_BASE + "/api/diagnostic/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        offer: state.offer,
+        buyer: state.buyer,
+        respondents: state.respondents
+      })
+    })
+      .then(function(res){
+        if (!res.ok) throw new Error("request_failed");
+        return res.json();
+      })
+      .then(function(data){
+        localStorage.removeItem(DRAFT_OFFER_KEY);
+        localStorage.removeItem(DRAFT_BUYER_KEY);
+        localStorage.removeItem(DRAFT_RESPONDENTS_KEY);
+        // data.respondents[i].token would key the real per-respondent record.
+        answersByRespondent = state.respondents.map(function(){ return {}; });
+        currentRespondentIndex = 0;
+        renderQuestionnaireStep();
+        setStep(5);
+      })
+      .catch(function(){
+        errorEl.classList.add("show");
+        btn.disabled = false;
+      });
+    */
+  });
+
+  // ---------- Step 5: inline questionnaire ----------
+  var answersByRespondent = [];
+  var currentRespondentIndex = 0;
+
+  function getQuestionDocs(offer){
+    if (offer === "combo") return [COMMERCIAL_DOC, STRATEGIQUE_DOC];
+    if (offer === "strategique") return [STRATEGIQUE_DOC];
+    return [COMMERCIAL_DOC];
+  }
+
+  function renderQuestionnaireStep(){
+    var respondent = state.respondents[currentRespondentIndex];
+    var answers = answersByRespondent[currentRespondentIndex];
+    var docs = getQuestionDocs(state.offer);
+
+    document.getElementById("questionnaire-title").textContent = docs.map(function(d){ return d.title; }).join(" + ");
+    document.getElementById("questionnaire-sub").textContent = "Répondez à chaque question du mieux que vous pouvez.";
+    document.getElementById("respondent-banner").innerHTML =
+      "Répondant <strong>" + (currentRespondentIndex + 1) + " sur " + state.respondents.length + "</strong> — " +
+      "<strong>" + escapeHtml(respondent.name) + "</strong> (" + escapeHtml(respondent.email) + ")";
+
+    var form = document.getElementById("questionnaire-form");
+    form.innerHTML = "";
+
+    docs.forEach(function(doc){
+      if (docs.length > 1) {
+        var volet = document.createElement("h2");
+        volet.style.fontFamily = "var(--font-display)";
+        volet.style.margin = "0 0 20px";
+        volet.textContent = "Volet " + doc.title.replace(/^Diagnostic /, "");
+        form.appendChild(volet);
+      }
+
+      doc.dimensions.forEach(function(dim){
+        var section = document.createElement("section");
+        section.className = "dimension";
+        var h2 = document.createElement("h2");
+        h2.textContent = dim.label;
+        section.appendChild(h2);
+
+        dim.questions.forEach(function(q){
+          var qWrap = document.createElement("div");
+          qWrap.className = "question";
+          var label = document.createElement("div");
+          label.className = "q-label";
+          label.textContent = q.label;
+          qWrap.appendChild(label);
+
+          if (q.type === "scale") {
+            var scale = document.createElement("div");
+            scale.className = "scale";
+            for (var i = 1; i <= 10; i++) {
+              var lbl = document.createElement("label");
+              var input = document.createElement("input");
+              input.type = "radio";
+              input.name = q.id;
+              input.value = String(i);
+              if (String(answers[q.id]) === String(i)) input.checked = true;
+              input.addEventListener("change", function(){
+                answers[q.id] = Number(this.value);
+              });
+              lbl.appendChild(input);
+              var num = document.createElement("span");
+              num.textContent = i;
+              lbl.appendChild(num);
+              scale.appendChild(lbl);
+            }
+            qWrap.appendChild(scale);
+            var ends = document.createElement("div");
+            ends.className = "scale-ends";
+            ends.innerHTML = "<span>1 — Pas du tout</span><span>10 — Totalement</span>";
+            qWrap.appendChild(ends);
+          } else {
+            var textarea = document.createElement("textarea");
+            textarea.name = q.id;
+            textarea.value = answers[q.id] || "";
+            textarea.addEventListener("input", function(){
+              answers[q.id] = this.value;
+            });
+            qWrap.appendChild(textarea);
+          }
+
+          section.appendChild(qWrap);
+        });
+
+        form.appendChild(section);
+      });
+    });
+
+    var continueBtn = document.getElementById("questionnaire-continue");
+    continueBtn.textContent = currentRespondentIndex < state.respondents.length - 1
+      ? "Soumettre et passer au prochain répondant"
+      : "Soumettre mes réponses";
+  }
+
+  document.getElementById("questionnaire-continue").addEventListener("click", function(){
+    currentRespondentIndex++;
+    if (currentRespondentIndex < state.respondents.length) {
+      renderQuestionnaireStep();
+      window.scrollTo(0, 0);
+    } else {
+      setStep(6);
+    }
+  });
+
+  // ---------- Back buttons ----------
+  document.querySelectorAll("[data-back]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      setStep(Number(btn.dataset.back));
+    });
+  });
+
+  // ---------- Initial render / resume ----------
+  renderOffer();
+  var startStep = 1;
+  if (state.offer) startStep = 2;
+  if (state.buyer && (state.buyer.name || state.buyer.email)) startStep = 3;
+  if (state.respondents && state.respondents.some(function(r){ return r.name || r.email; })) startStep = 4;
+  if (startStep === 4) renderSummary();
+  setStep(startStep);
+})();
+</script>
+
+</body>
+</html>
