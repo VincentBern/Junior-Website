@@ -40,6 +40,8 @@
   .top-rule .brand img{ height: 26px; width: auto; display: block; }
   .top-rule .word{ font-size: 13px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent-2); }
   .top-rule .tag{ font-size: 11px; color: var(--ink-soft); }
+  .top-rule .cta{ display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; background: var(--accent); color: var(--cream); text-decoration: none; border: 1px solid var(--accent); transition: background 0.18s ease, transform 0.18s ease; }
+  .top-rule .cta:hover{ background: var(--accent-2); border-color: var(--accent-2); transform: translateY(-1px); }
 
   /* ---------- Hero / top section (layout from index.html) ---------- */
   .hero{
@@ -283,7 +285,7 @@
       <span class="word">JUNIOR</span>
     </div>
     <span class="mono tag">une capacité, pas une plateforme</span>
-    <a class="mono tag" href="diagnostic.html" style="color:var(--accent-2); text-decoration:none; border-bottom:1px solid var(--accent-2);">Diagnostic →</a>
+    <a class="cta" href="diagnostic.html">Faire mon diagnostic →</a>
   </div>
 </div>
 
@@ -291,10 +293,10 @@
   <section class="hero">
     <div>
       <h1>Votre stratège,<br>dans l'outil que<br>vous avez <span>déjà</span>.</h1>
-      <p class="lede">Junior s'installe dans votre Claude ou votre ChatGPT. Pas de compte, pas de nouvel écran, pas de données qui quittent chez vous.</p>
+      <p class="lede">Junior s'installe dans votre Claude ou votre ChatGPT. Pas de compte, pas de nouvel écran, pas de données qui quittent chez vous. Pour voir comment ça s'applique chez vous, commencez par un diagnostic.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="mailto:contact@junior-strategie.com?subject=Junior">Demander une démo</a>
-        <a class="btn btn-secondary" href="#capacites">Voir les capacités</a>
+        <a class="btn btn-primary" href="diagnostic.html">Commencer le diagnostic →</a>
+        <a class="btn btn-secondary" href="mailto:contact@junior-strategie.com?subject=Junior">Nous écrire</a>
       </div>
     </div>
     <div class="hero-figure">
@@ -306,9 +308,9 @@
     <div class="section-head">
       <div>
         <div class="kicker mono">Capacités</div>
-        <h2>Conçu pour produire des résultats.</h2>
+        <h2>Ce que le diagnostic vous donne.</h2>
       </div>
-      <p>Une approche orientée exécution, intégrée à vos équipes et à vos méthodes de travail.</p>
+      <p>Une évaluation structurée, pas une conversation informelle — bâtie sur les cadres que Luc Goudreault applique en mandat de coaching stratégique.</p>
     </div>
 
     <div class="cards">
@@ -316,24 +318,24 @@
         <div class="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
         </div>
-        <h3>Intégré à vos outils</h3>
-        <p>Junior fonctionne là où vos équipes travaillent déjà, sans changement d'habitudes ni migration complexe.</p>
+        <h3>Une grille, pas une impression</h3>
+        <p>19 questions, 5 dimensions, un score de maturité sur 100. Vous savez exactement où vous en êtes — pas juste que « ça pourrait aller mieux ».</p>
       </article>
 
       <article class="card">
         <div class="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12h4l2-5 4 10 2-5h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <h3>Valeur immédiate</h3>
-        <p>Les premiers gains apparaissent rapidement grâce à une mise en œuvre ciblée sur vos priorités.</p>
+        <h3>La méthode LGS, pas un chatbot générique</h3>
+        <p>Junior applique le vocabulaire et les cadres de Luc Goudreault Stratégie — pas des conseils génériques improvisés par une IA.</p>
       </article>
 
       <article class="card">
         <div class="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
-        <h3>Adapté à vos processus</h3>
-        <p>La capacité s'ajuste à votre réalité opérationnelle plutôt que de vous forcer à suivre un modèle générique.</p>
+        <h3>Un livrable, pas une liste</h3>
+        <p>Vous repartez avec une présentation structurée, prête à partager avec votre équipe — pas une liste de recommandations à interpréter vous-même.</p>
       </article>
     </div>
   </section>
@@ -342,8 +344,8 @@
     <div class="band">
       <div>
         <div class="kicker mono" style="color:var(--accent-2); margin-bottom:10px;">Pourquoi Junior</div>
-        <h3>Une capacité qui renforce ce que vous faites déjà.</h3>
-        <p>L'objectif n'est pas d'ajouter une couche de complexité. L'objectif est d'accélérer les décisions, de réduire les frictions et de rendre vos équipes plus efficaces dans leur environnement actuel.</p>
+        <h3>Ce qui reste chez vous, ce qui vient de nous.</h3>
+        <p>Junior ne stocke rien de votre entreprise. Vos réponses restent les vôtres — on vous renvoie uniquement le livrable fini.</p>
         <div class="quote">« Le meilleur outil est souvent celui qui disparaît derrière le travail. »</div>
       </div>
 
@@ -351,22 +353,22 @@
         <div class="item">
           <div class="check">✓</div>
           <div>
-            <strong>Aucune donnée hébergée ailleurs</strong><br>
-            <span>Vous gardez le contrôle de vos informations et de vos processus.</span>
+            <strong>Aucune donnée hébergée chez nous</strong><br>
+            <span>Vos réponses restent chez vous ; on ne reçoit que ce qu'il faut pour produire votre livrable, rien n'est conservé après.</span>
           </div>
         </div>
         <div class="item">
           <div class="check">✓</div>
           <div>
-            <strong>Déploiement progressif</strong><br>
-            <span>Commencez petit, mesurez l'impact, puis étendez selon les résultats.</span>
+            <strong>Commencez par un diagnostic</strong><br>
+            <span>C'est votre premier pas. Si ça résonne, on peut aller plus loin avec la suite complète, à votre rythme.</span>
           </div>
         </div>
         <div class="item">
           <div class="check">✓</div>
           <div>
-            <strong>Approche orientée résultats</strong><br>
-            <span>Chaque intervention vise une amélioration concrète et mesurable.</span>
+            <strong>Un livrable à chaque étape</strong><br>
+            <span>Diagnostic, canevas, synthèse : chaque étape produit quelque chose de concret à partager avec votre équipe.</span>
           </div>
         </div>
       </div>
@@ -374,16 +376,19 @@
   </section>
 
   <section class="closing reveal">
-    <h2>Une idée, un projet ?</h2>
-    <a class="btn btn-primary" href="">Nous écrire</a>
+    <h2>Prêt à voir où vous en êtes ?</h2>
+    <div class="cta-row" style="justify-content: center;">
+      <a class="btn btn-primary" href="diagnostic.html">Commencer le diagnostic →</a>
+      <a class="btn btn-secondary" href="mailto:contact@junior-strategie.com?subject=Junior">Nous écrire</a>
+    </div>
   </section>
 </div>
 
 <footer id="contact">
   <div class="wrap">
     <div>
-      <span class="mono tag">© 2026 Junior</span>
-      <p>Une capacité intégrée à votre environnement existant. Aucune plateforme. Aucune donnée hébergée. Des résultats concrets.</p>
+      <span class="mono tag">© 2026 Junior — Luc Goudreault Stratégie inc.</span>
+      <p>La méthodologie de coaching stratégique et commercial de LGS, appliquée par IA. Aucune donnée hébergée chez nous.</p>
     </div>
     <div class="footer-links">
       <!-- <a href="mailto:contact@junior-strategie.com">contact@junior-strategie.com</a> -->
