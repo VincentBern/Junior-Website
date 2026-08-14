@@ -366,6 +366,16 @@
     .diagram{ min-width: 480px; }
     .diagram .node{ width: 120px; padding: 16px 10px; }
   }
+
+  @media (max-width: 480px){
+    .diagram{ min-width: 0; gap: 2px; padding: 8px 0 4px; }
+    .diagram .node{ width: 84px; padding: 12px 6px; border-radius: 16px; }
+    .diagram .node-icon{ width: 30px; height: 30px; margin-bottom: 8px; border-radius: 9px; }
+    .diagram .node-icon svg{ width: 16px; height: 16px; }
+    .diagram .node-label{ font-size: 9.5px; line-height: 1.3; }
+    .diagram .node-label small{ font-size: 8px; margin-top: 2px; }
+    .diagram .rail{ min-width: 12px; }
+  }
 </style>
 </head>
 <body>
