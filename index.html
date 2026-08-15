@@ -706,37 +706,30 @@
     <p class="note-text">Vous pouvez continuer à faire évoluer ces documents avec vos propres outils, sans Junior. Sa durée de vie utile se compte en mois, pas en années. C'est le but, pas une limite.</p>
 
     <div class="diagram-wrap" style="margin-top: 32px;">
-      <div class="diagram" aria-hidden="true">
-        <div class="node">
-          <div class="node-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          </div>
-          <div class="node-label">Génère</div>
-        </div>
+      <svg class="hub-diagram flow-diagnostic" viewBox="0 0 420 240" aria-hidden="true" style="--flow-dur:2.6s; --halo-dur:2.8s;">
+        <line x1="74" y1="158" x2="218" y2="80" stroke="var(--line)" stroke-width="2"/>
+        <line x1="218" y1="80" x2="362" y2="158" stroke="var(--line)" stroke-width="2"/>
 
-        <div class="rail rail-local">
-          <span class="dot d1"></span>
-          <span class="dot d2"></span>
-        </div>
+        <circle class="dot dot-1" cx="74" cy="158" r="4"/>
+        <circle class="dot dot-2" cx="218" cy="80" r="4"/>
 
-        <div class="node">
-          <div class="node-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          </div>
-          <div class="node-label">Vos fichiers<small>chez vous</small></div>
-        </div>
+        <circle class="halo h1" cx="218" cy="80" r="42"/>
+        <circle class="halo h2" cx="218" cy="80" r="42"/>
 
-        <div class="rail rail-remote">
-          <span class="dot d3"></span>
-        </div>
+        <circle cx="74" cy="158" r="32" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
+        <svg x="60" y="144" width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke="var(--accent-2)" stroke-width="2" stroke-linejoin="round"/></svg>
+        <text class="node-name" x="74" y="210" text-anchor="middle">Génère</text>
 
-        <div class="node">
-          <div class="node-icon">
-            <img class="fade-logo" src="assets/logo.png" alt="" width="18" height="29">
-          </div>
-          <div class="node-label">Se retire<small>rien ne reste</small></div>
-        </div>
-      </div>
+        <circle cx="218" cy="80" r="42" fill="var(--accent)"/>
+        <svg x="203" y="65" width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" stroke="var(--cream)" stroke-width="2" stroke-linejoin="round"/></svg>
+        <text class="node-name" x="218" y="142" text-anchor="middle">Vos fichiers</text>
+        <text class="node-sub" x="218" y="156" text-anchor="middle">chez vous</text>
+
+        <circle cx="362" cy="158" r="32" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
+        <image class="fade-logo" href="assets/logo.png" x="353" y="143.5" width="18" height="29"/>
+        <text class="node-name" x="362" y="210" text-anchor="middle">Se retire</text>
+        <text class="node-sub" x="362" y="224" text-anchor="middle">rien ne reste</text>
+      </svg>
     </div>
   </section>
 
