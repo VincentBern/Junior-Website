@@ -674,62 +674,100 @@
   <section id="passage" class="rule-top reveal">
     <div class="section-head">
       <div>
-        <div class="kicker mono">Le moment de passage</div>
-        <h2>Junior génère, puis s'efface.</h2>
+        <div class="kicker mono">Comment ça marche</div>
+        <h2>Vos données chez vous, le traitement chez nous.</h2>
       </div>
+      <p>Junior s'installe dans l'environnement que vous utilisez déjà : vos données restent dans vos fichiers, seul le traitement se fait avec nous. Deux façons de l'utiliser, selon le moment.</p>
     </div>
 
-    <div class="list" style="margin-bottom: 28px;">
-      <div class="item">
-        <div class="check">✓</div>
+    <div class="flows">
+      <div class="flow-row">
         <div>
-          <strong>Junior génère les fondations</strong><br>
-          <span>Stratégie et bases commerciales prêtes à l'emploi.</span>
+          <span class="flow-tag">Diagnostic</span>
+          <h3>Une évaluation complète</h3>
+          <p>19 questions, 5 dimensions, un livrable structuré — avec des itérations au besoin.</p>
+        </div>
+        <div class="diagram-wrap">
+          <svg class="hub-diagram flow-diagnostic" viewBox="0 0 420 262" aria-hidden="true" style="--flow-dur:2.6s; --halo-dur:2.8s;">
+            <defs>
+              <marker id="loop-arrow" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft)"/>
+              </marker>
+            </defs>
+
+            <path class="loop-path" d="M362,166 Q218,250 74,166" fill="none" stroke="var(--ink-soft)" stroke-width="1.5" stroke-dasharray="1 6" stroke-linecap="round" marker-end="url(#loop-arrow)"/>
+            <text class="node-sub" x="218" y="236" text-anchor="middle">itération</text>
+
+            <line x1="74" y1="158" x2="218" y2="80" stroke="var(--line)" stroke-width="2"/>
+            <line x1="218" y1="80" x2="362" y2="158" stroke="var(--line)" stroke-width="2"/>
+
+            <circle class="dot dot-1" cx="74" cy="158" r="4"/>
+            <circle class="dot dot-2" cx="218" cy="80" r="4"/>
+            <circle class="dot" r="4" opacity="0">
+              <animateMotion dur="3.4s" begin="1.1s" repeatCount="indefinite" path="M362,166 Q218,250 74,166"/>
+              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="3.4s" begin="1.1s" repeatCount="indefinite"/>
+            </circle>
+
+            <circle class="halo h1" cx="218" cy="80" r="42"/>
+            <circle class="halo h2" cx="218" cy="80" r="42"/>
+
+            <circle cx="74" cy="158" r="32" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
+            <svg x="60" y="144" width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M8 4h8a1 1 0 0 1 1 1v1h1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1V5a1 1 0 0 1 1-1z" stroke="var(--accent-2)" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="var(--accent-2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <text class="node-name" x="74" y="210" text-anchor="middle">Saisie de données</text>
+            <text class="node-sub" x="74" y="224" text-anchor="middle">19 questions</text>
+
+            <circle cx="218" cy="80" r="42" fill="var(--accent)"/>
+            <image class="hub-logo" href="assets/logo.png" x="209" y="65" width="18" height="29"/>
+            <text class="node-name" x="218" y="142" text-anchor="middle">Junior</text>
+            <text class="node-sub" x="218" y="156" text-anchor="middle">méthodologie</text>
+
+            <circle cx="362" cy="158" r="32" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
+            <svg x="348" y="144" width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="5" stroke="var(--accent-2)" stroke-width="2"/><path d="M9 13.5L7 21l5-3 5 3-2-7.5" stroke="var(--accent-2)" stroke-width="2" stroke-linejoin="round"/></svg>
+            <text class="node-name" x="362" y="210" text-anchor="middle">Diagnostic</text>
+            <text class="node-sub" x="362" y="224" text-anchor="middle">score &amp; livrable</text>
+          </svg>
         </div>
       </div>
-      <div class="item">
-        <div class="check">✓</div>
+
+      <div class="flow-row">
         <div>
-          <strong>Le contenu vit chez vous</strong><br>
-          <span>Dans vos fichiers, pas dans un compte Junior.</span>
+          <span class="flow-tag">Réponse instantanée</span>
+          <h3>Une question, peu importe qui la pose</h3>
+          <p>Chacun interroge Junior depuis son propre outil ; la réponse arrive aussitôt, avec la même méthodologie à chaque fois.</p>
+        </div>
+        <div class="diagram-wrap">
+          <svg class="hub-diagram flow-broadcast" viewBox="0 0 420 260" aria-hidden="true" style="--spoke-dur:1.1s; --halo-dur:1.1s;">
+            <line x1="210" y1="35" x2="210" y2="150" stroke="var(--line)" stroke-width="2"/>
+            <line x1="110" y1="208" x2="210" y2="150" stroke="var(--line)" stroke-width="2"/>
+            <line x1="310" y1="208" x2="210" y2="150" stroke="var(--line)" stroke-width="2"/>
+
+            <circle class="dot spoke-in" cx="210" cy="35" r="4" style="--dx:0px; --dy:115px; --delay:0s;"/>
+            <circle class="dot spoke-out" cx="210" cy="150" r="4" style="--dx:0px; --dy:-115px; --delay:0s;"/>
+
+            <circle class="dot spoke-in" cx="110" cy="208" r="4" style="--dx:100px; --dy:-58px; --delay:0.4s;"/>
+            <circle class="dot spoke-out" cx="210" cy="150" r="4" style="--dx:-100px; --dy:58px; --delay:0.4s;"/>
+
+            <circle class="dot spoke-in" cx="310" cy="208" r="4" style="--dx:-100px; --dy:-58px; --delay:0.8s;"/>
+            <circle class="dot spoke-out" cx="210" cy="150" r="4" style="--dx:100px; --dy:58px; --delay:0.8s;"/>
+
+            <circle class="halo h1" cx="210" cy="150" r="44"/>
+            <circle class="halo h2" cx="210" cy="150" r="44"/>
+
+            <circle cx="210" cy="35" r="28" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
+            <svg x="198" y="23" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.3" stroke="var(--accent-2)" stroke-width="2"/><path d="M5.5 19c0-3.4 3-6 6.5-6s6.5 2.6 6.5 6" stroke="var(--accent-2)" stroke-width="2" stroke-linecap="round"/></svg>
+
+            <circle cx="110" cy="208" r="28" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
+            <svg x="98" y="196" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.3" stroke="var(--accent-2)" stroke-width="2"/><path d="M5.5 19c0-3.4 3-6 6.5-6s6.5 2.6 6.5 6" stroke="var(--accent-2)" stroke-width="2" stroke-linecap="round"/></svg>
+
+            <circle cx="310" cy="208" r="28" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
+            <svg x="298" y="196" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.3" stroke="var(--accent-2)" stroke-width="2"/><path d="M5.5 19c0-3.4 3-6 6.5-6s6.5 2.6 6.5 6" stroke="var(--accent-2)" stroke-width="2" stroke-linecap="round"/></svg>
+
+            <circle cx="210" cy="150" r="44" fill="var(--accent)"/>
+            <image class="hub-logo" href="assets/logo.png" x="200" y="134" width="20" height="32"/>
+            <text class="node-name" x="210" y="240" text-anchor="middle">Junior</text>
+          </svg>
         </div>
       </div>
-      <div class="item">
-        <div class="check">✓</div>
-        <div>
-          <strong>Junior se retire</strong><br>
-          <span>Il ne reste que ce que vous avez construit.</span>
-        </div>
-      </div>
-    </div>
-
-    <p class="note-text">Vous pouvez continuer à faire évoluer ces documents avec vos propres outils, sans Junior. Sa durée de vie utile se compte en mois, pas en années. C'est le but, pas une limite.</p>
-
-    <div class="diagram-wrap" style="margin-top: 32px;">
-      <svg class="hub-diagram flow-diagnostic" viewBox="0 0 420 240" aria-hidden="true" style="--flow-dur:2.6s; --halo-dur:2.8s;">
-        <line x1="74" y1="158" x2="218" y2="80" stroke="var(--line)" stroke-width="2"/>
-        <line x1="218" y1="80" x2="362" y2="158" stroke="var(--line)" stroke-width="2"/>
-
-        <circle class="dot dot-1" cx="74" cy="158" r="4"/>
-        <circle class="dot dot-2" cx="218" cy="80" r="4"/>
-
-        <circle class="halo h1" cx="218" cy="80" r="42"/>
-        <circle class="halo h2" cx="218" cy="80" r="42"/>
-
-        <circle cx="74" cy="158" r="32" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
-        <svg x="60" y="144" width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke="var(--accent-2)" stroke-width="2" stroke-linejoin="round"/></svg>
-        <text class="node-name" x="74" y="210" text-anchor="middle">Génère</text>
-
-        <circle cx="218" cy="80" r="42" fill="var(--accent)"/>
-        <svg x="203" y="65" width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" stroke="var(--cream)" stroke-width="2" stroke-linejoin="round"/></svg>
-        <text class="node-name" x="218" y="142" text-anchor="middle">Vos fichiers</text>
-        <text class="node-sub" x="218" y="156" text-anchor="middle">chez vous</text>
-
-        <circle cx="362" cy="158" r="32" fill="var(--cream-deep)" stroke="var(--line)" stroke-width="1.5"/>
-        <image class="fade-logo" href="assets/logo.png" x="353" y="143.5" width="18" height="29"/>
-        <text class="node-name" x="362" y="210" text-anchor="middle">Se retire</text>
-        <text class="node-sub" x="362" y="224" text-anchor="middle">rien ne reste</text>
-      </svg>
     </div>
   </section>
 
