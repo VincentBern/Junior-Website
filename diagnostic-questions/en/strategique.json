@@ -1,0 +1,37 @@
+{
+  "offer": "strategique",
+  "title": "Strategic Diagnostic",
+  "placeholder": true,
+  "dimensions": [
+    { "id": "d1", "label": "Vision & ambition", "questions": [
+      { "id": "strat_d1_q1", "type": "scale", "label": "How much does the leadership team share a common vision for the next 3-5 years?" },
+      { "id": "strat_d1_q2", "type": "scale", "label": "How well is this vision known and understood across the whole organization?" },
+      { "id": "strat_d1_q3", "type": "scale", "label": "How aligned are your day-to-day decisions with this long-term ambition?" },
+      { "id": "strat_d1_text", "type": "text", "label": "Summarize in one sentence where you want to be in 3 years." }
+    ]},
+    { "id": "d2", "label": "Business model", "questions": [
+      { "id": "strat_d2_q1", "type": "scale", "label": "How clear and well understood is your revenue model across the whole leadership team?" },
+      { "id": "strat_d2_q2", "type": "scale", "label": "How profitable and scalable is your current business model?" },
+      { "id": "strat_d2_q3", "type": "scale", "label": "How well have you validated your key business model assumptions with real data?" },
+      { "id": "strat_d2_text", "type": "text", "label": "Which assumption in your business model worries you the most right now?" }
+    ]},
+    { "id": "d3", "label": "Objectives & metrics (OKR/KPI)", "questions": [
+      { "id": "strat_d3_q1", "type": "scale", "label": "How formalized and measurable are your annual objectives?" },
+      { "id": "strat_d3_q2", "type": "scale", "label": "How regularly (weekly/monthly) does your team track these objectives?" },
+      { "id": "strat_d3_q3", "type": "scale", "label": "How well do your current KPIs let you catch a problem before it becomes critical?" },
+      { "id": "strat_d3_text", "type": "text", "label": "What is your most important objective this year, and where do you stand on it?" }
+    ]},
+    { "id": "d4", "label": "Execution & prioritization", "questions": [
+      { "id": "strat_d4_q1", "type": "scale", "label": "How well does your team complete what was planned, without constant drift?" },
+      { "id": "strat_d4_q2", "type": "scale", "label": "How clear are priorities for each member of the leadership team?" },
+      { "id": "strat_d4_q3", "type": "scale", "label": "How well do you know how to say no to opportunities that aren't a priority?" },
+      { "id": "strat_d4_text", "type": "text", "label": "Which project or initiative should be stopped to free up capacity?" }
+    ]},
+    { "id": "d5", "label": "Organizational maturity", "questions": [
+      { "id": "strat_d5_q1", "type": "scale", "label": "How well documented are your internal processes (not just in someone's head)?" },
+      { "id": "strat_d5_q2", "type": "scale", "label": "How effectively could your organization function if a key team member left tomorrow?" },
+      { "id": "strat_d5_q3", "type": "scale", "label": "How well does your current structure support your expected growth over the next 12 months?" },
+      { "id": "strat_d5_text", "type": "text", "label": "What is the biggest organizational gap currently holding back your growth?" }
+    ]}
+  ]
+}

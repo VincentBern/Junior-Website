@@ -1,0 +1,37 @@
+{
+  "offer": "commercial",
+  "title": "Commercial Diagnostic",
+  "placeholder": true,
+  "dimensions": [
+    { "id": "d1", "label": "Customer knowledge (ICP)", "questions": [
+      { "id": "com_d1_q1", "type": "scale", "label": "How precisely can your team describe your ideal customer (industry, size, decision-maker's role)?" },
+      { "id": "com_d1_q2", "type": "scale", "label": "How much are your marketing and sales decisions based on real data about your customers rather than assumptions?" },
+      { "id": "com_d1_q3", "type": "scale", "label": "How aligned is your team on who is (and isn't) a good customer for you?" },
+      { "id": "com_d1_text", "type": "text", "label": "Describe your current ideal customer in a few sentences." }
+    ]},
+    { "id": "d2", "label": "Value proposition", "questions": [
+      { "id": "com_d2_q1", "type": "scale", "label": "How clear and differentiated is your value proposition in the eyes of your customers?" },
+      { "id": "com_d2_q2", "type": "scale", "label": "How consistent is the message your sales team uses from one rep to another?" },
+      { "id": "com_d2_q3", "type": "scale", "label": "How well can your customers explain, in their own words, why they chose you?" },
+      { "id": "com_d2_text", "type": "text", "label": "In your view, what is the main advantage you offer over your competitors?" }
+    ]},
+    { "id": "d3", "label": "Competitive positioning", "questions": [
+      { "id": "com_d3_q1", "type": "scale", "label": "How well do you know the strengths and weaknesses of your top 2-3 competitors?" },
+      { "id": "com_d3_q2", "type": "scale", "label": "How well is your pricing positioning justified relative to perceived value?" },
+      { "id": "com_d3_q3", "type": "scale", "label": "How actively do you track changes at your competitors?" },
+      { "id": "com_d3_text", "type": "text", "label": "Name a competitor you often lose to, and why." }
+    ]},
+    { "id": "d4", "label": "Customer journey & sales process", "questions": [
+      { "id": "com_d4_q1", "type": "scale", "label": "How well documented and consistently followed is your sales process?" },
+      { "id": "com_d4_q2", "type": "scale", "label": "How smooth is your customers' buying journey, from first contact to signature?" },
+      { "id": "com_d4_q3", "type": "scale", "label": "How well do you measure conversion rates at each stage of your funnel?" },
+      { "id": "com_d4_text", "type": "text", "label": "Where do you lose the most opportunities in your current sales journey?" }
+    ]},
+    { "id": "d5", "label": "Sales management & pricing", "questions": [
+      { "id": "com_d5_q1", "type": "scale", "label": "How well does your pricing strategy reflect the real value delivered to the customer?" },
+      { "id": "com_d5_q2", "type": "scale", "label": "How regularly (weekly/monthly) do you track sales performance indicators?" },
+      { "id": "com_d5_q3", "type": "scale", "label": "How much does your team use these indicators to adjust its actions?" },
+      { "id": "com_d5_text", "type": "text", "label": "What sales indicator would you like to track, but don't yet?" }
+    ]}
+  ]
+}
