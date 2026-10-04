@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Junior 102</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../_kit/kit.css">
+<style>
+/* ---------- shared helpers ---------- */
+.lin{animation-timing-function:linear !important}
+.stk{display:grid}
+.stk>*{grid-area:1/1}
+
+/* ---------- S1 hook ---------- */
+.s1 .h{position:absolute;left:80px;top:300px;font-size:128px}
+.s1 svg{position:absolute;left:80px;top:930px;width:920px;height:560px;overflow:visible}
+.ghost{fill:none;stroke:var(--graphite);stroke-width:2.4;stroke-dasharray:12 9}
+.q{fill:var(--revision);font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:800;font-size:84px}
+.ttl{fill:var(--ink);font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:66px;letter-spacing:-.02em}
+
+/* ---------- S2 + S3 blueprint ---------- */
+.bp .h{position:absolute;left:80px;top:270px;font-size:104px}
+.gframe{position:absolute;left:80px;right:80px;top:560px;height:1060px;border:1.5px solid rgba(255,255,255,.3)}
+.gcap{position:absolute;left:26px;right:26px;top:22px;display:flex;justify-content:space-between;font-size:19px;color:#93B4CE}
+.gcap .r{color:#F0A79D}
+.g{position:absolute;left:26px;top:84px;width:868px;height:900px;overflow:visible}
+.g .n-id{font-size:19px}
+.g .big{font-size:46px}
+.g .val{fill:#B9D3E8;font-family:"IBM Plex Mono",monospace;font-size:23px;letter-spacing:.08em}
+.g .prog{fill:#A9C1F7}
+.arrow{fill:#4E86B4}
+.amb{fill:#B97C12;stroke:#EDB850;stroke-width:2.6}
+.amb-t{fill:#FFF0D2;font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.12em;font-weight:500}
+.amb-l{fill:#fff;font-family:"IBM Plex Sans",sans-serif;font-size:33px;font-weight:600}
+.flip{animation:flip .5s cubic-bezier(.3,1.45,.5,1) var(--t) both;transform-box:fill-box;transform-origin:center}
+@keyframes flip{0%{opacity:0;transform:scaleY(0) rotate(-4deg)}30%{opacity:1}100%{opacity:1;transform:none}}
+.bump{animation:bump .5s ease var(--t) both;transform-box:fill-box;transform-origin:center}
+@keyframes bump{0%,100%{transform:none}40%{transform:scale(1.06)}}
+.pL{animation:pL .6s linear var(--t) both}
+@keyframes pL{0%{opacity:0;transform:translate(0,0)}8%{opacity:1}16.5%{transform:translate(0,55px)}83.5%{transform:translate(-224px,55px)}92%{opacity:1}100%{opacity:0;transform:translate(-224px,110px)}}
+.pR{animation:pR .6s linear var(--t) both}
+@keyframes pR{0%{opacity:0;transform:translate(0,0)}8%{opacity:1}16.5%{transform:translate(0,55px)}83.5%{transform:translate(224px,55px)}92%{opacity:1}100%{opacity:0;transform:translate(224px,110px)}}
+.revtag{fill:var(--revision)}
+.revtag-t{fill:#fff;font-family:"IBM Plex Mono",monospace;font-size:20px;letter-spacing:.12em;font-weight:500}
+.stampbox{position:absolute;right:26px;top:880px;width:224px;border:4px solid var(--revision);color:#fff;background:var(--revision);font-size:25px;line-height:1.3;padding:12px 16px;letter-spacing:.1em;text-align:center}
+
+/* ---------- S4 status list ---------- */
+.s4 .h{position:absolute;left:80px;top:270px;font-size:100px}
+.s4 .lede{position:absolute;left:80px;right:80px;top:530px;font-size:40px;line-height:1.3;color:var(--graphite)}
+.panel{position:absolute;left:80px;right:80px;top:720px;background:#fff;border:2px solid var(--ink);padding:10px 30px 8px}
+.p-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2.5px solid var(--ink);padding:22px 0 18px}
+.p-head h3{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:46px;letter-spacing:-.015em}
+.p-head p{font-size:20px;color:var(--graphite)}
+.row{border-bottom:1.5px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row>.in{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:0 22px;align-items:center;padding:30px 14px;margin:0 -14px;border-radius:6px}
+.ico{width:30px;height:30px;border-radius:6px}
+.ico.rv{background:var(--revisit)}
+.ico.pg{background:linear-gradient(to top,var(--prog) 60%,var(--prog-soft) 0)}
+.nm{font-size:40px;font-weight:600;line-height:1.15}
+.nm small{display:block;font-family:"IBM Plex Mono",monospace;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);font-weight:400;margin-top:6px}
+.chip{font-size:21px;color:#fff;padding:12px 18px;border-radius:6px;white-space:nowrap;letter-spacing:.1em}
+.chip.pg{background:var(--prog)}
+.chip.rv{background:var(--revisit)}
+.s4 svg{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:visible;pointer-events:none}
+.s4 .cap{position:absolute;left:80px;right:80px;top:1500px;font-size:26px;color:var(--ink);display:flex;align-items:center;gap:20px}
+.s4 .cap::before{content:"";width:60px;height:2px;background:var(--revision)}
+</style>
+</head>
+<body data-duration="30" data-out="junior-102-fr-9x16">
+
+<!-- ============ S1 · HOOK  0 – 4s ============ -->
+<section class="scene s1" style="--in:0s">
+ <div class="so" style="--out:3.8s">
+  <div class="grid fi" style="--t:0s"></div>
+  <img class="watermark" src="../../assets/logo.png" alt="">
+  <p class="eyebrow mono fu" style="--t:.25s">Junior 102 · Cohérence</p>
+  <h1 class="h">
+    <span class="ln"><span style="--t:.35s">Vous changez</span></span>
+    <span class="ln"><span style="--t:.47s">votre prix.</span></span>
+    <span class="ln"><span class="red" style="--t:1.45s">Qu'est-ce qui</span></span>
+    <span class="ln"><span class="red" style="--t:1.57s">casse?</span></span>
+  </h1>
+  <svg viewBox="0 0 920 560">
+    <g class="fu" style="--t:.8s">
+      <rect class="bx" x="230" y="0" width="460" height="200"/>
+      <text class="sm" x="262" y="46">Canevas · Prix</text>
+      <rect x="636" y="28" width="22" height="22" rx="4" fill="var(--ok)"/>
+      <text class="ttl" x="260" y="122">Palier PME</text>
+      <text class="sm" x="262" y="168">Cornets Boréal inc. · Rév. A</text>
+    </g>
+    <!-- what hangs below it -->
+    <path class="thin dr" style="--t:1.7s;--d:.5s" pathLength="1" d="M460,200 V270 H160 V350"/>
+    <path class="thin dr" style="--t:1.75s;--d:.4s" pathLength="1" d="M460,200 V350"/>
+    <path class="thin dr" style="--t:1.8s;--d:.5s" pathLength="1" d="M460,200 V270 H760 V350"/>
+    <rect class="ghost fi" style="--t:2.1s" x="20" y="350" width="280" height="170"/>
+    <rect class="ghost fi" style="--t:2.25s" x="320" y="350" width="280" height="170"/>
+    <rect class="ghost fi" style="--t:2.4s" x="620" y="350" width="280" height="170"/>
+    <text class="q pop" style="--t:2.45s" x="160" y="465" text-anchor="middle">?</text>
+    <text class="q pop" style="--t:2.6s" x="460" y="465" text-anchor="middle">?</text>
+    <text class="q pop" style="--t:2.75s" x="760" y="465" text-anchor="middle">?</text>
+  </svg>
+  <div class="cart mono fu" style="--t:.5s"><div><small>Projet</small>Junior 102</div><div><small>Feuille</small>01 / 04</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S2 + S3 · LE GRAPHE, PUIS LE CHANGEMENT  4 – 18s ============ -->
+<section class="scene blue wipe bp" style="--in:3.85s">
+ <div class="so" style="--out:17.75s">
+  <div class="grid"></div>
+  <div class="fo" style="--t:10.7s"><p class="eyebrow mono fu" style="--t:4.25s">Le graphe de dépendances</p></div>
+  <p class="eyebrow mono fu" style="--t:11.15s">Le moteur de cohérence</p>
+
+  <div class="fo" style="--t:10.7s">
+  <h2 class="h">
+    <span class="ln"><span style="--t:4.35s">Chaque outil sait</span></span>
+    <span class="ln"><span style="--t:4.47s">ce dont il dépend.</span></span>
+  </h2>
+  </div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:11.15s">Le prix change.</span></span>
+    <span class="ln"><span style="--t:11.27s">La suite le sait.</span></span>
+  </h2>
+
+  <div class="gframe fi" style="--t:4.75s">
+    <div class="gcap mono"><span>Dépendances · Commercialisation</span>
+      <span class="stk"><span class="fo" style="--t:11.9s">Rév. A</span><span class="r fi" style="--t:12.0s">Rév. B</span></span></div>
+    <svg class="g" viewBox="0 0 868 900">
+      <!-- edges (after their boxes) -->
+      <path class="edge dr" style="--t:6.35s" pathLength="1" d="M136,140 V195 H434 V250"/>
+      <path class="edge dr" style="--t:6.45s" pathLength="1" d="M434,140 V250"/>
+      <path class="edge dr" style="--t:6.55s" pathLength="1" d="M732,140 V195 H434"/>
+      <path class="arrow fi" style="--t:7.0s" d="M434,250 l-11,-18 h22 z"/>
+
+      <path class="edge dr" style="--t:7.55s" pathLength="1" d="M434,420 V475 H210 V530"/>
+      <path class="edge dr" style="--t:7.65s" pathLength="1" d="M434,475 H658 V530"/>
+      <path class="arrow fi" style="--t:8.05s" d="M210,530 l-11,-18 h22 z"/>
+      <path class="arrow fi" style="--t:8.1s" d="M658,530 l-11,-18 h22 z"/>
+
+      <path class="edge dr" style="--t:8.55s" pathLength="1" d="M210,660 V715 H434 V770"/>
+      <path class="edge dr" style="--t:8.65s" pathLength="1" d="M658,660 V715 H434"/>
+      <path class="arrow fi" style="--t:9.05s" d="M434,770 l-11,-18 h22 z"/>
+
+      <!-- row 1 : inputs -->
+      <rect class="n-box dr" style="--t:5.2s" pathLength="1" x="0" y="0" width="272" height="140"/>
+      <g class="fi" style="--t:5.45s">
+        <rect x="22" y="24" width="18" height="18" rx="3" fill="var(--ok)"/><text class="n-id" x="52" y="40">PRÊT</text>
+        <text class="n-label" x="22" y="104">ICP</text>
+      </g>
+      <rect class="n-box dr" style="--t:5.35s" pathLength="1" x="298" y="0" width="272" height="140"/>
+      <g class="fi" style="--t:5.6s">
+        <rect x="320" y="24" width="18" height="18" rx="3" fill="var(--ok)"/><text class="n-id" x="350" y="40">PRÊT</text>
+        <text class="n-label" x="320" y="88">Proposition</text><text class="n-label" x="320" y="124">de valeur</text>
+      </g>
+      <rect class="n-box dr" style="--t:5.5s" pathLength="1" x="596" y="0" width="272" height="140"/>
+      <g class="fi" style="--t:5.75s">
+        <rect x="618" y="24" width="18" height="18" rx="3" fill="var(--ok)"/><text class="n-id" x="648" y="40">PRÊT</text>
+        <text class="n-label" x="618" y="88">Audit</text><text class="n-label" x="618" y="124">concurrentiel</text>
+      </g>
+
+      <!-- Prix -->
+      <rect class="n-box dr" style="--t:5.95s" pathLength="1" x="234" y="250" width="400" height="170"/>
+      <g class="fi" style="--t:6.2s">
+        <text class="n-label big" x="258" y="346">Prix</text>
+        <text class="val" x="258" y="394">Palier PME</text>
+      </g>
+      <g class="fi" style="--t:6.2s"><g class="fo" style="--t:12.0s">
+        <rect x="258" y="274" width="18" height="18" rx="3" fill="var(--ok)"/><text class="n-id" x="288" y="290">PRÊT</text>
+      </g></g>
+      <g class="fi" style="--t:12.4s">
+        <rect x="258" y="274" width="18" height="18" rx="3" fill="url(#pg)"/><text class="n-id prog" x="288" y="290">EN COURS</text>
+      </g>
+      <defs><linearGradient id="pg" x1="0" y1="1" x2="0" y2="0"><stop offset=".6" stop-color="#2D5BD0"/><stop offset=".6" stop-color="#D6E0F7"/></linearGradient></defs>
+
+      <!-- row 3 -->
+      <rect class="n-box dr" style="--t:7.1s" pathLength="1" x="20" y="530" width="380" height="130"/>
+      <g class="fi" style="--t:7.35s">
+        <rect x="44" y="554" width="18" height="18" rx="3" fill="var(--ok)"/><text class="n-id" x="74" y="570">PRÊT</text>
+        <text class="n-label" x="44" y="630">Activation</text>
+      </g>
+      <rect class="n-box dr" style="--t:7.25s" pathLength="1" x="468" y="530" width="380" height="130"/>
+      <g class="fi" style="--t:7.5s">
+        <rect x="492" y="554" width="18" height="18" rx="3" fill="var(--ok)"/><text class="n-id" x="522" y="570">PRÊT</text>
+        <text class="n-label" x="492" y="630">Cycle de vente</text>
+      </g>
+
+      <!-- row 4 : on demand -->
+      <g class="fi" style="--t:8.25s">
+        <rect class="n-box" x="244" y="770" width="380" height="130" stroke-dasharray="12 8"/>
+        <rect x="268" y="794" width="18" height="18" rx="3" fill="var(--ok)"/><text class="n-id" x="298" y="810">PRÊT</text>
+        <text class="n-label" x="268" y="870">Pitch de vente</text>
+      </g>
+      <text class="n-id fi" style="--t:8.5s;fill:#C6D8E6" x="234" y="842" text-anchor="end">SUR DEMANDE →</text>
+
+      <!-- ===== S3 : the change ===== -->
+      <path class="flag dr" style="--t:11.7s;--d:.35s" pathLength="1" d="M252,386 H424"/>
+      <g class="pop" style="--t:12.0s">
+        <rect class="revtag" x="440" y="364" width="118" height="40" transform="rotate(-4 499 384)"/>
+        <text class="revtag-t" x="499" y="391" text-anchor="middle" transform="rotate(-4 499 384)">RÉV. B</text>
+      </g>
+      <rect class="flag dr" style="--t:12.2s;--d:.5s;stroke-width:3.5" pathLength="1" x="234" y="250" width="400" height="170"/>
+
+      <!-- pulse: Prix -> Activation / Cycle -->
+      <path class="flag dr lin" style="--t:12.5s;--d:.6s;stroke-width:3.5" pathLength="1" d="M434,420 V475 H210 V530"/>
+      <path class="flag dr lin" style="--t:13.0s;--d:.6s;stroke-width:3.5" pathLength="1" d="M434,475 H658 V530"/>
+      <g class="pL" style="--t:12.5s"><circle cx="434" cy="420" r="18" fill="#C42B1C" opacity=".35"/><circle cx="434" cy="420" r="9" fill="#FF6A55"/></g>
+      <g class="pR" style="--t:13.0s"><circle cx="434" cy="420" r="18" fill="#C42B1C" opacity=".35"/><circle cx="434" cy="420" r="9" fill="#FF6A55"/></g>
+
+      <path class="fi" style="--t:13.05s" d="M210,530 l-11,-18 h22 z" fill="var(--revision)"/>
+      <path class="fi" style="--t:13.55s" d="M658,530 l-11,-18 h22 z" fill="var(--revision)"/>
+      <g class="flip" style="--t:13.1s">
+        <rect class="amb" x="20" y="530" width="380" height="130"/>
+        <text class="amb-t" x="44" y="570">⟲ À REVOIR</text>
+        <text class="amb-l" x="44" y="630">Activation</text>
+      </g>
+      <g class="flip" style="--t:13.6s">
+        <rect class="amb" x="468" y="530" width="380" height="130"/>
+        <text class="amb-t" x="492" y="570">⟲ À REVOIR</text>
+        <text class="amb-l" x="492" y="630">Cycle de vente</text>
+      </g>
+
+      <!-- pulse: -> Pitch de vente -->
+      <path class="flag dr lin" style="--t:13.5s;--d:.6s;stroke-width:3.5" pathLength="1" d="M210,660 V715 H434 V770"/>
+      <path class="flag dr lin" style="--t:13.6s;--d:.5s;stroke-width:3.5" pathLength="1" d="M658,660 V715 H434"/>
+      <g class="pR" style="--t:13.5s"><circle cx="210" cy="660" r="18" fill="#C42B1C" opacity=".35"/><circle cx="210" cy="660" r="9" fill="#FF6A55"/></g>
+      <g class="pL" style="--t:13.5s"><circle cx="658" cy="660" r="18" fill="#C42B1C" opacity=".35"/><circle cx="658" cy="660" r="9" fill="#FF6A55"/></g>
+
+      <path class="fi" style="--t:14.05s" d="M434,770 l-11,-18 h22 z" fill="var(--revision)"/>
+      <g class="flip" style="--t:14.1s">
+        <rect class="amb" x="244" y="770" width="380" height="130" stroke-dasharray="12 8"/>
+        <text class="amb-t" x="268" y="810">⟲ À REVOIR</text>
+        <text class="amb-l" x="268" y="870">Pitch de vente</text>
+      </g>
+    </svg>
+    <div class="stampbox mono stamp" style="--t:14.9s">3 canevas<br>à revoir</div>
+  </div>
+  <div class="cart mono"><div><small>Projet</small>Junior 102</div><div><small>Feuille</small><span class="stk"><span class="fo" style="--t:10.9s">02 / 04</span><span class="fi" style="--t:11.1s">03 / 04</span></span></div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S4 · CE QUE VOUS VOYEZ  18 – 25.6s ============ -->
+<section class="scene s4" style="--in:17.75s">
+ <div class="so" style="--out:25.45s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:17.85s">Ce que vous voyez</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:17.9s">Signalé au moment</span></span>
+    <span class="ln"><span style="--t:18.02s">où vous le créez.</span></span>
+  </h2>
+  <p class="lede fi" style="--t:18.9s">Pas dix-huit mois plus tard,<br>en conseil d'administration.</p>
+
+  <div class="panel fu" style="--t:19.4s">
+    <div class="p-head"><h3>Commercialisation</h3><p class="mono">Cornets Boréal inc.</p></div>
+    <div class="row fi" style="--t:19.6s"><div class="in">
+      <span class="ico pg"></span>
+      <span class="nm">Prix<small>Rév. B · palier PME revu</small></span>
+      <span class="chip pg mono pop" style="--t:20.2s">En cours</span>
+    </div></div>
+    <div class="row fi" style="--t:19.75s"><div class="in recolor" style="--t:20.6s;--from:rgba(246,231,196,0);--to:#F6E7C4">
+      <span class="ico rv"></span>
+      <span class="nm">Activation<small>S'appuie sur Prix</small></span>
+      <span class="chip rv mono pop" style="--t:20.6s">À revoir</span>
+    </div></div>
+    <div class="row fi" style="--t:19.9s"><div class="in recolor" style="--t:20.9s;--from:rgba(246,231,196,0);--to:#F6E7C4">
+      <span class="ico rv"></span>
+      <span class="nm">Cycle de vente<small>S'appuie sur Prix</small></span>
+      <span class="chip rv mono pop" style="--t:20.9s">À revoir</span>
+    </div></div>
+    <div class="row fi" style="--t:20.05s"><div class="in recolor" style="--t:21.2s;--from:rgba(246,231,196,0);--to:#F6E7C4">
+      <span class="ico rv"></span>
+      <span class="nm">Pitch de vente<small>Sur demande · en aval</small></span>
+      <span class="chip rv mono pop" style="--t:21.2s">À revoir</span>
+    </div></div>
+  </div>
+  <svg viewBox="0 0 1080 1920">
+    <path id="loop" class="flag dr" style="--t:21.7s;--d:.8s;stroke-width:3.5" pathLength="1" d="M804,992 C866,978 950,978 980,994 C992,1100 992,1240 978,1342 C922,1358 850,1358 798,1344 C782,1240 782,1100 798,1000 C804,991 812,991 826,989"/>
+  </svg>
+  <p class="cap mono fu" style="--t:22.3s">Junior vous dit quoi regarder.</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 102</div><div><small>Feuille</small>04 / 04</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ CLOSER  25.6 – 30s (keep this block identical across the series; only the headline changes) ============ -->
+<section class="scene dark closer" style="--in:25.6s">
+ <div class="so" style="--out:99s">
+  <div class="cmark pop" style="--t:25.85s"><img src="../../assets/logo.png" alt=""><i></i><i class="r"></i></div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:26.0s">Pas les cadres.</span></span>
+    <span class="ln"><span style="--t:26.12s">Le réseau qui</span></span>
+    <span class="ln"><span style="--t:26.24s">les relie.</span></span>
+  </h2>
+  <p class="sub mono fi" style="--t:26.7s">Rien à connecter · Rien à migrer<br>Rien à perdre si vous arrêtez</p>
+  <div class="btn-wrap fu" style="--t:27.2s"><span class="btn mono">Faire mon diagnostic →</span></div>
+  <p class="url fu" style="--t:27.45s">junior<em>.</em>coach</p>
+  <p class="fine mono fi" style="--t:27.7s">Stratégie + commercialisation · dans votre Claude</p>
+ </div>
+</section>
+
+<!-- sheet border, drawn once -->
+<svg class="sheetframe" viewBox="0 0 1080 1920">
+  <rect class="dr" style="--t:0s;--d:1.1s" pathLength="1" x="36" y="36" width="1008" height="1848" fill="none" stroke="#8D98A5" stroke-opacity=".55" stroke-width="2"/>
+</svg>
+<script src="../_kit/kit.js"></script>
+</body>
+</html>
