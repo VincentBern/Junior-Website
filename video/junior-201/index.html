@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Junior 201</title>
+<!--
+  JUNIOR 201 · ARCHITECTURE — « Comment Junior fonctionne » (16:9, 60 s, silencieux)
+  Pour partenaires et investisseurs : la forme du système et pourquoi elle est défendable.
+
+  S1  0.0 – 6.8   Feuille 01 · Accroche (papier)
+      « Vous travaillez avec Junior. / Jamais dans Junior. »
+      Lede : « Junior, c'est un ensemble d'outils dans la conversation Claude que vous avez déjà ouverte. »
+      Figure : fantôme « une app de plus » (connexion, importer vos données) → stylo rouge : grand X, « Pas une app de plus ».
+      À droite, « Votre Claude » : « Où j'en suis? » · junior · show_progress · « Tu es à mi-chemin du Prix. On le termine? »
+  S2  6.85 – 15.2 Feuille 02 · La forme du système (papier, schéma qui se construit)
+      « Deux serveurs. / Un de chaque côté. »
+      Chez vous : Votre Claude → Serveur local (MCP · chez vous · « Lit et écrit votre fichier. ») ↔ Votre fichier projet.
+      Chez nous : Serveur Junior (MCP · Cloud Run) · La méthode (32 outils · le graphe) · Le moteur (synthétise · vérifie).
+      Stylo rouge : la FRONTIÈRE tracée entre les deux. Fig. 02 · Chaque appel part de votre conversation.
+  S3  15.2 – 23.6 Feuille 03 · La frontière (même schéma)
+      « La méthode ne traverse jamais. / Vos réponses ne restent pas chez nous. »
+      La puce « méthode » rebondit sur la frontière ; les réponses traversent, le livrable revient dans le fichier.
+      Stylo rouge : « Conservé ici : réponses » barré + tampon « Jamais de réponses ici ».
+  S4  23.65 – 34.6 Feuille 04 · BLEU · Une question sur votre travail (moindre privilège)
+      « Seulement les champs nécessaires. / Aucune valeur conservée. »
+      ① plan_query : le serveur nomme B-01 · D-08 → ② read_fields : seuls ces champs sont lus, chez vous
+      → ③ answer_query : seules ces valeurs voyagent ; réponse synthétisée ; « Conservé : aucune valeur. »
+      Stylo rouge : boucles autour des deux champs, « Seuls ceux-là ».
+  S5  34.65 – 45.0 Feuille 05 · Ce qui est conservé (papier)
+      « Vos statuts. / Jamais vos mots. »
+      Lede : « De votre travail, le serveur hébergé ne garde que la progression : des IDs, des statuts, des comptes, des dates. »
+      Fiche Progression · Cornets Boréal inc. (ICP prêt, Prix en cours, Activation à revoir) → /coach, /portal ; /admin autour.
+      Stylo rouge : une phrase du client tente d'entrer, barrée — « Jamais ».
+  S6  45.05 – 55.45 Feuille 06 · Le modèle (papier)
+      « Rien ne tourne / quand personne n'appelle. »
+      Tracé d'une journée : en marche à chaque appel, à zéro le reste du temps (stylo rouge : « À zéro »).
+      Qui paie quoi : La conversation → votre abonnement Claude · Chaque appel de méthode → une requête, sur notre clé (Haiku · Sonnet).
+  CLOSER 55.6 – 60 « Votre Claude, notre méthode. / Chacun chez soi. »
+-->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../_kit/kit.css">
+<link rel="stylesheet" href="../_kit/kit-16x9.css">
+<style>
+/* ---------- helpers ---------- */
+.lin{animation-timing-function:linear !important}
+.stk{display:grid}
+.stk>*{grid-area:1/1}
+.full{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible;pointer-events:none}
+.zone{fill:none;stroke:var(--graphite);stroke-width:2;stroke-dasharray:10 8;opacity:.8}
+.cap{fill:var(--graphite);font-family:"IBM Plex Sans",sans-serif;font-size:24px}
+.big{font-size:34px}
+.growy{transform-box:fill-box;transform-origin:center top;animation:growy var(--d,.9s) var(--ease) var(--t) both}
+@keyframes growy{from{transform:scaleY(0)}to{transform:none}}
+.dim{animation:dim .5s ease var(--t) both}
+@keyframes dim{from{opacity:1}to{opacity:.22}}
+.flash{animation:flash 1.1s ease var(--t) both}
+@keyframes flash{0%,100%{opacity:0}30%,60%{opacity:1}}
+.ar{fill:var(--graphite)}
+
+/* chat window (neutral frame, as on the site) */
+.chat{position:absolute;border:2px solid var(--ink);background:#FBFBFA;display:flex;flex-direction:column}
+.chat .bar{display:flex;align-items:center;gap:8px;height:46px;padding:0 16px;border-bottom:1.5px solid var(--line);background:var(--sheet);font-size:17px;color:var(--graphite);flex:none}
+.chat .bar i{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--line);display:block}
+.chat .bar span{margin-left:10px}
+.chat .body{flex:1;padding:22px 20px 0;display:flex;flex-direction:column;gap:16px}
+.u-msg{align-self:flex-end;background:#E6E9ED;border-radius:18px;padding:9px 18px;font-size:26px}
+.tool{font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.04em;color:var(--graphite);display:flex;align-items:center;gap:10px}
+.tool::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--ok)}
+.a-msg{font-size:26px;line-height:1.3}
+.composer{margin:0 16px 16px;border:1.5px solid var(--line);border-radius:14px;padding:12px 16px;color:var(--graphite);font-size:24px;background:#fff;flex:none}
+
+/* ---------- S1 ---------- */
+.s1 .h{position:absolute;left:120px;top:160px;font-size:100px}
+.s1 .lede{position:absolute;left:120px;top:448px;width:560px;font-size:31px;line-height:1.38;color:#2A323C}
+.tlist{position:absolute;left:120px;top:640px;width:580px;border-top:1.5px solid var(--line);padding-top:16px}
+.tlist>p{font-size:17px;color:var(--graphite)}
+.tlist ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin-top:20px}
+.tlist .tool{font-size:19px;color:var(--ink)}
+.s1 .chat{left:1240px;top:432px;width:560px;height:476px}
+
+/* ---------- S2 / S3 ---------- */
+.sys .h{position:absolute;left:120px;top:150px;font-size:88px}
+.sys .chat{left:150px;top:462px;width:340px;height:418px}
+.sys .chat .body{padding:18px 16px 0;gap:13px}
+.sys .u-msg{font-size:24px;padding:8px 16px}
+.sys .a-msg{font-size:24px}
+.sys .composer{font-size:24px;padding:10px 14px}
+.chip-ok{fill:var(--ok)}
+.chip-t{fill:#fff;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.1em;font-weight:500}
+.pk{fill:var(--blueprint)}
+.pk-t{fill:var(--blueprint);font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.12em;font-weight:500}
+.meth{fill:var(--blueprint)}
+.pAns{animation:pAns 1.1s cubic-bezier(.5,0,.5,1) var(--t) both}
+@keyframes pAns{0%{opacity:0;transform:translateX(0)}12%{opacity:1}82%{opacity:1;transform:translateX(232px)}100%{opacity:0;transform:translateX(244px)}}
+.pDel{animation:pDel 1.5s linear var(--t) both}
+@keyframes pDel{0%{opacity:0;transform:translate(0,0)}8%{opacity:1}58%{transform:translate(-270px,0)}90%{opacity:1;transform:translate(-270px,150px)}100%{opacity:0;transform:translate(-270px,150px)}}
+.pMeth{animation:pMeth 1.9s var(--t) both}
+@keyframes pMeth{0%{opacity:0;transform:translateX(0);animation-timing-function:cubic-bezier(.5,0,.9,.6)}10%{opacity:1}40%{transform:translateX(-130px);animation-timing-function:ease-out}48%{transform:translateX(-104px);animation-timing-function:ease-in}56%{transform:translateX(-130px);animation-timing-function:ease-out}64%{transform:translateX(-122px);animation-timing-function:ease-in-out}80%{opacity:1}100%{opacity:0;transform:translateX(0)}}
+.stampx{position:absolute;background:var(--revision);color:#fff;font-size:19px;line-height:1.25;padding:8px 16px;letter-spacing:.12em;text-align:center;white-space:nowrap;transform-origin:center}
+
+/* ---------- S4 blueprint ---------- */
+.bp .h{position:absolute;left:120px;top:150px;font-size:88px}
+.gframe{position:absolute;left:120px;right:120px;top:372px;height:560px;border:1.5px solid rgba(255,255,255,.3)}
+.gcap{position:absolute;left:24px;right:24px;top:16px;display:flex;justify-content:space-between;font-size:17px;color:#93B4CE}
+.gcap .r{letter-spacing:.06em;text-transform:none}
+.bp .n-id{font-size:17px}
+.cell{fill:rgba(13,53,87,.6);stroke:#4E86B4;stroke-width:2}
+.mask{fill:#4E86B4;opacity:.55}
+.hi{fill:rgba(255,255,255,.12);stroke:#fff;stroke-width:2.6}
+.q-b{fill:rgba(255,255,255,.08);stroke:#7FB2D8;stroke-width:2.2}
+.lane{fill:none;stroke:#4E86B4;stroke-width:2.4}
+.fr-b{fill:none;stroke:rgba(255,255,255,.4);stroke-width:2;stroke-dasharray:10 8}
+.idchip{fill:rgba(255,255,255,.12);stroke:#fff;stroke-width:2}
+.idchip-t{fill:#fff;font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.1em;font-weight:500}
+.wpk{fill:#EAF3FA}
+.wpk-t{fill:#EAF3FA;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.12em;font-weight:500}
+.okchip{fill:var(--ok)}
+.pinkflag{fill:none;stroke:#FF6A55;stroke-width:4;stroke-linecap:round}
+.smp{fill:#F0A79D;font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.12em}
+.qR{animation:qR 1s cubic-bezier(.5,0,.5,1) var(--t) both}
+@keyframes qR{0%{opacity:0;transform:translateX(0)}12%{opacity:1}85%{opacity:1;transform:translateX(330px)}100%{opacity:0;transform:translateX(340px)}}
+.qL{animation:qL 1s cubic-bezier(.5,0,.5,1) var(--t) both}
+@keyframes qL{0%{opacity:0;transform:translateX(0)}12%{opacity:1}85%{opacity:1;transform:translateX(-330px)}100%{opacity:0;transform:translateX(-340px)}}
+.vR{animation:vR .9s cubic-bezier(.5,0,.3,1) var(--t) both}
+@keyframes vR{0%{opacity:0;transform:translateX(0)}15%{opacity:1}100%{opacity:1;transform:translateX(392px)}}
+
+/* ---------- S5 ---------- */
+.s5 .h{position:absolute;left:120px;top:150px;font-size:96px}
+.s5 .lede{position:absolute;left:120px;top:368px;width:850px;font-size:26px;line-height:1.38;color:#2A323C}
+.rec{position:absolute;left:120px;top:486px;width:780px;height:424px;background:#fff;border:2px solid var(--ink);padding:0 26px}
+.rec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2.5px solid var(--ink);padding:18px 0 14px}
+.rec-h h3{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:36px;letter-spacing:-.015em}
+.rec-h p{font-size:17px;color:var(--graphite)}
+.rg{display:grid;grid-template-columns:140px 140px 84px 130px 1fr;align-items:center;column-gap:10px}
+.rec-c{font-size:17px;color:var(--graphite);padding:12px 0 8px;border-bottom:1.5px solid var(--line)}
+.rec-r{height:66px;border-bottom:1.5px solid var(--line);font-size:26px}
+.rec-r b{font-weight:600}
+.rec-r .m{font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.06em;color:var(--ink)}
+.rec-r .g{color:var(--graphite)}
+.chip{font-size:17px;color:#fff;padding:7px 12px;border-radius:5px;white-space:nowrap;letter-spacing:.1em;justify-self:start}
+.chip.ok{background:var(--ok)}.chip.pg{background:var(--prog)}.chip.rv{background:var(--revisit)}
+.ghost{position:absolute;left:26px;right:26px;top:356px;font-size:26px;font-style:italic;color:var(--graphite);display:flex;align-items:center;gap:20px}
+.ghost .tag{font-style:normal;background:var(--revision);color:#fff;font-size:18px;padding:6px 12px;letter-spacing:.12em}
+.frm{position:absolute;left:1000px;width:800px;border:2px solid var(--ink);background:#fff}
+.frm .ub{display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-bottom:1.5px solid var(--line);background:var(--sheet)}
+.frm .ub i{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--line);display:block}
+.frm .ub span{margin-left:12px;font-size:17px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:6px;padding:2px 12px}
+.frm .fb{display:grid;grid-template-columns:250px 1fr;gap:28px;padding:20px 24px;align-items:center}
+.frm h4{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:32px;letter-spacing:-.015em}
+.frm p{font-size:24px;color:#333B45;line-height:1.3;margin-top:4px}
+.segs{display:flex;gap:4px;height:34px}
+.segs i{display:block;flex:1;border-radius:3px}
+.sg-ok{background:var(--ok)}.sg-rv{background:var(--revisit)}.sg-pg{background:linear-gradient(to top,var(--prog) 55%,var(--prog-soft) 0)}.sg-td{background:#F7F9FB;box-shadow:inset 0 0 0 1.5px var(--line)}
+.mini{display:flex;flex-direction:column;gap:10px}
+.mini small{font-size:17px;color:var(--graphite)}
+.pbtn{align-self:flex-start;background:var(--prog);color:#fff;font-size:17px;padding:6px 12px;border-radius:6px;font-weight:600}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs span{font-size:17px;border:1.5px solid var(--line);padding:3px 8px;color:var(--graphite);letter-spacing:.08em}
+.tabs span.on{border-color:var(--ink);color:var(--ink)}
+.aroundlbl{position:absolute;left:1000px;top:124px;font-size:17px;color:var(--graphite)}
+
+/* ---------- S6 ---------- */
+.s6 .h{position:absolute;left:120px;top:150px;font-size:96px}
+.paycap{position:absolute;left:1200px;top:430px;font-size:17px;color:var(--graphite)}
+.pay{position:absolute;left:1200px;width:600px;border:2px solid var(--ink);background:#fff;padding:24px 28px}
+.pay small{display:block;font-size:17px;color:var(--graphite)}
+.pay b{display:block;font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:42px;letter-spacing:-.015em;line-height:1.08;margin-top:10px}
+.pay p{font-size:24px;color:#333B45;margin-top:10px}
+.pay .ar2{font-family:"IBM Plex Mono",monospace;color:var(--revision)}
+</style>
+</head>
+<body data-size="1920x1080" data-duration="60" data-out="junior-201-fr-16x9">
+
+<!-- ============ S1 · ACCROCHE  0 – 6.8s ============ -->
+<section class="scene s1" style="--in:0s">
+ <div class="so" style="--out:6.8s">
+  <div class="grid fi" style="--t:0s"></div>
+  <img class="watermark" src="../../assets/logo.png" alt="">
+  <p class="eyebrow mono fu" style="--t:.25s">Junior 201 · Architecture</p>
+  <h1 class="h">
+    <span class="ln"><span style="--t:.35s">Vous travaillez avec Junior.</span></span>
+    <span class="ln"><span style="--t:.6s">Jamais dans Junior.</span></span>
+  </h1>
+  <p class="lede fi" style="--t:1.2s">Junior, c'est un ensemble d'outils dans la conversation Claude que vous avez déjà ouverte.</p>
+  <div class="tlist">
+    <p class="mono fi" style="--t:2.0s">Outils Junior · extrait</p>
+    <ul>
+      <li class="tool fi" style="--t:2.15s">list_canevas</li>
+      <li class="tool fi" style="--t:2.25s">describe_canevas</li>
+      <li class="tool fi" style="--t:2.35s">populate_canevas</li>
+      <li class="tool fi" style="--t:2.45s">generate_deliverable</li>
+      <li class="tool fi" style="--t:2.55s">plan_query</li>
+      <li class="tool fi" style="--t:2.65s">show_progress</li>
+    </ul>
+  </div>
+
+  <svg class="full">
+    <!-- the app Junior is not -->
+    <g class="fi" style="--t:1.5s">
+      <rect class="zone" x="760" y="470" width="420" height="400"/>
+      <path class="zone" d="M760,514 H1180"/>
+      <g fill="none" stroke="var(--graphite)" stroke-width="1.6" opacity=".8"><circle cx="784" cy="492" r="6"/><circle cx="804" cy="492" r="6"/><circle cx="824" cy="492" r="6"/></g>
+      <text class="sm" x="790" y="572">Connexion</text>
+      <rect class="zone" x="790" y="590" width="360" height="50" rx="8"/>
+      <rect class="zone" x="790" y="656" width="360" height="50" rx="8"/>
+      <text class="sm" x="790" y="768">Importer vos données</text>
+      <rect class="zone" x="790" y="786" width="230" height="52" rx="8"/>
+    </g>
+    <path class="flag dr" style="--t:3.9s;--d:.35s;stroke-width:6" pathLength="1" d="M786,494 C880,600 1040,760 1160,858"/>
+    <path class="flag dr" style="--t:4.2s;--d:.35s;stroke-width:6" pathLength="1" d="M1156,492 C1060,600 900,760 780,860"/>
+    <text class="smr fi" style="--t:4.5s" x="970" y="912" text-anchor="middle">Pas une app de plus</text>
+  </svg>
+
+  <div class="chat fu" style="--t:1.8s">
+    <div class="bar mono"><i></i><i></i><i></i><span>Votre Claude</span></div>
+    <div class="body">
+      <div class="u-msg fu" style="--t:2.3s">Où j'en suis?</div>
+      <div class="tool fi" style="--t:2.75s">junior · show_progress</div>
+      <div class="a-msg fu" style="--t:3.05s">Tu es à mi-chemin du Prix. On le termine?</div>
+      <div class="u-msg fu" style="--t:3.55s">Oui, allons-y.</div>
+      <div class="tool fi" style="--t:3.95s">junior · describe_canevas</div>
+    </div>
+    <div class="composer">Répondre…</div>
+  </div>
+  <p class="figcap mono fu" style="--t:.6s">Fig. 01 · Dans l'outil déjà ouvert</p>
+  <div class="cart mono fu" style="--t:.5s"><div><small>Projet</small>Junior 201</div><div><small>Feuille</small>01 / 06</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S2 + S3 · LE SYSTÈME, PUIS LA FRONTIÈRE  6.85 – 23.6s ============ -->
+<section class="scene sys" style="--in:6.85s">
+ <div class="so" style="--out:23.6s">
+  <div class="grid"></div>
+  <div class="fo" style="--t:15.1s"><p class="eyebrow mono fu" style="--t:7.0s">La forme du système</p></div>
+  <p class="eyebrow mono fu" style="--t:15.45s">La frontière</p>
+
+  <div class="fo" style="--t:15.1s">
+  <h2 class="h">
+    <span class="ln"><span style="--t:7.05s">Deux serveurs.</span></span>
+    <span class="ln"><span style="--t:7.2s">Un de chaque côté.</span></span>
+  </h2>
+  </div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:15.45s">La méthode ne traverse jamais.</span></span>
+    <span class="ln"><span style="--t:15.6s">Vos réponses ne restent pas chez nous.</span></span>
+  </h2>
+
+  <svg class="full">
+    <!-- zone: chez vous -->
+    <rect class="zone fi" style="--t:7.6s" x="120" y="400" width="940" height="510"/>
+    <text class="sm fi" style="--t:7.7s" x="144" y="436">Chez vous · votre environnement</text>
+
+    <!-- chat -> local -->
+    <path class="thin dr" style="--t:9.3s;--d:.4s" pathLength="1" d="M490,560 H570"/>
+    <path class="ar fi" style="--t:9.6s" d="M580,560 l-14,-8 v16 z"/>
+    <text class="sm fi" style="--t:9.6s" x="535" y="540" text-anchor="middle">Outils</text>
+
+    <!-- local server -->
+    <rect class="fi" style="--t:9.75s;fill:var(--sheet)" x="580" y="470" width="450" height="190"/><rect class="bx dr" style="--t:9.5s;fill:none" pathLength="1" x="580" y="470" width="450" height="190"/>
+    <g class="fi" style="--t:9.85s">
+      <text class="sm" x="606" y="510">MCP · chez vous</text>
+      <text class="lbl big" x="606" y="556">Serveur local</text>
+      <text class="cap" x="606" y="606">Lit et écrit votre fichier.</text>
+    </g>
+
+    <!-- local <-> file -->
+    <path class="thin dr" style="--t:10.15s;--d:.35s" pathLength="1" d="M805,672 V708"/>
+    <path class="ar fi" style="--t:10.3s" d="M805,662 l-8,14 h16 z"/>
+    <path class="ar fi" style="--t:10.3s" d="M805,718 l-8,-14 h16 z"/>
+
+    <!-- project file -->
+    <rect class="fi" style="--t:10.50s;fill:var(--sheet)" x="580" y="720" width="450" height="160"/><rect class="bx dr" style="--t:10.25s;fill:none" pathLength="1" x="580" y="720" width="450" height="160"/>
+    <g class="fi" style="--t:10.6s">
+      <path d="M606,748 h30 l14,14 v44 h-44 z" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M636,748 v14 h14" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>
+      <text class="lbl" x="672" y="776">Votre fichier projet</text>
+      <text class="sm" x="672" y="812">Réponses · livrables</text>
+      <text class="sm" x="672" y="842">+ exports Word · HTML · MD</text>
+    </g>
+
+    <!-- zone: chez nous -->
+    <rect class="zone fi" style="--t:10.9s" x="1240" y="400" width="560" height="510"/>
+    <text class="sm fi" style="--t:11.0s" x="1264" y="436">Chez nous · hébergé</text>
+
+    <!-- hosted server -->
+    <rect class="fi" style="--t:11.35s;fill:var(--sheet)" x="1270" y="470" width="500" height="410"/><rect class="bx dr" style="--t:11.1s;fill:none" pathLength="1" x="1270" y="470" width="500" height="410"/>
+    <g class="fi" style="--t:11.45s">
+      <text class="sm" x="1296" y="510">MCP · Cloud Run</text>
+      <text class="lbl big" x="1296" y="552">Serveur Junior</text>
+    </g>
+    <rect class="fi" style="--t:11.8s;fill:#fff" x="1296" y="588" width="448" height="90"/><rect class="dr" style="--t:11.6s;--d:.6s;fill:none;stroke:var(--ink);stroke-width:2" pathLength="1" x="1296" y="588" width="448" height="90"/>
+    <g class="fi" style="--t:11.85s">
+      <text class="lbl" x="1320" y="626">La méthode</text>
+      <text class="sm" x="1320" y="660">32 outils · le graphe</text>
+    </g>
+    <rect class="flash" style="--t:18.75s;fill:var(--prog-soft)" x="1297" y="693" width="446" height="88"/>
+    <rect class="dr" style="--t:11.8s;--d:.6s;fill:none;stroke:var(--ink);stroke-width:2" pathLength="1" x="1296" y="692" width="448" height="90"/>
+    <g class="fi" style="--t:12.05s">
+      <text class="lbl" x="1320" y="730">Le moteur</text>
+      <text class="sm" x="1320" y="764">Synthétise · vérifie</text>
+    </g>
+
+    <!-- the two wires between them -->
+    <path class="thin dr" style="--t:12.4s;--d:.5s" pathLength="1" d="M1030,525 H1258"/>
+    <path class="ar fi" style="--t:12.8s" d="M1270,525 l-14,-8 v16 z"/>
+    <path class="thin dr" style="--t:12.55s;--d:.5s" pathLength="1" d="M1270,614 H1042"/>
+    <path class="ar fi" style="--t:12.95s" d="M1030,614 l14,-8 v16 z"/>
+
+    <!-- red pen: the frontier -->
+    <path class="growy" style="--t:13.1s;--d:1s" d="M1150,394 V918" stroke="var(--revision)" stroke-width="4" stroke-dasharray="14 10" fill="none"/>
+    <text class="smr fi" style="--t:13.6s" x="1150" y="382" text-anchor="middle">Frontière</text>
+
+    <!-- ===== S3 ===== -->
+    <!-- the method bounces off the frontier -->
+    <g class="pMeth" style="--t:16.0s">
+      <rect class="meth" x="1280" y="555" width="132" height="34"/>
+      <text class="chip-t" x="1346" y="578" text-anchor="middle">MÉTHODE</text>
+    </g>
+    <!-- answers travel when needed -->
+    <g class="pAns" style="--t:17.95s">
+      <rect class="pk" x="1022" y="516" width="18" height="18"/>
+      <text class="pk-t" x="1031" y="505" text-anchor="middle">RÉPONSES</text>
+    </g>
+    <!-- the deliverable comes back into the file -->
+    <g class="pDel" style="--t:19.1s">
+      <rect class="pk" x="1261" y="605" width="18" height="18" fill="var(--ok)" style="fill:var(--ok)"/>
+      <g class="fo" style="--t:19.85s"><text class="pk-t" x="1270" y="652" text-anchor="middle" style="fill:var(--ok)">LIVRABLE</text></g>
+    </g>
+    <g class="pop" style="--t:20.55s">
+      <rect class="chip-ok" x="890" y="706" width="128" height="30" rx="4"/>
+      <text class="chip-t" x="954" y="727" text-anchor="middle">+ LIVRABLE</text>
+    </g>
+    <!-- nothing kept -->
+    <g class="fi" style="--t:20.7s">
+      <rect x="1296" y="796" width="448" height="64" fill="none" stroke="var(--graphite)" stroke-width="2" stroke-dasharray="8 6"/>
+      <text class="sm" x="1316" y="835">Conservé ici :</text>
+    </g>
+  </svg>
+
+  <div class="chat fu" style="--t:7.85s">
+    <div class="bar mono"><i></i><i></i><i></i><span>Votre Claude</span></div>
+    <div class="body">
+      <div class="u-msg fu" style="--t:8.3s">Où j'en suis?</div>
+      <div class="tool fi" style="--t:8.7s">junior · show_progress</div>
+      <div class="a-msg fu" style="--t:9.0s">Tu es à mi-chemin du Prix. On le termine?</div>
+    </div>
+    <div class="composer">Répondre…</div>
+  </div>
+  <div class="stampx mono stamp" style="--t:21.15s;left:1500px;top:800px">Jamais de<br>réponses ici</div>
+
+  <div class="fo" style="--t:15.1s"><p class="figcap mono fu" style="--t:13.4s">Fig. 02 · Chaque appel part de votre conversation</p></div>
+  <p class="figcap mono fu" style="--t:15.5s">Fig. 03 · Vos réponses voyagent au besoin</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 201</div><div><small>Feuille</small><span class="stk"><span class="fo" style="--t:15.1s">02 / 06</span><span class="fi" style="--t:15.3s">03 / 06</span></span></div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S4 · BLEU · MOINDRE PRIVILÈGE  23.65 – 34.6s ============ -->
+<section class="scene blue wipe bp" style="--in:23.65s">
+ <div class="so" style="--out:34.6s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:23.95s">Une question sur votre travail</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:24.05s">Seulement les champs nécessaires.</span></span>
+    <span class="ln"><span style="--t:24.2s">Aucune valeur conservée.</span></span>
+  </h2>
+  <div class="gframe fi" style="--t:24.6s">
+    <div class="gcap mono"><span>Fig. 04 · Moindre privilège</span><span class="r">plan_query → read_fields → answer_query</span></div>
+  </div>
+
+  <svg class="full">
+    <!-- left: chez vous -->
+    <g class="fi" style="--t:24.9s">
+      <rect class="q-b" x="150" y="440" width="680" height="72" rx="16"/>
+      <text class="n-label" x="176" y="486">Mon prix tient-il face à mon ICP?</text>
+      <text class="n-id" x="150" y="560">VOTRE FICHIER · PAR ID DE CHAMP</text>
+    </g>
+    <text class="n-id fi" style="--t:28.7s;fill:#fff" x="814" y="560" text-anchor="end">② READ_FIELDS</text>
+
+    <!-- grid of fields: values never shown -->
+    <g class="fi" style="--t:25.2s">
+      <g class="dim" style="--t:28.7s">
+        <rect class="cell" x="150" y="580" width="154" height="84"/><text class="n-id" x="166" y="610">A-02</text><rect class="mask" x="166" y="628" width="104" height="10"/><rect class="mask" x="166" y="646" width="70" height="10"/>
+        <rect class="cell" x="320" y="580" width="154" height="84"/><text class="n-id" x="336" y="610">A-05</text><rect class="mask" x="336" y="628" width="90" height="10"/><rect class="mask" x="336" y="646" width="110" height="10"/>
+        <rect class="cell" x="490" y="580" width="154" height="84"/><text class="n-id" x="506" y="610">C-01</text><rect class="mask" x="506" y="628" width="112" height="10"/><rect class="mask" x="506" y="646" width="60" height="10"/>
+        <rect class="cell" x="150" y="680" width="154" height="84"/><text class="n-id" x="166" y="710">A-07</text><rect class="mask" x="166" y="728" width="80" height="10"/><rect class="mask" x="166" y="746" width="112" height="10"/>
+        <rect class="cell" x="320" y="680" width="154" height="84"/><text class="n-id" x="336" y="710">C-04</text><rect class="mask" x="336" y="728" width="112" height="10"/><rect class="mask" x="336" y="746" width="84" height="10"/>
+        <rect class="cell" x="490" y="680" width="154" height="84"/><text class="n-id" x="506" y="710">E-02</text><rect class="mask" x="506" y="728" width="96" height="10"/><rect class="mask" x="506" y="746" width="66" height="10"/>
+        <rect class="cell" x="660" y="680" width="154" height="84"/><text class="n-id" x="676" y="710">F-03</text><rect class="mask" x="676" y="728" width="108" height="10"/><rect class="mask" x="676" y="746" width="74" height="10"/>
+        <rect class="cell" x="150" y="780" width="154" height="84"/><text class="n-id" x="166" y="810">B-04</text><rect class="mask" x="166" y="828" width="100" height="10"/><rect class="mask" x="166" y="846" width="64" height="10"/>
+        <rect class="cell" x="320" y="780" width="154" height="84"/><text class="n-id" x="336" y="810">E-06</text><rect class="mask" x="336" y="828" width="76" height="10"/><rect class="mask" x="336" y="846" width="108" height="10"/>
+        <rect class="cell" x="490" y="780" width="154" height="84"/><text class="n-id" x="506" y="810">F-01</text><rect class="mask" x="506" y="828" width="110" height="10"/><rect class="mask" x="506" y="846" width="88" height="10"/>
+      </g>
+      <rect class="cell" x="660" y="580" width="154" height="84"/><text class="n-id" x="676" y="610">B-01</text><rect class="mask" x="676" y="628" width="100" height="10"/><rect class="mask" x="676" y="646" width="78" height="10"/>
+      <rect class="cell" x="660" y="780" width="154" height="84"/><text class="n-id" x="676" y="810">D-08</text><rect class="mask" x="676" y="828" width="106" height="10"/><rect class="mask" x="676" y="846" width="72" height="10"/>
+    </g>
+    <rect class="hi fi" style="--t:28.75s" x="660" y="580" width="154" height="84"/>
+    <rect class="hi fi" style="--t:28.75s" x="660" y="780" width="154" height="84"/>
+    <!-- red pen: only those -->
+    <path class="pinkflag dr" style="--t:29.05s;--d:.45s" pathLength="1" d="M700,572 C760,562 828,566 830,610 C832,660 790,676 730,674 C668,672 644,654 646,620 C648,590 670,578 712,571"/>
+    <path class="pinkflag dr" style="--t:29.3s;--d:.45s" pathLength="1" d="M700,772 C760,762 828,766 830,810 C832,860 790,876 730,874 C668,872 644,854 646,820 C648,790 670,778 712,771"/>
+    <text class="smp fi" style="--t:29.6s" x="640" y="903" text-anchor="end">SEULS CEUX-LÀ</text>
+
+    <!-- frontier -->
+    <path class="fr-b fi" style="--t:25.4s" d="M1000,446 V910"/>
+    <text class="n-id fi" style="--t:25.4s" x="1000" y="434" text-anchor="middle">FRONTIÈRE</text>
+
+    <!-- lanes -->
+    <path class="lane dr" style="--t:26.2s;--d:.5s" pathLength="1" d="M830,476 H1170"/>
+    <path class="lane dr" style="--t:29.6s;--d:.4s" pathLength="1" d="M814,622 H1170"/>
+    <path class="lane dr" style="--t:29.7s;--d:.4s" pathLength="1" d="M814,822 H1170"/>
+
+    <!-- right: Serveur Junior -->
+    <rect class="n-box dr" style="--t:25.6s" pathLength="1" x="1170" y="440" width="600" height="470"/>
+    <text class="n-id fi" style="--t:25.9s" x="1746" y="472" text-anchor="end">SERVEUR JUNIOR</text>
+    <g class="fi" style="--t:27.15s">
+      <text class="n-id" x="1196" y="476">① PLAN_QUERY</text>
+      <text class="n-label" x="1196" y="530">Champs requis :</text>
+    </g>
+    <g class="pop" style="--t:27.4s"><rect class="idchip" x="1418" y="502" width="100" height="40"/><text class="idchip-t" x="1468" y="529" text-anchor="middle">B-01</text></g>
+    <g class="pop" style="--t:27.55s"><rect class="idchip" x="1530" y="502" width="100" height="40"/><text class="idchip-t" x="1580" y="529" text-anchor="middle">D-08</text></g>
+    <g class="fi" style="--t:30.4s">
+      <text class="n-id" x="1196" y="712">③ ANSWER_QUERY</text>
+      <text class="n-label" x="1196" y="760">Réponse synthétisée</text>
+    </g>
+    <g class="fi" style="--t:32.5s">
+      <text class="n-label" x="1196" y="878" style="font-weight:600;fill:#fff">Conservé : aucune valeur.</text>
+    </g>
+
+    <!-- packets: question → , IDs ← , values → , answer ← -->
+    <g class="qR" style="--t:26.4s">
+      <rect class="wpk" x="822" y="467" width="18" height="18"/>
+      <text class="wpk-t" x="831" y="455" text-anchor="middle">QUESTION</text>
+    </g>
+    <g class="qL" style="--t:27.95s">
+      <rect class="wpk" x="1161" y="467" width="18" height="18"/>
+      <text class="wpk-t" x="1170" y="455" text-anchor="middle">B-01 · D-08</text>
+    </g>
+    <g class="fo" style="--t:32.2s"><g class="vR" style="--t:29.9s">
+      <rect class="idchip" x="806" y="602" width="160" height="40" style="fill:#0D3557"/><text class="idchip-t" x="822" y="629">B-01</text><rect x="884" y="617" width="66" height="10" fill="#B9D3E8"/>
+    </g></g>
+    <g class="fo" style="--t:32.2s"><g class="vR" style="--t:30.05s">
+      <rect class="idchip" x="806" y="802" width="160" height="40" style="fill:#0D3557"/><text class="idchip-t" x="822" y="829">D-08</text><rect x="884" y="817" width="66" height="10" fill="#B9D3E8"/>
+    </g></g>
+    <g class="qL" style="--t:31.1s">
+      <rect class="wpk" x="1161" y="467" width="18" height="18" style="fill:#7FD6A6"/>
+      <text class="wpk-t" x="1170" y="455" text-anchor="middle" style="fill:#7FD6A6">RÉPONSE</text>
+    </g>
+    <g class="pop" style="--t:31.95s">
+      <rect class="okchip" x="646" y="459" width="168" height="34" rx="4"/>
+      <text class="chip-t" x="730" y="482" text-anchor="middle">✓ RÉPONDU</text>
+    </g>
+  </svg>
+  <div class="cart mono"><div><small>Projet</small>Junior 201</div><div><small>Feuille</small>04 / 06</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S5 · CE QUI EST CONSERVÉ  34.65 – 45.0s ============ -->
+<section class="scene s5" style="--in:34.65s">
+ <div class="so" style="--out:45.0s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:34.8s">Ce qui est conservé</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:34.9s">Vos statuts.</span></span>
+    <span class="ln"><span style="--t:35.05s">Jamais vos mots.</span></span>
+  </h2>
+  <p class="lede fi" style="--t:35.7s">De votre travail, le serveur hébergé ne garde que la progression : des IDs, des statuts, des comptes, des dates.</p>
+
+  <div class="rec fu" style="--t:36.2s">
+    <div class="rec-h"><h3>Progression</h3><p class="mono">Cornets Boréal inc.</p></div>
+    <div class="rg rec-c mono"><span>Canevas</span><span>Statut</span><span>Requis</span><span>Champs</span><span>Par · date</span></div>
+    <div class="rg rec-r fi" style="--t:36.6s"><b>ICP</b><span class="chip ok mono">Prêt</span><span class="m">7/7</span><span class="m">B-01 ★★</span><span class="m g">Maude · 09-22</span></div>
+    <div class="rg rec-r fi" style="--t:36.8s"><b>Prix</b><span class="chip pg mono">En cours</span><span class="m">4/7</span><span class="m">D-08 ★☆</span><span class="m g">Félix · 09-30</span></div>
+    <div class="rg rec-r fi" style="--t:37.0s"><b>Activation</b><span class="chip rv mono">À revoir</span><span class="m">6/6</span><span class="m">⟲ C-04</span><span class="m g">Maude · 10-01</span></div>
+    <div class="ghost sl" style="--t:39.6s"><span class="strike" style="--t:40.3s">« On vise les crèmeries de quartier… »</span><span class="tag mono stamp" style="--t:40.75s">Jamais</span></div>
+  </div>
+
+  <p class="aroundlbl mono fi" style="--t:37.3s">Autour de la conversation</p>
+  <div class="frm fu" style="--t:37.5s;top:160px">
+    <div class="ub"><i></i><i></i><i></i><span class="mono">/coach</span></div>
+    <div class="fb">
+      <div class="mini"><small class="mono">Cornets Boréal inc.</small><div class="segs"><i class="sg-ok"></i><i class="sg-ok"></i><i class="sg-pg"></i><i class="sg-rv"></i><i class="sg-td"></i><i class="sg-td"></i></div></div>
+      <div><h4>Vue coach</h4><p>Le coach suit les entreprises qui lui sont assignées.</p></div>
+    </div>
+  </div>
+  <div class="frm fu" style="--t:37.75s;top:416px">
+    <div class="ub"><i></i><i></i><i></i><span class="mono">/portal</span></div>
+    <div class="fb">
+      <div class="mini"><div class="segs"><i class="sg-ok"></i><i class="sg-ok"></i><i class="sg-pg"></i><i class="sg-rv"></i><i class="sg-td"></i><i class="sg-td"></i></div><span class="pbtn">Continuer dans Claude</span></div>
+      <div><h4>Portail client</h4><p>Le client voit sa progression. Lecture seule.</p></div>
+    </div>
+  </div>
+  <div class="frm fu" style="--t:38.0s;top:672px">
+    <div class="ub"><i></i><i></i><i></i><span class="mono">/admin</span></div>
+    <div class="fb">
+      <div class="tabs mono"><span>Trafic</span><span>Sessions</span><span class="on">Clients</span><span>Contenu</span><span>Moteur</span></div>
+      <div><h4>Admin</h4><p>Pour nous : accès, modules, liens d'installation, trafic.</p></div>
+    </div>
+  </div>
+  <svg class="full">
+    <path class="thin dr" style="--t:38.4s;--d:.5s" pathLength="1" d="M900,560 C950,560 950,300 990,300"/>
+    <path class="ar fi" style="--t:38.8s" d="M1000,300 l-14,-8 v16 z"/>
+    <path class="thin dr" style="--t:38.55s;--d:.5s" pathLength="1" d="M900,580 C950,580 950,556 990,556"/>
+    <path class="ar fi" style="--t:38.95s" d="M1000,556 l-14,-8 v16 z"/>
+  </svg>
+  <div class="cart mono"><div><small>Projet</small>Junior 201</div><div><small>Feuille</small>05 / 06</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S6 · LE MODÈLE  45.05 – 55.45s ============ -->
+<section class="scene s6" style="--in:45.05s">
+ <div class="so" style="--out:55.45s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:45.2s">Le modèle</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:45.3s">Rien ne tourne</span></span>
+    <span class="ln"><span style="--t:45.45s">quand personne n'appelle.</span></span>
+  </h2>
+  <svg class="full">
+    <rect class="fi" style="--t:46.05s;fill:var(--sheet)" x="120" y="420" width="980" height="490"/><rect class="bx dr" style="--t:45.8s;fill:none" pathLength="1" x="120" y="420" width="980" height="490"/>
+    <g class="fi" style="--t:46.1s">
+      <text class="sm" x="148" y="460">Serveur hébergé · une journée</text>
+      <path d="M200,640 H1070" stroke="var(--line)" stroke-width="2" stroke-dasharray="6 6" fill="none"/>
+      <text class="sm" x="200" y="626">En marche</text>
+      <path class="thin" d="M200,820 H1070" style="stroke:var(--line)"/>
+      <text class="sm" x="200" y="862">Une journée →</text>
+    </g>
+    <!-- call markers -->
+    <g class="fi" style="--t:46.4s"><text class="sm" x="410" y="534" text-anchor="middle" style="fill:var(--blueprint)">Appel</text><path d="M410,546 V618" stroke="var(--blueprint)" stroke-width="2.6"/><path d="M410,630 l-8,-14 h16 z" fill="var(--blueprint)"/></g>
+    <g class="fi" style="--t:47.1s"><text class="sm" x="610" y="534" text-anchor="middle" style="fill:var(--blueprint)">Appel</text><path d="M610,546 V618" stroke="var(--blueprint)" stroke-width="2.6"/><path d="M610,630 l-8,-14 h16 z" fill="var(--blueprint)"/></g>
+    <g class="fi" style="--t:47.85s"><text class="sm" x="780" y="534" text-anchor="middle" style="fill:var(--blueprint)">Appel</text><path d="M780,546 V618" stroke="var(--blueprint)" stroke-width="2.6"/><path d="M780,630 l-8,-14 h16 z" fill="var(--blueprint)"/></g>
+    <!-- the trace -->
+    <path class="dr lin" style="--t:46.3s;--d:2.6s" pathLength="1" d="M200,820 H380 V640 H440 V820 H560 V640 H660 V820 H760 V640 H800 V820 H1070" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+    <!-- red pen: at zero -->
+    <path class="flag dr" style="--t:49.05s;--d:.6s" pathLength="1" d="M880,790 C960,780 1060,784 1076,812 C1086,846 980,856 900,852 C840,848 812,830 826,808 C836,794 856,790 896,788"/>
+    <text class="smr fi" style="--t:49.45s" x="950" y="770" text-anchor="middle">À zéro</text>
+  </svg>
+  <p class="paycap mono fi" style="--t:49.7s">Qui paie quoi</p>
+  <div class="pay fu" style="--t:49.85s;top:462px">
+    <small class="mono">La conversation</small>
+    <b>Votre abonnement Claude</b>
+    <p>Le client travaille dans son propre Claude.</p>
+  </div>
+  <div class="pay fu" style="--t:50.5s;top:686px">
+    <small class="mono">Chaque appel de méthode</small>
+    <b>Une requête, sur notre clé</b>
+    <p class="mono" style="font-size:17px;color:var(--graphite);letter-spacing:.14em">Haiku · Sonnet</p>
+  </div>
+  <p class="figcap mono fu" style="--t:46.2s">Fig. 06 · Hébergement mis à l'échelle à zéro</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 201</div><div><small>Feuille</small>06 / 06</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ CLOSER  55.6 – 60s (keep this block identical across the series; only the headline changes) ============ -->
+<section class="scene dark closer" style="--in:55.6s">
+ <div class="so" style="--out:99s">
+  <div class="cmark pop" style="--t:55.85s"><img src="../../assets/logo.png" alt=""><i></i><i class="r"></i></div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:56.0s">Votre Claude, notre méthode.</span></span>
+    <span class="ln"><span style="--t:56.12s">Chacun chez soi.</span></span>
+  </h2>
+  <p class="sub mono fi" style="--t:56.7s">Rien à connecter · Rien à migrer · Rien à perdre si vous arrêtez</p>
+  <div class="btn-wrap fu" style="--t:57.2s"><span class="btn mono">Faire mon diagnostic →</span></div>
+  <p class="url fu" style="--t:57.45s">junior<em>.</em>coach</p>
+  <p class="fine mono fi" style="--t:57.7s">Stratégie + commercialisation · dans votre Claude</p>
+ </div>
+</section>
+
+<!-- sheet border, drawn once -->
+<svg class="sheetframe" viewBox="0 0 1920 1080">
+  <rect class="dr" style="--t:0s;--d:1.1s" pathLength="1" x="32" y="32" width="1856" height="1016" fill="none" stroke="#8D98A5" stroke-opacity=".55" stroke-width="2"/>
+</svg>
+<script src="../_kit/kit.js"></script>
+</body>
+</html>

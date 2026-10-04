@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<!--
+JUNIOR 202 · MOTEUR DE COHÉRENCE · 16:9 · 60 s · FR (Québec)
+Deep dive for partners / investors / Luc: how the coherence engine works inside.
+Sources (junior repo): roadmap §22, §39, §44; docs/functional-overview.md (Coherence);
+docs/architecture/mcp-tool-contracts.md; server-remote field-impact.ts, progress-state.ts,
+portal-progress.ts, portal-page.ts, server.ts (synthesize_canevas, plan_bridge_check,
+check_bridge_gaps, field_impact, dismiss_review); server-local coherence.ts.
+
+FLOW
+S1  0.0 – 6.4   Hook (split). « Un champ change. Qui doit le savoir? »
+                Fig. 01: canevas ICP + Proposition de valeur, rows B-01 B-02 B-03 D-08 (values masked,
+                « Valeurs · chez vous »). Red pen strikes B-01, « Rév. B ». Four ghost canevas « ? ».
+S2  6.45 – 14.2 Le graphe de dépendances (split). « Un graphe, jusqu'au champ. »
+                « Chaque lien nomme les champs de la matrice qu'il transporte. Les ponts formels relient
+                les deux suites, champ à champ. » · « 32 outils · 2 suites · 5 ponts formels »
+                Fig. 02 (extrait): Modèle d'affaires (P1-C01) ⇢ pont-1 ⇢ ICP + Proposition de valeur (B-01);
+                ICP → Prix « B-01..03 · D »; ICP → Activation « B-01..09 … »; Prix → Cycle de vente « G-01..02 ».
+                Red pen loops « B-01..03 · D ».
+S3  14.25 – 21.6 À la saisie (split). « Vérifié dès la saisie. »
+                « Chaque réponse est confrontée à vos canevas terminés. Une contradiction est signalée
+                au moment où vous la créez. » · synthesize_canevas · mode capture
+                Fig. 03: Saisie · Prix (G-01..03) compared to 3 canevas Prêt. Red line to ICP,
+                « 1 contradiction signalée ». Output: coherenceNotes → « Junior vous en parle avant d'avancer. »
+S4  21.65 – 29.8 Les ponts entre les suites (stacked). « Pour un pont, seules les valeurs utiles voyagent. »
+                Fig. 04: Chez vous · le kit (24 field IDs) ↔ Serveur Junior · la méthode.
+                1 · plan_bridge_check · icp → « pont-1 · 6 IDs · aucune valeur »
+                2 · read_fields · 6 IDs (6 chips light up, red pen rings them)
+                3 · check_bridge_gaps (6 values travel) → « Écarts déclarés ». « Rien n'est conservé. »
+S5  29.85 – 41.2 BLUEPRINT · field_impact · le parcours. « B-01 change. Le moteur suit les liens. »
+                Depth 0 ICP (source, jamais signalée) → depth 1 Prix, Activation (precondition · B-01),
+                Modèle d'affaires (bridge · P1-C01 · pont-1, « un pont ne propage pas ») → depth 2
+                Cycle de vente, Suivi (precondition · via Prix). Stepper: ① Profondeur 1 · consommateurs de
+                B-01 + pont ② Profondeur 2 · chaque module une seule fois ③ Marqueur seulement sur les
+                canevas commencés. Started → « ⟲ À REVOIR »; Suivi « NON COMMENCÉ · AUCUN MARQUEUR ».
+                Stamp « 4 canevas à revoir ».
+S6  41.25 – 48.2 Ce qui est gardé (split). « Des identifiants. Jamais vos mots. »
+                « Le marqueur rejoint votre progression : raison, champ, profondeur, date. Vos réponses
+                restent chez vous. » Fig. 06: needsReview records (toolKey, reasons, triggeredBy,
+                bridgeFieldIds, depth, flaggedAt). Ghost row « réponse » struck by the red pen: « jamais stocké ».
+S7  48.25 – 55.45 Ce que vous voyez (split). « Signalé. Jamais défait. »
+                « Un canevas signalé reste terminé. Vous le reprenez, ou vous confirmez qu'il tient :
+                le marqueur s'efface. » Fig. 07: portal, Commercialisation: Prix / Activation / Cycle de vente
+                « À revoir », « ICP + Proposition de valeur a changé depuis que tu l'as terminé. »
+                Red pen loops the chips. « Le prix tient toujours. » → dismiss_review · pricing → Prix « Prêt ».
+Closer 55.6 – 60  « Junior signale. Vous décidez. »
+-->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Junior 202</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../_kit/kit.css">
+<link rel="stylesheet" href="../_kit/kit-16x9.css">
+<style>
+/* ---------- shared helpers ---------- */
+.lin{animation-timing-function:linear !important}
+.stk{display:grid}
+.stk>*{grid-area:1/1}
+.split .h{position:absolute;left:120px;top:176px;font-size:96px;width:840px}
+.lede{position:absolute;left:120px;width:780px;font-size:30px;line-height:1.42;color:var(--graphite)}
+.lede b{color:var(--ink);font-weight:600}
+.code{position:absolute;left:120px;font-size:19px;color:var(--ink);display:flex;align-items:center;gap:14px}
+.code::before{content:"";width:10px;height:10px;background:var(--revision)}
+.fig{position:absolute;left:1000px;top:150px;width:800px;height:760px;overflow:visible}
+/* SVG paper bits */
+.cid{fill:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.06em}
+.cidw{fill:#fff;font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.06em}
+.chipbx{fill:#fff;stroke:var(--ink);stroke-width:1.6}
+.ebl{fill:var(--sheet);stroke:var(--line);stroke-width:1.5}
+.etx{fill:var(--graphite);font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.06em}
+.ah{fill:var(--graphite)}
+.bar{fill:#C9D1DA}
+.dash{fill:none;stroke:var(--ink);stroke-width:2.6;stroke-dasharray:10 8}
+.ghost{fill:none;stroke:var(--graphite);stroke-width:2.4;stroke-dasharray:12 9}
+.q{fill:var(--revision);font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:800;font-size:80px}
+.revtag{fill:var(--revision)}
+.revtag-t{fill:#fff;font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.12em;font-weight:500}
+.lbl28{fill:var(--ink);font-family:"IBM Plex Sans",sans-serif;font-size:28px;font-weight:500}
+.okt{fill:var(--ok);font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.12em}
+.tick{fill:none;stroke:var(--ok);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- S1 ---------- */
+.s1 .h{font-size:100px}
+
+/* ---------- S4 stacked ---------- */
+.s4 .h{position:absolute;left:120px;top:168px;font-size:84px}
+.s4 svg.wide{position:absolute;left:120px;top:392px;width:1680px;height:520px;overflow:visible}
+.lane{fill:var(--graphite);font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.06em}
+.lane b{fill:var(--ink)}
+.pk{fill:var(--prog)}
+@keyframes pkt{0%{opacity:0;transform:translateX(0)}10%{opacity:1}88%{opacity:1}100%{opacity:0;transform:translateX(470px)}}
+.pkt{animation:pkt 1s cubic-bezier(.45,.05,.55,.95) var(--t) both}
+
+/* ---------- S5 blueprint ---------- */
+.s5 .h{position:absolute;left:120px;top:150px;font-size:80px}
+.step{position:absolute;left:120px;top:262px;font-size:21px;color:#C6D8E6;letter-spacing:.1em}
+.step b{color:#F0A79D;font-weight:500}
+.s5 svg.g{position:absolute;left:120px;top:318px;width:1680px;height:600px;overflow:visible}
+.s5 .n-label{font-size:30px}
+.s5 .n-id{font-size:17px}
+.colh{fill:#7FA6C4;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.16em}
+.vdiv{stroke:rgba(255,255,255,.13);stroke-width:1.5;stroke-dasharray:6 8}
+.edge-d{fill:none;stroke:#4E86B4;stroke-width:2.6;stroke-dasharray:10 8}
+.tagb{fill:rgba(255,255,255,.08);stroke:#7FB2D8;stroke-width:1.4}
+.tagt{fill:#DCEAF5;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.06em}
+.tagr{fill:rgba(196,43,28,.25);stroke:#F0A79D;stroke-width:1.4}
+.amb{fill:#B97C12;stroke:#EDB850;stroke-width:2.6}
+.amb-t{fill:#FFF0D2;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.12em;font-weight:500}
+.amb-l{fill:#fff;font-family:"IBM Plex Sans",sans-serif;font-size:30px;font-weight:600}
+.amb-s{fill:#FFE6B8;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.06em}
+.off{fill:#0B2C48;stroke:#56728B;stroke-width:2.2;stroke-dasharray:10 8}
+.off-l{fill:#7D93A6;font-family:"IBM Plex Sans",sans-serif;font-size:30px;font-weight:500}
+.off-t{fill:#9FB4C6;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.12em}
+.stopl{stroke:#F0A79D;stroke-width:3;fill:none}
+.stopt{fill:#F0A79D;font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.1em}
+.flip{animation:flip .5s cubic-bezier(.3,1.45,.5,1) var(--t) both;transform-box:fill-box;transform-origin:center}
+@keyframes flip{0%{opacity:0;transform:scaleY(0) rotate(-3deg)}30%{opacity:1}100%{opacity:1;transform:none}}
+.stampbox{position:absolute;left:1460px;top:722px;width:330px;border:4px solid var(--revision);color:#fff;background:var(--revision);font-size:24px;line-height:1.35;padding:12px 16px;letter-spacing:.1em;text-align:center}
+
+/* ---------- S6 record ---------- */
+.rec{position:absolute;left:1000px;top:150px;width:800px;background:#fff;border:2px solid var(--ink);padding:6px 30px 14px}
+.rec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2.5px solid var(--ink);padding:18px 0 14px}
+.rec-h h3{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:40px;letter-spacing:-.015em}
+.rec-h p{font-size:17px;color:var(--graphite)}
+.mk{font-size:17px;color:var(--graphite);padding:16px 0 6px;display:flex;align-items:center;gap:12px}
+.mk i{width:14px;height:14px;background:var(--revisit);display:block;border-radius:3px}
+.kv{display:grid;grid-template-columns:230px 1fr;align-items:center;border-bottom:1.5px solid var(--line);padding:9px 0;font-family:"IBM Plex Mono",monospace;font-size:22px}
+.kv>span:first-child{color:var(--graphite);font-size:19px;letter-spacing:.04em}
+.kv em{font-style:normal;color:var(--graphite);font-size:17px;letter-spacing:.1em;text-transform:uppercase;margin-left:14px}
+.kv .rc{color:var(--revisit);font-weight:500}
+.kv.ghost-row{border-bottom:0;padding-top:16px}
+.kv.ghost-row>span:last-child{font-family:"IBM Plex Sans",sans-serif;font-style:italic;color:#9AA4AE;font-size:24px}
+.s6 .note{position:absolute;left:1530px;top:742px;transform:rotate(-4deg)}
+
+.where{position:absolute;left:120px;top:600px;width:780px;display:grid;grid-template-columns:.78fr 1.22fr;gap:20px}
+.where>div{border:2px solid var(--ink);background:var(--sheet);padding:18px 22px}
+.where>div.srv{border-style:dashed}
+.where small{display:block;font-size:17px;color:var(--graphite);margin-bottom:10px}
+.where p{font-size:27px;font-weight:500;line-height:1.3}
+/* ---------- S7 portal ---------- */
+.panel{position:absolute;left:1000px;top:150px;width:800px;background:#fff;border:2px solid var(--ink);padding:4px 26px 4px}
+.p-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2.5px solid var(--ink);padding:18px 0 14px}
+.p-head h3{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:40px;letter-spacing:-.015em}
+.p-head p{font-size:17px;color:var(--graphite)}
+.row{border-bottom:1.5px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row>.in{display:grid;grid-template-columns:28px minmax(0,1fr) 150px;gap:0 18px;align-items:center;padding:16px 12px;margin:0 -12px;border-radius:6px}
+.ico{width:26px;height:26px;border-radius:6px;background:var(--revisit)}
+.nm{font-size:32px;font-weight:600;line-height:1.15}
+.nm small{display:block;font-size:24px;color:var(--graphite);font-weight:400;margin-top:6px;line-height:1.3}
+.chip{font-size:18px;color:#fff;padding:10px 14px;border-radius:6px;white-space:nowrap;letter-spacing:.1em;text-align:center}
+.chip.rv{background:var(--revisit)}
+.chip.ok{background:var(--ok)}
+.s7 svg.over{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible;pointer-events:none}
+.chat{position:absolute;left:1000px;top:742px;width:800px;display:flex;align-items:center;gap:22px}
+.bub{background:var(--ink);color:#fff;font-size:26px;padding:16px 24px;border-radius:18px 18px 4px 18px;white-space:nowrap}
+.call{font-size:18px;color:var(--ink);white-space:nowrap}
+.call b{color:var(--revision);font-weight:500}
+</style>
+</head>
+<body data-size="1920x1080" data-duration="60" data-out="junior-202-fr-16x9">
+
+<!-- ============ S1 · HOOK  0 – 6.4s ============ -->
+<section class="scene s1 split" style="--in:0s">
+ <div class="so" style="--out:6.4s">
+  <div class="grid fi" style="--t:0s"></div>
+  <img class="watermark" src="../../assets/logo.png" alt="">
+  <p class="eyebrow mono fu" style="--t:.25s">Junior 202 · Moteur de cohérence</p>
+  <h1 class="h">
+    <span class="ln"><span style="--t:.35s">Un champ</span></span>
+    <span class="ln"><span style="--t:.47s">change.</span></span>
+    <span class="ln"><span class="red" style="--t:1.35s">Qui doit</span></span>
+    <span class="ln"><span class="red" style="--t:1.47s">le savoir?</span></span>
+  </h1>
+  <svg class="fig" viewBox="0 0 800 760">
+    <g class="fu" style="--t:.75s">
+      <rect class="bx" x="100" y="20" width="600" height="360"/>
+      <text class="sm" x="128" y="62">Canevas · ICP + Proposition de valeur</text>
+      <line x1="128" y1="82" x2="672" y2="82" stroke="var(--line)" stroke-width="1.5"/>
+    </g>
+    <g class="fi" style="--t:1.0s"><rect class="chipbx" x="128" y="102" width="96" height="40"/><text class="cid" x="176" y="128" text-anchor="middle">B-01</text><rect class="bar" x="248" y="113" width="200" height="18" rx="3"/></g>
+    <g class="fi" style="--t:1.1s"><rect class="chipbx" x="128" y="162" width="96" height="40"/><text class="cid" x="176" y="188" text-anchor="middle">B-02</text><rect class="bar" x="248" y="173" width="360" height="18" rx="3"/></g>
+    <g class="fi" style="--t:1.2s"><rect class="chipbx" x="128" y="222" width="96" height="40"/><text class="cid" x="176" y="248" text-anchor="middle">B-03</text><rect class="bar" x="248" y="233" width="280" height="18" rx="3"/></g>
+    <g class="fi" style="--t:1.3s"><rect class="chipbx" x="128" y="282" width="96" height="40"/><text class="cid" x="176" y="308" text-anchor="middle">D-08</text><rect class="bar" x="248" y="293" width="330" height="18" rx="3"/></g>
+    <text class="sm fi" style="--t:1.5s" x="128" y="358">Valeurs · chez vous</text>
+    <!-- red pen: B-01 changes -->
+    <path class="flag dr" style="--t:2.0s;--d:.35s" pathLength="1" d="M240,123 H456"/>
+    <rect class="grow" style="--t:2.35s;--d:.45s" x="472" y="113" width="118" height="18" rx="3" fill="var(--prog)"/>
+    <g class="pop" style="--t:2.6s">
+      <rect class="revtag" x="606" y="104" width="112" height="36" transform="rotate(-4 662 122)"/>
+      <text class="revtag-t" x="662" y="129" text-anchor="middle" transform="rotate(-4 662 122)">RÉV. B</text>
+    </g>
+    <!-- who hangs on it -->
+    <path class="thin dr" style="--t:2.95s;--d:.45s" pathLength="1" d="M400,380 V450 H85 V520"/>
+    <path class="thin dr" style="--t:3.0s;--d:.4s" pathLength="1" d="M400,450 H295 V520"/>
+    <path class="thin dr" style="--t:3.05s;--d:.4s" pathLength="1" d="M400,450 H505 V520"/>
+    <path class="thin dr" style="--t:3.1s;--d:.45s" pathLength="1" d="M400,450 H715 V520"/>
+    <rect class="ghost fi" style="--t:3.3s" x="10" y="520" width="150" height="160"/>
+    <rect class="ghost fi" style="--t:3.4s" x="220" y="520" width="150" height="160"/>
+    <rect class="ghost fi" style="--t:3.5s" x="430" y="520" width="150" height="160"/>
+    <rect class="ghost fi" style="--t:3.6s" x="640" y="520" width="150" height="160"/>
+    <text class="q pop" style="--t:3.6s" x="85" y="628" text-anchor="middle">?</text>
+    <text class="q pop" style="--t:3.72s" x="295" y="628" text-anchor="middle">?</text>
+    <text class="q pop" style="--t:3.84s" x="505" y="628" text-anchor="middle">?</text>
+    <text class="q pop" style="--t:3.96s" x="715" y="628" text-anchor="middle">?</text>
+  </svg>
+  <p class="figcap mono fu" style="--t:.6s">Fig. 01 · Un champ de la matrice</p>
+  <div class="cart mono fu" style="--t:.5s"><div><small>Projet</small>Junior 202</div><div><small>Feuille</small>01 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S2 · LE GRAPHE, JUSQU'AU CHAMP  6.45 – 14.2s ============ -->
+<section class="scene s2 split" style="--in:6.45s">
+ <div class="so" style="--out:14.2s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:6.55s">Le graphe de dépendances</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:6.6s">Un graphe,</span></span>
+    <span class="ln"><span style="--t:6.72s">jusqu'au champ.</span></span>
+  </h2>
+  <p class="lede fi" style="--t:7.4s;top:420px">Chaque lien nomme les champs de la matrice qu'il transporte. Les ponts formels relient les deux suites, champ à champ.</p>
+  <p class="code mono fu" style="--t:8.0s;top:640px">32 outils · 2 suites · 5 ponts formels</p>
+  <svg class="fig" viewBox="0 0 800 760">
+    <text class="sm fi" style="--t:7.0s" x="800" y="24" text-anchor="end">Planification stratégique</text>
+    <rect class="fi" style="--t:7.25s" x="0" y="44" width="330" height="130" fill="var(--sheet)"/><rect class="bx dr" style="--t:7.1s;fill:none" pathLength="1" x="0" y="44" width="330" height="130"/>
+    <g class="fi" style="--t:7.4s"><text class="lbl" x="24" y="98">Modèle d'affaires</text>
+      <rect class="chipbx" x="24" y="120" width="104" height="36"/><text class="cid" x="76" y="144" text-anchor="middle">P1-C01</text></g>
+    <line class="grow" style="--t:7.3s;--d:1s" x1="0" y1="226" x2="800" y2="226" stroke="var(--graphite)" stroke-opacity=".5" stroke-width="1.5" stroke-dasharray="6 7"/>
+    <text class="sm fi" style="--t:7.5s" x="800" y="266" text-anchor="end">Commercialisation</text>
+    <rect class="fi" style="--t:7.65s" x="0" y="284" width="330" height="160" fill="var(--sheet)"/><rect class="bx dr" style="--t:7.5s;fill:none" pathLength="1" x="0" y="284" width="330" height="160"/>
+    <g class="fi" style="--t:7.8s"><text class="lbl" x="24" y="334">ICP + Proposition</text><text class="lbl" x="24" y="368">de valeur</text>
+      <rect class="chipbx" x="24" y="390" width="84" height="36"/><text class="cid" x="66" y="414" text-anchor="middle">B-01</text></g>
+    <rect class="fi" style="--t:7.80s" x="500" y="284" width="300" height="160" fill="var(--sheet)"/><rect class="bx dr" style="--t:7.65s;fill:none" pathLength="1" x="500" y="284" width="300" height="160"/>
+    <g class="fi" style="--t:7.95s"><text class="lbl" x="524" y="350">Prix</text>
+      <rect class="chipbx" x="524" y="390" width="84" height="36"/><text class="cid" x="566" y="414" text-anchor="middle">G-01</text></g>
+    <rect class="fi" style="--t:7.95s" x="0" y="590" width="330" height="120" fill="var(--sheet)"/><rect class="bx dr" style="--t:7.8s;fill:none" pathLength="1" x="0" y="590" width="330" height="120"/>
+    <text class="lbl fi" style="--t:8.1s" x="24" y="660">Activation</text>
+    <rect class="fi" style="--t:8.10s" x="500" y="590" width="300" height="120" fill="var(--sheet)"/><rect class="bx dr" style="--t:7.95s;fill:none" pathLength="1" x="500" y="590" width="300" height="120"/>
+    <text class="lbl fi" style="--t:8.25s" x="524" y="660">Cycle de vente</text>
+
+    <!-- precondition edges, each one names its fields -->
+    <path class="thin dr" style="--t:8.6s;--d:.5s" pathLength="1" d="M330,364 H490"/>
+    <path class="ah fi" style="--t:9.0s" d="M500,364 l-16,-9 v18 z"/>
+    <g class="pop" style="--t:9.05s"><rect class="ebl" x="338" y="318" width="154" height="30"/><text class="etx" x="415" y="339" text-anchor="middle">B-01..03 · D</text></g>
+    <path class="thin dr" style="--t:8.8s;--d:.5s" pathLength="1" d="M165,444 V580"/>
+    <path class="ah fi" style="--t:9.2s" d="M165,590 l-9,-16 h18 z"/>
+    <g class="pop" style="--t:9.25s"><rect class="ebl" x="180" y="498" width="140" height="30"/><text class="etx" x="250" y="519" text-anchor="middle">B-01..09 …</text></g>
+    <path class="thin dr" style="--t:9.0s;--d:.5s" pathLength="1" d="M650,444 V580"/>
+    <path class="ah fi" style="--t:9.4s" d="M650,590 l-9,-16 h18 z"/>
+    <g class="pop" style="--t:9.45s"><rect class="ebl" x="665" y="498" width="114" height="30"/><text class="etx" x="722" y="519" text-anchor="middle">G-01..02</text></g>
+
+    <!-- formal bridge, field to field -->
+    <path class="dash fi" style="--t:9.8s" d="M165,174 V284"/>
+    <circle class="fi" style="--t:9.8s" cx="165" cy="174" r="6" fill="var(--ink)"/>
+    <circle class="fi" style="--t:9.8s" cx="165" cy="284" r="6" fill="var(--ink)"/>
+    <g class="pop" style="--t:10.0s"><rect x="184" y="208" width="290" height="34" fill="var(--ink)"/><text class="cidw" x="329" y="231" text-anchor="middle" style="font-size:17px">pont-1 · P1-C01 ↔ B-01</text></g>
+
+    <!-- red pen: the link knows its fields -->
+    <path class="flag dr" style="--t:10.9s;--d:.7s;stroke-width:3.5" pathLength="1" d="M420,304 C480,302 512,318 508,336 C504,356 456,364 412,363 C364,362 324,354 322,334 C320,314 364,303 430,305"/>
+  </svg>
+  <p class="figcap mono fu" style="--t:7.0s">Fig. 02 · Extrait du graphe · liens par champ</p>
+  <div class="cart mono fu" style="--t:6.6s"><div><small>Projet</small>Junior 202</div><div><small>Feuille</small>02 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S3 · À LA SAISIE  14.25 – 21.6s ============ -->
+<section class="scene s3 split" style="--in:14.25s">
+ <div class="so" style="--out:21.6s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:14.35s">À la saisie</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:14.4s">Vérifié dès</span></span>
+    <span class="ln"><span style="--t:14.52s">la saisie.</span></span>
+  </h2>
+  <p class="lede fi" style="--t:15.2s;top:420px">Chaque réponse est confrontée à vos canevas terminés. Une contradiction est signalée dès que vous la créez.</p>
+  <p class="code mono fu" style="--t:15.8s;top:640px">synthesize_canevas · mode capture</p>
+  <svg class="fig" viewBox="0 0 800 760">
+    <!-- the new answers -->
+    <g class="fu" style="--t:14.9s">
+      <rect class="bx" x="0" y="170" width="300" height="330"/>
+      <rect x="22" y="194" width="18" height="18" rx="3" fill="var(--prog)"/>
+      <text class="sm" x="52" y="210">Saisie · Prix</text>
+      <line x1="22" y1="228" x2="278" y2="228" stroke="var(--line)" stroke-width="1.5"/>
+    </g>
+    <g class="fi" style="--t:15.2s"><rect class="chipbx" x="22" y="250" width="84" height="36"/><text class="cid" x="64" y="274" text-anchor="middle">G-01</text></g>
+    <rect class="grow" style="--t:15.35s;--d:.5s" x="122" y="259" width="150" height="18" rx="3" fill="var(--prog)"/>
+    <g class="fi" style="--t:15.35s"><rect class="chipbx" x="22" y="320" width="84" height="36"/><text class="cid" x="64" y="344" text-anchor="middle">G-02</text></g>
+    <rect class="grow" style="--t:15.5s;--d:.5s" x="122" y="329" width="110" height="18" rx="3" fill="var(--prog)"/>
+    <g class="fi" style="--t:15.5s"><rect class="chipbx" x="22" y="390" width="84" height="36"/><text class="cid" x="64" y="414" text-anchor="middle">G-03</text></g>
+    <rect class="grow" style="--t:15.65s;--d:.5s" x="122" y="399" width="130" height="18" rx="3" fill="var(--prog)"/>
+    <text class="sm fi" style="--t:15.8s" x="22" y="474">Nouvelle réponse</text>
+
+    <!-- completed canevas -->
+    <text class="sm fi" style="--t:15.6s" x="470" y="24">Vos canevas terminés</text>
+    <g class="sl" style="--t:15.7s">
+      <rect class="bx" x="470" y="40" width="330" height="150"/>
+      <rect x="494" y="62" width="18" height="18" rx="3" fill="var(--ok)"/><text class="okt" x="524" y="78">PRÊT</text>
+      <text class="lbl28" x="494" y="128">ICP + Proposition</text><text class="lbl28" x="494" y="162">de valeur</text>
+    </g>
+    <g class="sl" style="--t:15.85s">
+      <rect class="bx" x="470" y="220" width="330" height="150"/>
+      <rect x="494" y="242" width="18" height="18" rx="3" fill="var(--ok)"/><text class="okt" x="524" y="258">PRÊT</text>
+      <text class="lbl28" x="494" y="322">Audit concurrentiel</text>
+    </g>
+    <g class="sl" style="--t:16.0s">
+      <rect class="bx" x="470" y="400" width="330" height="150"/>
+      <rect x="494" y="422" width="18" height="18" rx="3" fill="var(--ok)"/><text class="okt" x="524" y="438">PRÊT</text>
+      <text class="lbl28" x="494" y="502">Parcours client</text>
+    </g>
+
+    <!-- comparisons -->
+    <path class="thin dr" style="--t:16.8s;--d:.5s" pathLength="1" d="M300,335 L470,115"/>
+    <path class="thin dr" style="--t:16.95s;--d:.5s" pathLength="1" d="M300,335 L470,295"/>
+    <path class="thin dr" style="--t:17.1s;--d:.5s" pathLength="1" d="M300,335 L470,475"/>
+    <path class="tick dr" style="--t:17.7s;--d:.3s" pathLength="1" d="M376,306 l10,10 l18,-20"/>
+    <path class="tick dr" style="--t:17.85s;--d:.3s" pathLength="1" d="M376,394 l10,10 l18,-20"/>
+    <!-- red pen: one contradiction -->
+    <path class="flag dr" style="--t:18.2s;--d:.4s;stroke-width:3.5" pathLength="1" d="M300,335 L470,115"/>
+    <g class="pop" style="--t:18.55s">
+      <rect class="revtag" x="80" y="112" width="330" height="40" transform="rotate(-4 245 132)"/>
+      <text class="revtag-t" x="245" y="139" text-anchor="middle" transform="rotate(-4 245 132)">1 CONTRADICTION SIGNALÉE</text>
+    </g>
+
+    <!-- what comes back -->
+    <g class="fu" style="--t:19.1s">
+      <rect class="bx" x="0" y="596" width="800" height="120"/>
+      <text class="sm" x="24" y="636">Retour · coherenceNotes</text>
+      <text class="lbl28" x="24" y="686">Junior vous en parle avant d'avancer.</text>
+    </g>
+  </svg>
+  <p class="figcap mono fu" style="--t:14.9s">Fig. 03 · Vérification à la saisie</p>
+  <div class="cart mono fu" style="--t:14.4s"><div><small>Projet</small>Junior 202</div><div><small>Feuille</small>03 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S4 · LES PONTS, AU MOINDRE PRIVILÈGE  21.65 – 29.8s ============ -->
+<section class="scene s4" style="--in:21.65s">
+ <div class="so" style="--out:29.8s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:21.75s">Les ponts entre les suites</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:21.8s">Pour un pont, seules</span></span>
+    <span class="ln"><span style="--t:21.92s">les valeurs utiles voyagent.</span></span>
+  </h2>
+  <svg class="wide" viewBox="0 0 1680 520">
+    <!-- left: the client's Mac -->
+    <rect class="fi" style="--t:22.55s" x="0" y="0" width="560" height="500" fill="var(--sheet)"/><rect class="bx dr" style="--t:22.4s;fill:none" pathLength="1" x="0" y="0" width="560" height="500"/>
+    <text class="sm fi" style="--t:22.6s" x="24" y="40">Chez vous · le kit</text>
+    <g class="fi" style="--t:22.8s">
+      <g transform="translate(24,70)">
+        <rect class="chipbx" x="0" y="0" width="116" height="44"/><text class="cid" x="58" y="29" text-anchor="middle">P1-A01</text>
+        <rect class="chipbx" x="128" y="0" width="116" height="44"/><text class="cid" x="186" y="29" text-anchor="middle">P1-B03</text>
+        <rect class="chipbx" x="256" y="0" width="116" height="44"/><text class="cid" x="314" y="29" text-anchor="middle">P1-C01</text>
+        <rect class="chipbx" x="384" y="0" width="116" height="44"/><text class="cid" x="442" y="29" text-anchor="middle">P1-E01</text>
+        <rect class="chipbx" x="0" y="60" width="116" height="44"/><text class="cid" x="58" y="89" text-anchor="middle">P1-F02</text>
+        <rect class="chipbx" x="128" y="60" width="116" height="44"/><text class="cid" x="186" y="89" text-anchor="middle">P2-B01</text>
+        <rect class="chipbx" x="256" y="60" width="116" height="44"/><text class="cid" x="314" y="89" text-anchor="middle">P5-C05</text>
+        <rect class="chipbx" x="384" y="60" width="116" height="44"/><text class="cid" x="442" y="89" text-anchor="middle">B-01</text>
+        <rect class="chipbx" x="0" y="120" width="116" height="44"/><text class="cid" x="58" y="149" text-anchor="middle">B-02</text>
+        <rect class="chipbx" x="128" y="120" width="116" height="44"/><text class="cid" x="186" y="149" text-anchor="middle">B-03</text>
+        <rect class="chipbx" x="256" y="120" width="116" height="44"/><text class="cid" x="314" y="149" text-anchor="middle">B-04</text>
+        <rect class="chipbx" x="384" y="120" width="116" height="44"/><text class="cid" x="442" y="149" text-anchor="middle">B-05</text>
+        <rect class="chipbx" x="0" y="180" width="116" height="44"/><text class="cid" x="58" y="209" text-anchor="middle">C-01</text>
+        <rect class="chipbx" x="128" y="180" width="116" height="44"/><text class="cid" x="186" y="209" text-anchor="middle">C-02</text>
+        <rect class="chipbx" x="256" y="180" width="116" height="44"/><text class="cid" x="314" y="209" text-anchor="middle">D-01</text>
+        <rect class="chipbx" x="384" y="180" width="116" height="44"/><text class="cid" x="442" y="209" text-anchor="middle">D-04</text>
+        <rect class="chipbx" x="0" y="240" width="116" height="44"/><text class="cid" x="58" y="269" text-anchor="middle">D-08</text>
+        <rect class="chipbx" x="128" y="240" width="116" height="44"/><text class="cid" x="186" y="269" text-anchor="middle">E-01</text>
+        <rect class="chipbx" x="256" y="240" width="116" height="44"/><text class="cid" x="314" y="269" text-anchor="middle">E-05</text>
+        <rect class="chipbx" x="384" y="240" width="116" height="44"/><text class="cid" x="442" y="269" text-anchor="middle">F-02</text>
+        <rect class="chipbx" x="0" y="300" width="116" height="44"/><text class="cid" x="58" y="329" text-anchor="middle">G-01</text>
+        <rect class="chipbx" x="128" y="300" width="116" height="44"/><text class="cid" x="186" y="329" text-anchor="middle">G-02</text>
+        <rect class="chipbx" x="256" y="300" width="116" height="44"/><text class="cid" x="314" y="329" text-anchor="middle">G-04</text>
+        <rect class="chipbx" x="384" y="300" width="116" height="44"/><text class="cid" x="442" y="329" text-anchor="middle">J-02</text>
+      </g>
+    </g>
+    <text class="sm fi" style="--t:23.0s" x="24" y="470">Vos valeurs restent ici</text>
+    <!-- the 6 IDs pont-1 needs light up (step 2) -->
+    <g transform="translate(24,70)">
+      <g class="fi" style="--t:25.05s"><rect x="256" y="0" width="116" height="44" fill="var(--prog)"/><text class="cidw" x="314" y="29" text-anchor="middle">P1-C01</text></g>
+      <g class="fi" style="--t:25.12s"><rect x="0" y="60" width="116" height="44" fill="var(--prog)"/><text class="cidw" x="58" y="89" text-anchor="middle">P1-F02</text></g>
+      <g class="fi" style="--t:25.19s"><rect x="384" y="60" width="116" height="44" fill="var(--prog)"/><text class="cidw" x="442" y="89" text-anchor="middle">B-01</text></g>
+      <g class="fi" style="--t:25.26s"><rect x="0" y="120" width="116" height="44" fill="var(--prog)"/><text class="cidw" x="58" y="149" text-anchor="middle">B-02</text></g>
+      <g class="fi" style="--t:25.33s"><rect x="384" y="120" width="116" height="44" fill="var(--prog)"/><text class="cidw" x="442" y="149" text-anchor="middle">B-05</text></g>
+      <g class="fi" style="--t:25.4s"><rect x="0" y="240" width="116" height="44" fill="var(--prog)"/><text class="cidw" x="58" y="269" text-anchor="middle">D-08</text></g>
+      <!-- red pen rings -->
+      <rect class="flag dr" style="--t:25.6s;--d:.3s;stroke-width:3" pathLength="1" x="250" y="-6" width="128" height="56" rx="8"/>
+      <rect class="flag dr" style="--t:25.68s;--d:.3s;stroke-width:3" pathLength="1" x="-6" y="54" width="128" height="56" rx="8"/>
+      <rect class="flag dr" style="--t:25.76s;--d:.3s;stroke-width:3" pathLength="1" x="378" y="54" width="128" height="56" rx="8"/>
+      <rect class="flag dr" style="--t:25.84s;--d:.3s;stroke-width:3" pathLength="1" x="-6" y="114" width="128" height="56" rx="8"/>
+      <rect class="flag dr" style="--t:25.92s;--d:.3s;stroke-width:3" pathLength="1" x="378" y="114" width="128" height="56" rx="8"/>
+      <rect class="flag dr" style="--t:26.0s;--d:.3s;stroke-width:3" pathLength="1" x="-6" y="234" width="128" height="56" rx="8"/>
+    </g>
+
+    <!-- right: Junior's server -->
+    <rect class="fi" style="--t:22.70s" x="1120" y="0" width="560" height="500" fill="var(--sheet)"/><rect class="bx dr" style="--t:22.55s;fill:none" pathLength="1" x="1120" y="0" width="560" height="500"/>
+    <text class="sm fi" style="--t:22.75s" x="1144" y="40">Serveur Junior · la méthode</text>
+    <g class="fi" style="--t:22.95s">
+      <rect x="1144" y="70" width="512" height="150" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="8 7"/>
+      <text class="lbl" x="1168" y="130">Règle de pont-1</text>
+      <text class="sm" x="1168" y="180">Ne sort jamais du serveur</text>
+    </g>
+    <g class="fu" style="--t:27.2s">
+      <rect x="1144" y="300" width="512" height="150" fill="var(--ink)"/>
+      <text class="lbl" x="1168" y="362" style="fill:#fff">Écarts déclarés</text>
+      <text class="sm" x="1168" y="412" style="fill:#AEB8C3">Rien n'est conservé</text>
+    </g>
+
+    <!-- step 1 -->
+    <text class="lane fi" style="--t:23.5s" x="840" y="56" text-anchor="middle">1 · plan_bridge_check · icp</text>
+    <path class="thin dr" style="--t:23.6s;--d:.45s" pathLength="1" d="M580,74 H1100"/>
+    <path class="ah fi" style="--t:23.95s" d="M1112,74 l-16,-9 v18 z"/>
+    <path class="thin dr" style="--t:24.2s;--d:.45s" pathLength="1" d="M1100,112 H580"/>
+    <path class="ah fi" style="--t:24.55s" d="M568,112 l16,-9 v18 z"/>
+    <text class="lane fi" style="--t:24.4s" x="840" y="146" text-anchor="middle">← pont-1 · 6 IDs · aucune valeur</text>
+    <!-- step 2 -->
+    <text class="lane fi" style="--t:24.85s" x="840" y="250" text-anchor="middle">2 · read_fields · ces 6 IDs</text>
+    <path class="thin dr" style="--t:24.9s;--d:.35s" pathLength="1" d="M1000,268 H580"/>
+    <path class="ah fi" style="--t:25.2s" d="M568,268 l16,-9 v18 z"/>
+    <!-- step 3 -->
+    <text class="lane fi" style="--t:26.2s" x="840" y="372" text-anchor="middle">3 · check_bridge_gaps · 6 valeurs</text>
+    <path class="thin dr" style="--t:26.25s;--d:.45s" pathLength="1" d="M580,400 H1100"/>
+    <path class="ah fi" style="--t:26.6s" d="M1112,400 l-16,-9 v18 z"/>
+    <rect class="pk pkt" style="--t:26.4s" x="592" y="392" width="16" height="16"/>
+    <rect class="pk pkt" style="--t:26.52s" x="592" y="392" width="16" height="16"/>
+    <rect class="pk pkt" style="--t:26.64s" x="592" y="392" width="16" height="16"/>
+    <rect class="pk pkt" style="--t:26.76s" x="592" y="392" width="16" height="16"/>
+    <rect class="pk pkt" style="--t:26.88s" x="592" y="392" width="16" height="16"/>
+    <rect class="pk pkt" style="--t:27.0s" x="592" y="392" width="16" height="16"/>
+    <path class="thin dr" style="--t:27.5s;--d:.45s" pathLength="1" d="M1100,444 H580"/>
+    <path class="ah fi" style="--t:27.85s" d="M568,444 l16,-9 v18 z"/>
+    <text class="lane fi" style="--t:27.7s" x="840" y="480" text-anchor="middle">← écarts déclarés</text>
+  </svg>
+  <p class="figcap mono fu" style="--t:22.4s">Fig. 04 · Valeurs en transit, appel par appel</p>
+  <div class="cart mono fu" style="--t:21.8s"><div><small>Projet</small>Junior 202</div><div><small>Feuille</small>04 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S5 · BLUEPRINT · FIELD_IMPACT  29.85 – 41.2s ============ -->
+<section class="scene blue wipe s5" style="--in:29.85s">
+ <div class="so" style="--out:41.2s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:30.25s">field_impact · le parcours</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:30.35s">B-01 change. Le moteur suit les liens.</span></span>
+  </h2>
+  <div class="step mono">
+    <div class="stk">
+      <div class="fi" style="--t:32.7s"><div class="fo" style="--t:35.15s"><b>1 ·</b> Profondeur 1 · consommateurs de B-01, et son pont</div></div>
+      <div class="fi" style="--t:35.35s"><div class="fo" style="--t:37.15s"><b>2 ·</b> Profondeur 2 · chaque module une seule fois</div></div>
+      <div class="fi" style="--t:37.35s"><b>3 ·</b> Un marqueur, seulement sur les canevas commencés</div>
+    </div>
+  </div>
+  <svg class="g" viewBox="0 0 1680 600">
+    <!-- columns -->
+    <g class="fi" style="--t:30.8s">
+      <text class="colh" x="0" y="14">PROFONDEUR 0</text>
+      <text class="colh" x="560" y="14">PROFONDEUR 1</text>
+      <text class="colh" x="1120" y="14">PROFONDEUR 2</text>
+      <line class="vdiv" x1="500" y1="0" x2="500" y2="580"/>
+      <line class="vdiv" x1="1060" y1="0" x2="1060" y2="580"/>
+    </g>
+    <!-- depth 0 : the edited canevas -->
+    <rect class="fi" style="--t:31.05s" x="0" y="212" width="400" height="170" fill="rgba(13,53,87,.6)"/><rect class="n-box dr" style="--t:30.9s;fill:none" pathLength="1" x="0" y="212" width="400" height="170"/>
+    <g class="fi" style="--t:31.15s">
+      <text class="n-id" x="24" y="246">COMMERCIALISATION</text>
+      <text class="n-label" x="24" y="290">ICP + Proposition</text><text class="n-label" x="24" y="326">de valeur</text>
+      <rect x="24" y="340" width="86" height="30" fill="none" stroke="#7FB2D8" stroke-width="1.4"/><text class="tagt" x="67" y="361" text-anchor="middle">B-01</text>
+    </g>
+    <text class="n-id fi" style="--t:31.3s" x="0" y="412">SOURCE · JAMAIS SIGNALÉE</text>
+
+    <!-- depth 1 -->
+    <rect class="fi" style="--t:31.20s" x="560" y="34" width="400" height="150" fill="rgba(13,53,87,.6)"/><rect class="n-box dr" style="--t:31.05s;fill:none" pathLength="1" x="560" y="34" width="400" height="150"/>
+    <g class="fi" style="--t:31.3s"><text class="n-id" x="584" y="66">COMMERCIALISATION</text><text class="n-label" x="584" y="112">Prix</text></g>
+    <rect class="fi" style="--t:31.30s" x="560" y="222" width="400" height="150" fill="rgba(13,53,87,.6)"/><rect class="n-box dr" style="--t:31.15s;fill:none" pathLength="1" x="560" y="222" width="400" height="150"/>
+    <g class="fi" style="--t:31.4s"><text class="n-id" x="584" y="254">COMMERCIALISATION</text><text class="n-label" x="584" y="300">Activation</text></g>
+    <g class="fi" style="--t:31.25s"><rect class="n-box" x="560" y="410" width="400" height="150" stroke-dasharray="12 8"/></g>
+    <g class="fi" style="--t:31.5s"><text class="n-id" x="584" y="442">PLANIFICATION STRATÉGIQUE</text><text class="n-label" x="584" y="488">Modèle d'affaires</text></g>
+
+    <!-- depth 2 -->
+    <rect class="fi" style="--t:31.45s" x="1120" y="34" width="400" height="150" fill="rgba(13,53,87,.6)"/><rect class="n-box dr" style="--t:31.3s;fill:none" pathLength="1" x="1120" y="34" width="400" height="150"/>
+    <g class="fi" style="--t:31.55s"><text class="n-id" x="1144" y="66">COMMERCIALISATION</text><text class="n-label" x="1144" y="112">Cycle de vente</text></g>
+    <rect class="fi" style="--t:31.55s" x="1120" y="222" width="400" height="150" fill="rgba(13,53,87,.6)"/><rect class="n-box dr" style="--t:31.4s;fill:none" pathLength="1" x="1120" y="222" width="400" height="150"/>
+    <g class="fi" style="--t:31.65s"><text class="n-id" x="1144" y="254">COMMERCIALISATION</text><text class="n-label" x="1144" y="300">Suivi</text></g>
+
+    <!-- neutral edges -->
+    <path class="edge dr" style="--t:31.7s;--d:.5s" pathLength="1" d="M400,297 H480 V109 H560"/>
+    <path class="edge dr" style="--t:31.75s;--d:.4s" pathLength="1" d="M400,297 H560"/>
+    <path class="edge-d fi" style="--t:31.9s" d="M480,297 V485 H560"/>
+    <path class="edge dr" style="--t:31.9s;--d:.4s" pathLength="1" d="M960,109 H1120"/>
+    <path class="edge dr" style="--t:31.95s;--d:.5s" pathLength="1" d="M960,109 H1040 V297 H1120"/>
+
+    <!-- red pen: B-01 changes -->
+    <rect class="flag dr" style="--t:32.3s;--d:.4s;stroke-width:3.5" pathLength="1" x="18" y="334" width="98" height="42"/>
+    <g class="pop" style="--t:32.6s">
+      <rect class="revtag" x="128" y="337" width="130" height="34" transform="rotate(-4 193 354)"/>
+      <text class="revtag-t" x="193" y="361" text-anchor="middle" transform="rotate(-4 193 354)">MODIFIÉ</text>
+    </g>
+
+    <!-- wave 1 -->
+    <path class="flag dr lin" style="--t:33.1s;--d:.5s;stroke-width:3.5" pathLength="1" d="M400,297 H480 V109 H560"/>
+    <path class="flag dr lin" style="--t:33.1s;--d:.35s;stroke-width:3.5" pathLength="1" d="M400,297 H560"/>
+    <path class="flag dr lin" style="--t:33.1s;--d:.5s;stroke-width:3.5" pathLength="1" d="M400,297 H480 V485 H560"/>
+    <g class="pop" style="--t:33.6s"><rect class="tagb" x="584" y="128" width="262" height="32"/><text class="tagt" x="598" y="150">precondition · B-01</text></g>
+    <g class="pop" style="--t:33.7s"><rect class="tagb" x="584" y="316" width="262" height="32"/><text class="tagt" x="598" y="338">precondition · B-01</text></g>
+    <g class="pop" style="--t:33.8s"><rect class="tagr" x="584" y="504" width="300" height="32"/><text class="tagt" x="598" y="526">bridge · P1-C01 · pont-1</text></g>
+    <!-- a bridge flags, it doesn't propagate -->
+    <g class="fi" style="--t:34.4s">
+      <path class="stopl" d="M960,485 H1010 M1010,467 V503"/>
+      <text class="stopt" x="1030" y="491">UN PONT NE PROPAGE PAS</text>
+    </g>
+
+    <!-- wave 2 (from Prix) -->
+    <path class="flag dr lin" style="--t:35.5s;--d:.35s;stroke-width:3.5" pathLength="1" d="M960,109 H1120"/>
+    <path class="flag dr lin" style="--t:35.5s;--d:.5s;stroke-width:3.5" pathLength="1" d="M960,109 H1040 V297 H1120"/>
+    <g class="pop" style="--t:35.95s"><rect class="tagb" x="1144" y="128" width="300" height="32"/><text class="tagt" x="1158" y="150">precondition · via Prix</text></g>
+    <g class="pop" style="--t:36.05s"><rect class="tagb" x="1144" y="316" width="300" height="32"/><text class="tagt" x="1158" y="338">precondition · via Prix</text></g>
+
+    <!-- markers on started canevas only -->
+    <g class="flip" style="--t:37.5s"><rect class="amb" x="560" y="34" width="400" height="150"/>
+      <text class="amb-t" x="584" y="66">⟲ À REVOIR</text><text class="amb-l" x="584" y="112">Prix</text><text class="amb-s" x="584" y="150">precondition · B-01</text></g>
+    <g class="flip" style="--t:37.65s"><rect class="amb" x="560" y="222" width="400" height="150"/>
+      <text class="amb-t" x="584" y="254">⟲ À REVOIR</text><text class="amb-l" x="584" y="300">Activation</text><text class="amb-s" x="584" y="338">precondition · B-01</text></g>
+    <g class="flip" style="--t:37.8s"><rect class="amb" x="560" y="410" width="400" height="150" stroke-dasharray="12 8"/>
+      <text class="amb-t" x="584" y="442">⟲ À REVOIR</text><text class="amb-l" x="584" y="488">Modèle d'affaires</text><text class="amb-s" x="584" y="526">bridge · P1-C01 · pont-1</text></g>
+    <g class="flip" style="--t:37.95s"><rect class="amb" x="1120" y="34" width="400" height="150"/>
+      <text class="amb-t" x="1144" y="66">⟲ À REVOIR</text><text class="amb-l" x="1144" y="112">Cycle de vente</text><text class="amb-s" x="1144" y="150">precondition · via Prix</text></g>
+    <g class="fi" style="--t:38.2s"><rect class="off" x="1120" y="222" width="400" height="150"/>
+      <text class="off-t" x="1144" y="254">NON COMMENCÉ</text><text class="off-l" x="1144" y="300">Suivi</text><text class="off-t" x="1144" y="338">AUCUN MARQUEUR</text></g>
+  </svg>
+  <div class="stampbox mono stamp" style="--t:38.9s">Revue<br>seulement</div>
+  <p class="figcap mono fu" style="--t:31.0s">Fig. 05 · Extrait · parcours en largeur, avec profondeur</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 202</div><div><small>Feuille</small>05 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S6 · CE QUI EST GARDÉ  41.25 – 48.2s ============ -->
+<section class="scene s6 split" style="--in:41.25s">
+ <div class="so" style="--out:48.2s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:41.35s">Ce qui est gardé</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:41.4s">Des identifiants.</span></span>
+    <span class="ln"><span class="red" style="--t:41.52s">Jamais vos mots.</span></span>
+  </h2>
+  <p class="lede fi" style="--t:42.2s;top:420px">Le marqueur rejoint votre progression : raison, champ, profondeur, date. Vos réponses restent chez vous.</p>
+  <div class="where">
+    <div class="fu" style="--t:43.0s"><small class="mono">Chez vous</small><p>Réponses, livrables</p></div>
+    <div class="srv fu" style="--t:43.2s"><small class="mono">Côté serveur</small><p>IDs, statuts, comptes, dates</p></div>
+  </div>
+  <div class="rec fu" style="--t:41.8s">
+    <div class="rec-h"><h3>Progression</h3><p class="mono">Cornets Boréal inc.</p></div>
+    <p class="mk mono fi" style="--t:42.1s"><i></i>needsReview · marqueur 1</p>
+    <div class="kv fi" style="--t:42.25s"><span>toolKey</span><span>pricing<em>Prix</em></span></div>
+    <div class="kv fi" style="--t:42.4s"><span>reasons</span><span class="rc">precondition</span></div>
+    <div class="kv fi" style="--t:42.55s"><span>triggeredBy</span><span>B-01</span></div>
+    <div class="kv fi" style="--t:42.7s"><span>depth</span><span>1</span></div>
+    <div class="kv fi" style="--t:42.85s"><span>flaggedAt</span><span>2026-10-04 · 14:32</span></div>
+    <p class="mk mono fi" style="--t:43.2s"><i></i>needsReview · marqueur 2</p>
+    <div class="kv fi" style="--t:43.35s"><span>toolKey</span><span>modele-affaires<em>Modèle d'affaires</em></span></div>
+    <div class="kv fi" style="--t:43.5s"><span>reasons</span><span class="rc">bridge</span></div>
+    <div class="kv fi" style="--t:43.65s"><span>bridgeFieldIds</span><span>P1-C01</span></div>
+    <div class="kv ghost-row fi" style="--t:44.4s"><span>réponse</span><span><span class="strike" style="--t:45.1s">« … vos mots … »</span></span></div>
+  </div>
+  <p class="note mono pop" style="--t:45.5s">Jamais stocké</p>
+  <p class="figcap mono fu" style="--t:41.8s">Fig. 06 · Un marqueur de revue</p>
+  <div class="cart mono fu" style="--t:41.4s"><div><small>Projet</small>Junior 202</div><div><small>Feuille</small>06 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S7 · CE QUE VOUS VOYEZ  48.25 – 55.45s ============ -->
+<section class="scene s7 split" style="--in:48.25s">
+ <div class="so" style="--out:55.45s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:48.35s">Ce que vous voyez</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:48.4s">Signalé.</span></span>
+    <span class="ln"><span style="--t:48.52s">Jamais défait.</span></span>
+  </h2>
+  <p class="lede fi" style="--t:49.1s;top:420px">Un canevas signalé reste terminé. Vous le reprenez, ou vous confirmez qu'il tient : le marqueur s'efface.</p>
+  <div class="panel fu" style="--t:48.8s">
+    <div class="p-head"><h3>Commercialisation</h3><p class="mono">Cornets Boréal inc.</p></div>
+    <div class="row fi" style="--t:49.0s"><div class="in">
+      <span class="stk"><span class="fo" style="--t:53.0s"><span class="ico" style="display:block"></span></span><span class="ico pop" style="--t:53.1s;background:var(--ok)"></span></span>
+      <span class="nm">Prix<span class="fo" style="--t:53.0s;display:block"><small>ICP + Proposition de valeur a changé depuis que tu l'as terminé.</small></span></span>
+      <span class="stk"><span class="fo" style="--t:53.0s"><span class="chip rv mono" style="display:block">À revoir</span></span><span class="chip ok mono pop" style="--t:53.1s">Prêt</span></span>
+    </div></div>
+    <div class="row fi" style="--t:49.15s"><div class="in">
+      <span class="ico"></span>
+      <span class="nm">Activation<small>ICP + Proposition de valeur a changé depuis que tu l'as terminé.</small></span>
+      <span class="chip rv mono">À revoir</span>
+    </div></div>
+    <div class="row fi" style="--t:49.3s"><div class="in">
+      <span class="ico"></span>
+      <span class="nm">Cycle de vente<small>ICP + Proposition de valeur a changé depuis que tu l'as terminé.</small></span>
+      <span class="chip rv mono">À revoir</span>
+    </div></div>
+  </div>
+  <svg class="over" viewBox="0 0 1920 1080">
+    <path class="flag dr" style="--t:50.3s;--d:.8s;stroke-width:3.5" pathLength="1" d="M1640,252 C1700,240 1790,242 1800,262 C1812,380 1812,560 1798,662 C1740,676 1680,676 1630,664 C1616,560 1616,380 1626,268 C1630,252 1640,250 1662,248"/>
+  </svg>
+  <div class="chat">
+    <span class="bub fu" style="--t:51.6s">Le prix tient toujours.</span>
+    <span class="call mono fi" style="--t:52.4s">→ <b>dismiss_review</b> · pricing</span>
+  </div>
+  <p class="figcap mono fu" style="--t:48.8s">Fig. 07 · Votre portail</p>
+  <div class="cart mono fu" style="--t:48.4s"><div><small>Projet</small>Junior 202</div><div><small>Feuille</small>07 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ CLOSER  55.6 – 60s (keep this block identical across the series; only the headline changes) ============ -->
+<section class="scene dark closer" style="--in:55.6s">
+ <div class="so" style="--out:99s">
+  <div class="cmark pop" style="--t:55.85s"><img src="../../assets/logo.png" alt=""><i></i><i class="r"></i></div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:56.0s">Junior signale.</span></span>
+    <span class="ln"><span style="--t:56.12s">Vous décidez.</span></span>
+  </h2>
+  <p class="sub mono fi" style="--t:56.7s">Rien à connecter · Rien à migrer · Rien à perdre si vous arrêtez</p>
+  <div class="btn-wrap fu" style="--t:57.2s"><span class="btn mono">Faire mon diagnostic →</span></div>
+  <p class="url fu" style="--t:57.45s">junior<em>.</em>coach</p>
+  <p class="fine mono fi" style="--t:57.7s">Stratégie + commercialisation · dans votre Claude</p>
+ </div>
+</section>
+
+<!-- sheet border, drawn once -->
+<svg class="sheetframe" viewBox="0 0 1920 1080">
+  <rect class="dr" style="--t:0s;--d:1.1s" pathLength="1" x="32" y="32" width="1856" height="1016" fill="none" stroke="#8D98A5" stroke-opacity=".55" stroke-width="2"/>
+</svg>
+<script src="../_kit/kit.js"></script>
+</body>
+</html>

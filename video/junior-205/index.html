@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<!--
+JUNIOR 205 · CRÉATION D'UN CLIENT — 16:9, 60 s, silent, fr-CA
+Sources (junior repo): /admin Clients tab (admin-clients-tab.ts, admin-i18n.ts fr), admin.ts (key = random token),
+kit-delivery.ts + roadmap §48 (short /i/<id> link, 15 min, revocable), §60 + apps/server-local/install.sh (install screen),
+§49 (project kept across reinstalls, progress per entreprise with `by`), §43 (welcome guide card « Comment ça marche »),
+§76 (welcome first, stages Invité → Connecté → Présenté), portal.ts/email.ts (magic link, 15 min), §42 (coaches per entreprise).
+
+S1  0.0 – 6.6   Hook (paper, split) · « Du nouveau client / à sa première / conversation. / En cinq étapes. »
+                Fig. 01 itinerary: 01 Créer l'entreprise · 02 Ajouter l'employé (/admin) · 03 Coller la commande ·
+                04 « Toujours autoriser » · 05 L'accueil de Junior (chez le client). Red pen loops 05 « le but ».
+S2  6.5 – 14.3  Entreprise (paper, stacked) · « D'abord, l'entreprise : / ce qu'elle a acheté, son coach. »
+                /admin → Clients: + Nouvelle entreprise « Cornets Boréal inc. », Modules switches on, + Assigner un coach.
+                Red pen strikes « sans coach », ticks 01.
+S3  14.1 – 22.6 Employé + lien (paper, stacked) · « Un employé, une clé. / Un lien qui expire en 15 minutes. »
+                + Ajouter un employé → Créer et ouvrir le lien → row « Invité » + reveal block (real copy).
+                Red pen loops « expire dans 15 min », ticks 02.
+S4  22.5 – 31.4 Blueprint · « Dans le kit : sa clé. / Jamais la méthode. » Lien → kit personnel (clé, outils Junior,
+                Node.js dans son dossier) → Claude Desktop (entrée junior, redémarré) + son projet (conservé à la
+                réinstallation). Red pen crosses the « La méthode » slot, stamp « Reste chez nous ».
+S5  31.3 – 39.4 Installation (paper, split) · « Il colle la commande. / Quatre lignes vertes, / puis un seul clic. »
+                Terminal: 4 steps ✓, « Junior est prêt. », reminder; Claude prompt « Toujours autoriser » looped. Ticks 03 + 04.
+S6  39.3 – 47.4 Accueil (paper, split) · « Quoi qu'il demande, / Junior se présente / d'abord. »
+                Chat: a question → guide card « Comment ça marche » → then the answer. /admin stage chips
+                Invité → Connecté · pas encore présenté → Présenté. Red loop « une fois par personne », ticks 05.
+S7  47.3 – 55.6 Ensuite (paper, stacked) · « Toute l'équipe, / une seule progression. »
+                Camille, Olivier, Nadia → one progress record per entreprise (each canevas « par … ») → /coach + portail
+                (lien par courriel, 15 min). Stamp « Vos statuts, jamais vos mots. »
+Closer 55.6 – 60 · « Un lien, un clic. / Junior se présente. »
+-->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Junior 205</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../_kit/kit.css">
+<link rel="stylesheet" href="../_kit/kit-16x9.css">
+<style>
+/* ---------- helpers ---------- */
+.stk{display:inline-grid}
+.stk>*{grid-area:1/1}
+.eyebrow::after{width:110px}
+.type{display:inline-block;white-space:nowrap;animation:type var(--d,.6s) linear var(--t) both}
+@keyframes type{from{clip-path:inset(-10% 100% -10% 0)}to{clip-path:inset(-10% 0 -10% 0)}}
+.press{animation:press .35s ease var(--t) both}
+@keyframes press{0%,100%{transform:none}45%{transform:scale(.93)}}
+.growy{transform-box:fill-box;transform-origin:center top;animation:growy var(--d,.9s) var(--ease) var(--t) both}
+@keyframes growy{from{transform:scaleY(0)}to{transform:none}}
+.lin{animation-timing-function:linear !important}
+
+/* ---------- step ruler (top right) ---------- */
+.ruler{position:absolute;right:120px;top:98px;display:flex;gap:22px;font-size:17px;color:var(--graphite);letter-spacing:.1em}
+.ruler .st{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.ruler svg{width:26px;height:26px;overflow:visible}
+.ruler rect{fill:var(--sheet);stroke:var(--graphite);stroke-width:1.6}
+.ruler .on{color:var(--ink);font-weight:500}
+.ruler .on rect{stroke:var(--ink);stroke-width:2.4}
+.ruler .flag{stroke-width:3.4}
+
+/* ---------- S1 ---------- */
+.s1 .h{position:absolute;left:120px;top:190px;font-size:100px;width:860px}
+.s1 .h .red{color:var(--revision)}
+.s1 svg.fig{position:absolute;left:1000px;top:150px;width:800px;height:760px;overflow:visible}
+.stn{fill:var(--sheet);stroke:var(--ink);stroke-width:2.4}
+.stn-n{fill:var(--revision);font-family:"IBM Plex Mono",monospace;font-size:22px;letter-spacing:.1em;font-weight:500}
+.stn-l{fill:var(--ink);font-family:"IBM Plex Sans",sans-serif;font-size:30px;font-weight:500}
+.stn-p{fill:var(--graphite);font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.14em;text-transform:uppercase}
+.dash{fill:none;stroke:var(--graphite);stroke-width:2.4;stroke-dasharray:9 8}
+
+/* ---------- /admin window ---------- */
+.win{position:absolute;left:120px;right:120px;background:#fff;border:2px solid var(--ink);box-shadow:10px 10px 0 rgba(20,26,34,.07)}
+.win .bar{height:54px;border-bottom:2px solid var(--ink);display:flex;align-items:center;padding:0 24px;gap:34px;font-size:22px}
+.win .bar .logo{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 84;font-weight:800;letter-spacing:.16em;font-size:22px}
+.win .bar .path{font-family:"IBM Plex Mono",monospace;font-size:18px;color:var(--graphite);border-left:1.5px solid var(--line);padding-left:20px;margin-right:auto}
+.win .tab{color:var(--graphite);padding:14px 0;border-bottom:3px solid transparent}
+.win .tab.on{color:var(--ink);font-weight:600;border-color:var(--ink)}
+.win .body{display:flex;position:absolute;top:56px;left:0;right:0;bottom:0}
+.win .lp{width:470px;border-right:1.5px solid var(--line);padding:24px 26px;position:relative;background:#F7F9FB}
+.win .rp{flex:1;padding:22px 32px;position:relative}
+.btnq{display:inline-block;font-size:21px;border:1.5px solid var(--ink);padding:9px 16px;background:#fff;white-space:nowrap}
+.btnp{display:inline-block;font-size:21px;border:1.5px solid var(--ink);padding:9px 16px;background:var(--ink);color:#fff;white-space:nowrap}
+.field{display:inline-block;font-size:21px;border:1.5px solid var(--line);padding:9px 14px;background:#fff;color:var(--ink);white-space:nowrap}
+.ph{color:#9AA4AE}
+.card{margin-top:18px;border:2px solid var(--ink);background:#fff;padding:16px 18px;position:relative}
+.card b{display:block;font-size:26px;font-weight:600}
+.card .meta{font-size:17px;color:var(--graphite);margin-top:8px;letter-spacing:.07em}
+.stk{justify-items:start}
+.card .warn{color:var(--revision)}
+.kick{font-size:17px;color:var(--graphite);letter-spacing:.14em}
+.rp h4{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:38px;letter-spacing:-.015em;margin:4px 0 6px}
+.blk{border-top:1.5px solid var(--line);padding:14px 0 12px}
+.blk .bh{display:flex;align-items:baseline;gap:18px}
+.blk .bh .mono{font-size:18px;font-weight:500;color:var(--ink)}
+.blk .bh span:last-child{font-size:19px;color:var(--graphite)}
+.blk .row2{display:flex;align-items:center;gap:26px;margin-top:12px;font-size:22px}
+.sw{position:relative;display:inline-block;width:54px;height:30px;border-radius:15px;vertical-align:middle;margin-right:12px}
+.sw i{position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);animation:knob .3s var(--ease) var(--t) both}
+@keyframes knob{from{transform:none}to{transform:translateX(24px)}}
+.chip{display:inline-block;font-size:20px;border:1.5px solid var(--ink);border-radius:20px;padding:6px 16px;background:#fff}
+.chip.add{border-style:dashed;color:var(--graphite);border-color:var(--graphite)}
+.cwarn{font-size:20px;color:var(--revision)}
+.dim{color:var(--graphite);font-size:20px}
+
+/* S2 */
+.s2 .h{position:absolute;left:120px;top:166px;font-size:84px}
+.s2 .win{top:378px;height:552px}
+.s2 .blk{padding:18px 0 18px}
+/* S3 */
+.s3 .h{position:absolute;left:120px;top:166px;font-size:84px}
+.s3 .win{top:352px;height:578px}
+.s3 .lp{width:420px}
+.tbl{width:100%;border-collapse:collapse;font-size:21px;margin-top:8px}
+.tbl th{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:17px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);text-align:left;padding:6px 10px;border-bottom:1.5px solid var(--ink)}
+.tbl td{padding:9px 10px;border-bottom:1.5px solid var(--line);white-space:nowrap}
+.inh{color:var(--graphite);font-style:italic}
+.stage{display:inline-block;font-size:18px;padding:5px 12px;border-radius:6px;background:#EEF1F4;color:var(--ink);border:1.5px solid var(--line)}
+.stage.hot{background:#F6E7C4;border-color:var(--revisit)}
+.btnq.open{background:#EEF1F4}
+.reveal{margin-top:10px;background:#F7F9FB;border:1.5px solid var(--line);padding:12px 20px 12px;font-size:19px;position:relative}
+.reveal .rl{font-weight:600;font-size:22px}
+.reveal ul{margin:4px 0 0 24px;color:var(--ink);line-height:1.38}
+.reveal .kept{margin-top:8px;font-size:19px;color:var(--ok)}
+.reveal .kept span{color:var(--graphite);margin-left:22px}
+.reveal .kept span::before{content:"";display:inline-block;width:15px;height:15px;border:1.5px solid var(--graphite);margin-right:8px;vertical-align:-1px}
+.reveal pre{margin-top:8px;background:var(--ink);color:#E8EEF4;font-family:"IBM Plex Mono",monospace;font-size:21px;padding:12px 16px}
+.reveal .acts{margin-top:8px;display:flex;align-items:center;gap:16px;font-size:18px}
+.reveal .acts .btnq{font-size:18px;padding:6px 12px}
+.reveal .acts .rv{color:var(--revision);border-color:var(--revision)}
+.reveal .acts .dim{font-size:18px}
+.s3 svg.over{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible;pointer-events:none}
+
+/* ---------- S4 blueprint ---------- */
+.s4 .h{position:absolute;left:120px;top:160px;font-size:88px}
+.s4 .h .pink{color:#F0A79D}
+.s4 svg.bp{position:absolute;left:120px;top:400px;width:1680px;height:520px;overflow:visible}
+.kitframe{fill:rgba(255,255,255,.03);stroke:#9CC3E2;stroke-width:2.4;stroke-dasharray:12 9}
+.ghost{fill:none;stroke:#7FA6C4;stroke-width:2.2;stroke-dasharray:10 8}
+.ghost-l{fill:#7FA6C4;font-family:"IBM Plex Sans",sans-serif;font-size:28px;font-weight:500}
+.val{fill:#B9D3E8;font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.06em}
+.arrow{fill:#4E86B4}
+.bpstamp{position:absolute;left:1092px;top:820px;border:4px solid var(--revision);background:var(--revision);color:#fff;font-size:22px;letter-spacing:.12em;padding:10px 18px;transform:rotate(-5deg)}
+
+/* ---------- S5 terminal ---------- */
+.s5 .h{position:absolute;left:120px;top:190px;font-size:80px;width:860px}
+.s5 .h .red{color:var(--revision)}
+.s5 .lede{position:absolute;left:120px;top:560px;font-size:32px;line-height:1.4;color:var(--graphite)}
+.term{position:absolute;left:1000px;top:150px;width:800px;height:540px;background:#11161D;border:2px solid var(--ink);color:#D5DCE4;font-family:"IBM Plex Mono",monospace;font-size:20px;box-shadow:10px 10px 0 rgba(20,26,34,.08)}
+.term .tb{height:40px;background:#232B35;display:flex;align-items:center;gap:9px;padding:0 16px;color:#8A96A3;font-size:16px;letter-spacing:.12em}
+.term .tb i{width:13px;height:13px;border-radius:50%;background:#4A5562;display:block}
+.term .tb span{margin-left:auto;margin-right:auto;transform:translateX(-30px)}
+.term .tx{padding:18px 26px;line-height:1.6}
+.term .pr{color:#7FB2D8}
+.term .lg{display:flex;align-items:center;gap:22px;margin:12px 0 10px}
+.term .lg b{font-weight:500;color:#fff;letter-spacing:.2em;font-size:22px}
+.term .sl{display:flex;align-items:center;gap:14px;height:34px}
+.term .sl .ic{width:22px;height:22px;display:inline-grid}
+.term .sl .ic>*{grid-area:1/1}
+.spin{width:18px;height:18px;margin:2px;border-radius:50%;border:2.5px solid #2E3A47;border-top-color:#5FC8E0;animation:spin .5s linear var(--t) both}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(540deg)}}
+.term .ready{color:#5BC48C;font-weight:500;margin-top:10px}
+.term .rem{color:#8A96A3;margin-top:8px;font-size:18px;line-height:1.5;white-space:pre}
+.term .rem em{font-style:normal;color:#fff}
+.perm{position:absolute;left:1180px;top:712px;width:620px;background:#fff;border:2px solid var(--ink);padding:16px 22px;box-shadow:10px 10px 0 rgba(20,26,34,.08)}
+.perm .kick{font-size:17px}
+.perm .btns{display:flex;gap:16px;margin-top:12px}
+.perm .btnq,.perm .btnp{font-size:21px}
+.s5 svg.over,.s6 svg.over{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible;pointer-events:none}
+
+/* ---------- S6 chat ---------- */
+.s6 .h{position:absolute;left:120px;top:190px;font-size:88px;width:860px}
+.chat{position:absolute;left:1000px;top:150px;width:800px;height:560px;background:#fff;border:2px solid var(--ink);box-shadow:10px 10px 0 rgba(20,26,34,.07)}
+.chat .tb{height:46px;border-bottom:1.5px solid var(--line);display:flex;align-items:center;padding:0 20px;font-size:18px;color:var(--graphite)}
+.chat .in{padding:20px 26px}
+.bub{margin-left:auto;width:fit-content;max-width:520px;background:#EEF1F4;border-radius:14px;padding:12px 18px;font-size:23px}
+.tool{margin-top:16px;font-family:"IBM Plex Mono",monospace;font-size:17px;color:var(--graphite);letter-spacing:.08em;display:flex;align-items:center;gap:10px}
+.tool i{width:10px;height:10px;border-radius:50%;background:var(--ok);display:block}
+.guide{margin-top:12px;border:2px solid var(--ink);border-radius:10px;padding:18px 22px;background:#F7F9FB}
+.guide .kick{font-size:16px}
+.guide h5{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:34px;letter-spacing:-.015em;margin:6px 0 10px}
+.guide .su{display:flex;justify-content:space-between;align-items:center;border-top:1.5px solid var(--line);padding:9px 0;font-size:21px}
+.guide .su span:last-child{font-family:"IBM Plex Mono",monospace;font-size:17px;color:var(--graphite);letter-spacing:.1em}
+.guide .nav{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.guide .dots{display:flex;gap:8px}
+.guide .dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.guide .dots i.on{background:var(--ink)}
+.guide .nav .btnq,.guide .nav .btnp{font-size:18px;padding:6px 12px}
+.reply{margin-top:30px}
+.reply i{display:block;height:13px;border-radius:7px;background:#DDE3E9;margin-top:12px}
+.stages{position:absolute;left:120px;top:600px;width:860px}
+.stages .kick{font-size:17px}
+.stages .rowc{display:flex;align-items:center;gap:12px;margin-top:14px;font-size:21px}
+.stages .stage{font-size:24px;padding:8px 14px}
+.stages .ar{color:var(--graphite);font-size:22px}
+.stages .bar0{display:inline-flex;align-items:center;gap:10px;font-size:19px;color:var(--graphite)}
+.stages .bar0 b{display:inline-block;width:70px;height:10px;border-radius:5px;background:#E3E8ED;border:1px solid var(--line)}
+
+/* ---------- S7 team ---------- */
+.s7 .h{position:absolute;left:120px;top:166px;font-size:84px}
+.s7 svg.tm{position:absolute;left:120px;top:390px;width:1680px;height:540px;overflow:visible}
+.pbox{fill:#fff;stroke:var(--ink);stroke-width:2.4}
+.pn{fill:var(--ink);font-family:"IBM Plex Sans",sans-serif;font-size:27px;font-weight:600}
+.ps{fill:var(--graphite);font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.12em}
+.rowl{fill:var(--ink);font-family:"IBM Plex Sans",sans-serif;font-size:23px}
+.by{fill:var(--graphite);font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.08em}
+.chipt{fill:#fff;font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.12em}
+.tmstamp{position:absolute;left:1320px;top:846px;border:4px solid var(--revision);color:var(--revision);background:var(--sheet);font-size:20px;letter-spacing:.1em;padding:10px 18px}
+</style>
+</head>
+<body data-size="1920x1080" data-duration="60" data-out="junior-205-fr-16x9">
+
+<!-- ============ S1 · HOOK  0 – 6.6s ============ -->
+<section class="scene s1" style="--in:0s">
+ <div class="so" style="--out:6.45s">
+  <div class="grid fi" style="--t:0s"></div>
+  <img class="watermark" src="../../assets/logo.png" alt="">
+  <p class="eyebrow mono fu" style="--t:.25s">Junior 205 · Création d'un client</p>
+  <h1 class="h">
+    <span class="ln"><span style="--t:.35s">Du nouveau client</span></span>
+    <span class="ln"><span style="--t:.47s">à sa première</span></span>
+    <span class="ln"><span style="--t:.59s">conversation.</span></span>
+    <span class="ln"><span class="red" style="--t:1.5s">En cinq étapes.</span></span>
+  </h1>
+  <svg class="fig" viewBox="0 0 800 760">
+    <text class="sm fi" style="--t:.8s" x="0" y="22">Fig. 01 · Le parcours</text>
+    <line class="dash growy" style="--t:1.0s;--d:1.4s" x1="44" y1="104" x2="44" y2="684"/>
+    <!-- stations -->
+    <g class="fu" style="--t:1.05s">
+      <circle cx="44" cy="104" r="11" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect class="stn" x="84" y="54" width="560" height="100"/>
+      <text class="stn-n" x="108" y="112">01</text><text class="stn-l" x="160" y="104">Créer l'entreprise</text>
+      <text class="stn-p" x="160" y="134">/admin · Clients</text>
+    </g>
+    <g class="fu" style="--t:1.3s">
+      <circle cx="44" cy="249" r="11" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect class="stn" x="84" y="199" width="560" height="100"/>
+      <text class="stn-n" x="108" y="257">02</text><text class="stn-l" x="160" y="249">Ajouter l'employé</text>
+      <text class="stn-p" x="160" y="279">/admin · Clients</text>
+    </g>
+    <g class="fu" style="--t:1.55s">
+      <circle cx="44" cy="394" r="11" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect class="stn" x="84" y="344" width="560" height="100"/>
+      <text class="stn-n" x="108" y="402">03</text><text class="stn-l" x="160" y="394">Coller la commande</text>
+      <text class="stn-p" x="160" y="424">Terminal du client</text>
+    </g>
+    <g class="fu" style="--t:1.8s">
+      <circle cx="44" cy="539" r="11" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect class="stn" x="84" y="489" width="560" height="100"/>
+      <text class="stn-n" x="108" y="547">04</text><text class="stn-l" x="160" y="539">« Toujours autoriser »</text>
+      <text class="stn-p" x="160" y="569">Son Claude</text>
+    </g>
+    <g class="fu" style="--t:2.05s">
+      <circle cx="44" cy="684" r="11" fill="var(--ink)"/>
+      <rect class="stn" x="84" y="634" width="560" height="100" style="stroke-width:3"/>
+      <text class="stn-n" x="108" y="692">05</text><text class="stn-l" x="160" y="684">L'accueil de Junior</text>
+      <text class="stn-p" x="160" y="714">Son Claude</text>
+    </g>
+    <!-- who does what -->
+    <g class="fi" style="--t:2.6s">
+      <path class="thin" d="M664,58 H680 V296 H664"/>
+      <text class="sm" x="696" y="172">Nous</text><text class="sm" x="696" y="198">/admin</text>
+    </g>
+    <g class="fi" style="--t:2.85s">
+      <path class="thin" d="M664,348 H680 V730 H664"/>
+      <text class="sm" x="696" y="532">Le</text><text class="sm" x="696" y="558">client</text>
+    </g>
+    <!-- red pen: the goal -->
+    <path class="flag dr" style="--t:3.5s;--d:.8s" pathLength="1" d="M70,640 C200,616 520,612 664,630 C680,670 680,710 662,742 C520,760 200,760 72,744 C56,712 56,670 74,640 C84,634 96,632 108,631"/>
+    <text class="smr fi" style="--t:4.15s" x="458" y="782">Le but : la 1re conversation</text>
+  </svg>
+  <div class="cart mono fu" style="--t:.5s"><div><small>Projet</small>Junior 205</div><div><small>Feuille</small>01 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S2 · L'ENTREPRISE  6.5 – 14.3s ============ -->
+<section class="scene s2" style="--in:6.5s">
+ <div class="so" style="--out:14.15s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:6.6s">Junior 205 · Création d'un client</p>
+  <div class="ruler mono fi" style="--t:6.7s">
+    <div class="st on"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag dr" style="--t:12.1s;--d:.35s" pathLength="1" d="M5,14 L11,20 L24,3"/></svg>Entreprise</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/></svg>Employé</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/></svg>Installation</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/></svg>Autoriser</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/></svg>Accueil</div>
+  </div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:6.7s">D'abord, l'entreprise :</span></span>
+    <span class="ln"><span style="--t:6.82s">ce qu'elle a acheté, son coach.</span></span>
+  </h2>
+
+  <div class="win fu" style="--t:7.2s">
+    <div class="bar"><span class="logo">JUNIOR</span><span class="path">/admin</span>
+      <span class="tab">Trafic</span><span class="tab">Sessions</span><span class="tab on">Clients</span><span class="tab">Contenu</span><span class="tab">Moteur</span></div>
+    <div class="body">
+      <div class="lp">
+        <p class="kick mono">Entreprises</p>
+        <div style="margin-top:14px"><span class="btnq press" style="--t:7.75s">+ Nouvelle entreprise</span></div>
+        <div class="fi" style="--t:7.95s"><div class="fo" style="--t:8.95s">
+          <div style="margin-top:12px;display:flex;gap:10px"><span class="field" style="width:300px"><span class="type" style="--t:8.05s;--d:.6s">Cornets Boréal inc.</span></span><span class="btnp press" style="--t:8.75s">Créer</span></div>
+        </div></div>
+        <div class="card fu" style="--t:9.0s;position:absolute;left:26px;right:26px;top:118px;margin:0">
+          <b>Cornets Boréal inc.</b>
+          <div class="meta mono">0 employé</div>
+          <div class="meta mono"><span class="stk"><span class="fo" style="--t:11.75s"><span class="warn strike" style="--t:11.3s">sans coach</span></span><span class="fi" style="--t:11.85s">1 coach</span></span></div>
+          <div class="meta mono"><span class="stk"><span class="fo" style="--t:9.95s">aucun module</span><span class="fi" style="--t:10.05s">Planif. · Commercialisation</span></span></div>
+        </div>
+      </div>
+      <div class="rp fi" style="--t:9.25s">
+        <p class="kick mono">Entreprise · Cornets Boréal inc.</p>
+        <h4>Cornets Boréal inc.</h4>
+        <div class="blk">
+          <div class="bh"><span class="mono">Modules</span><span>Ce que l'entreprise a acheté. Chaque employé en hérite.</span></div>
+          <div class="row2">
+            <span><span class="sw recolor" style="--t:9.75s;--from:#C9D1DA;--to:#2E7A57"><i style="--t:9.75s"></i></span>Planification stratégique</span>
+            <span><span class="sw recolor" style="--t:10.15s;--from:#C9D1DA;--to:#2E7A57"><i style="--t:10.15s"></i></span>Commercialisation</span>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="bh"><span class="mono">Coachs</span><span>Ils voient la progression de tous les employés sur /coach.</span></div>
+          <div class="row2">
+            <span class="stk"><span class="fo" style="--t:10.95s"><span class="cwarn">Aucun coach assigné.</span></span><span class="fi" style="--t:11.05s"><span class="chip">mathieu@exemple.ca ×</span></span></span>
+            <span class="chip add press" style="--t:10.6s">+ Assigner un coach</span>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="bh"><span class="mono">Employés</span><span>Une clé par personne.</span></div>
+          <div class="row2"><span class="dim">Aucun employé pour l'instant.</span><span class="btnq">+ Ajouter un employé</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="figcap mono fu" style="--t:7.4s">Fig. 02 · /admin → Clients</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 205</div><div><small>Feuille</small>02 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S3 · L'EMPLOYÉ ET SON LIEN  14.1 – 22.6s ============ -->
+<section class="scene s3" style="--in:14.1s">
+ <div class="so" style="--out:22.45s">
+  <div class="grid"></div>
+  <p class="eyebrow mono">Junior 205 · Création d'un client</p>
+  <div class="ruler mono">
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Entreprise</div>
+    <div class="st on"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag dr" style="--t:20.3s;--d:.35s" pathLength="1" d="M5,14 L11,20 L24,3"/></svg>Employé</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/></svg>Installation</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/></svg>Autoriser</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/></svg>Accueil</div>
+  </div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:14.3s">Un employé, une clé.</span></span>
+    <span class="ln"><span style="--t:14.42s">Un lien qui expire en 15 minutes.</span></span>
+  </h2>
+
+  <div class="win fu" style="--t:14.6s">
+    <div class="bar"><span class="logo">JUNIOR</span><span class="path">/admin</span>
+      <span class="tab">Trafic</span><span class="tab">Sessions</span><span class="tab on">Clients</span><span class="tab">Contenu</span><span class="tab">Moteur</span></div>
+    <div class="body">
+      <div class="lp">
+        <p class="kick mono">Entreprises</p>
+        <div class="card" style="margin-top:14px">
+          <b>Cornets Boréal inc.</b>
+          <div class="meta mono">1 coach · <span class="stk"><span class="fo" style="--t:17.35s">0 employé</span><span class="fi" style="--t:17.45s">1 employé</span></span></div>
+          <div class="meta mono">Planif. · Commercialisation</div>
+        </div>
+      </div>
+      <div class="rp">
+        <p class="kick mono">Entreprise · Cornets Boréal inc.</p>
+        <div class="blk" style="margin-top:12px">
+          <div class="bh"><span class="mono">Employés</span><span>Une clé par personne. Le lien d'installation expire après 15 min.</span></div>
+          <!-- the add form, then the row -->
+          <div class="fi" style="--t:15.1s"><div class="fo" style="--t:17.3s">
+            <div style="display:flex;gap:12px;margin-top:14px;position:absolute">
+              <span class="field" style="width:290px"><span class="stk"><span class="fo" style="--t:15.4s"><span class="ph">prénom et nom</span></span><span class="type" style="--t:15.4s;--d:.55s">Camille Tremblay</span></span></span>
+              <span class="field" style="width:330px"><span class="stk"><span class="fo" style="--t:16.1s"><span class="ph">courriel de connexion…</span></span><span class="type" style="--t:16.1s;--d:.55s">camille@exemple.ca</span></span></span>
+              <span class="btnp press" style="--t:16.9s">Créer et ouvrir le lien</span>
+            </div>
+          </div></div>
+          <div class="fi" style="--t:17.4s">
+            <table class="tbl">
+              <tr><th>Employé</th><th>Courriel du portail</th><th>Modules</th><th>Progression</th><th></th></tr>
+              <tr><td style="font-weight:600">Camille Tremblay</td><td>camille@exemple.ca</td><td class="inh">comme l'entreprise</td><td><span class="stage">Invité</span></td>
+                <td><span class="btnq open" style="font-size:18px;padding:5px 10px">Lien d'installation</span> <span class="btnq" style="font-size:18px;padding:5px 10px;border-color:var(--line)">Gérer</span></td></tr>
+            </table>
+          </div>
+          <div class="reveal fu" style="--t:17.8s">
+            <div class="rl">Lien d'installation pour « Camille Tremblay » (expire dans 15 min)</div>
+            <div style="color:var(--graphite);margin-top:4px">À coller dans le Terminal du client. La commande va :</div>
+            <ul>
+              <li>télécharger son kit Junior personnel (sa clé est déjà dedans)</li>
+              <li>installer Node.js dans son dossier personnel au besoin (sans mot de passe admin)</li>
+              <li>brancher Junior dans Claude Desktop et le redémarrer</li>
+            </ul>
+            <div class="kept">✓ Données conservées<span>Réinitialisation complète</span></div>
+            <pre>curl -fsSL https://…/i/k7m3qx9p2d | bash</pre>
+            <div class="acts"><span class="btnq">Copier la commande</span><span class="btnq rv">Révoquer le lien</span><span class="dim">Lien valide jusqu'à 9 h 47, ensuite il ne fonctionne plus.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- key tag + red pen -->
+  <div class="note ink mono pop" style="--t:18.7s;left:1340px;top:666px">Clé ••••••3f9a · dans le kit</div>
+  <svg class="over" viewBox="0 0 1920 1080">
+    <path class="thin fi" style="--t:18.9s" d="M1336,684 H1140"/>
+    <path class="flag dr" style="--t:19.6s;--d:.7s" pathLength="1" d="M1066,610 C1120,602 1240,602 1288,610 C1302,620 1302,640 1286,650 C1220,658 1110,658 1062,650 C1050,640 1050,620 1068,610 C1076,606 1088,604 1100,604"/>
+  </svg>
+  <p class="figcap mono fu" style="--t:14.8s">Fig. 03 · Employés → Créer et ouvrir le lien</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 205</div><div><small>Feuille</small>03 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S4 · BLUEPRINT : CE QUE FAIT LA COMMANDE  22.5 – 31.4s ============ -->
+<section class="scene blue wipe s4" style="--in:22.5s">
+ <div class="so" style="--out:31.25s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:22.85s">Junior 205 · Ce que fait la commande</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:22.9s">Dans le kit : sa clé.</span></span>
+    <span class="ln"><span class="pink" style="--t:23.02s">Jamais la méthode.</span></span>
+  </h2>
+  <svg class="bp" viewBox="0 0 1680 520">
+    <!-- the link -->
+    <rect class="n-box dr" style="--t:23.6s" pathLength="1" x="0" y="180" width="270" height="160"/>
+    <g class="fi" style="--t:23.85s">
+      <text class="n-id" x="22" y="214">LE LIEN · 15 MIN</text>
+      <text class="n-label" x="22" y="266">/i/k7m3qx9p2d</text>
+      <text class="val" x="22" y="312">curl … | bash</text>
+    </g>
+    <path class="edge dr" style="--t:24.1s;--d:.4s" pathLength="1" d="M270,260 H322"/>
+    <path class="arrow fi" style="--t:24.4s" d="M336,260 l-16,-9 v18 z"/>
+
+    <!-- the kit -->
+    <rect class="kitframe fi" style="--t:24.3s" x="340" y="0" width="640" height="520"/>
+    <text class="n-id fi" style="--t:24.4s;fill:#C6D8E6" x="362" y="34">KIT PERSONNEL · CHEZ LE CLIENT</text>
+    <rect class="n-box dr" style="--t:24.6s" pathLength="1" x="362" y="60" width="290" height="200"/>
+    <g class="fi" style="--t:24.85s">
+      <text class="n-id" x="384" y="96">01</text>
+      <text class="n-label" x="384" y="160">Sa clé</text>
+      <text class="val" x="384" y="206">••••••3f9a</text>
+    </g>
+    <rect class="n-box dr" style="--t:24.8s" pathLength="1" x="670" y="60" width="290" height="200"/>
+    <g class="fi" style="--t:25.05s">
+      <text class="n-id" x="692" y="96">02</text>
+      <text class="n-label" x="692" y="160">Les outils</text>
+      <text class="n-label" x="692" y="196">Junior</text>
+    </g>
+    <rect class="n-box dr" style="--t:25.0s" pathLength="1" x="362" y="290" width="290" height="200"/>
+    <g class="fi" style="--t:25.25s">
+      <text class="n-id" x="384" y="326">03</text>
+      <text class="n-label" x="384" y="390">Node.js</text>
+      <text class="val" x="384" y="436">au besoin, dans</text>
+      <text class="val" x="384" y="464">son dossier</text>
+    </g>
+    <g class="fi" style="--t:25.3s">
+      <rect class="ghost" x="670" y="290" width="290" height="200"/>
+      <text class="ghost-l" x="692" y="390">La méthode</text>
+      <text class="val" x="692" y="436" style="fill:#7FA6C4">canevas, règles,</text>
+      <text class="val" x="692" y="464" style="fill:#7FA6C4">graphe</text>
+    </g>
+
+    <!-- what it changes on their side -->
+    <path class="edge dr" style="--t:25.7s;--d:.4s" pathLength="1" d="M980,150 H1042"/>
+    <path class="arrow fi" style="--t:26.0s" d="M1056,150 l-16,-9 v18 z"/>
+    <path class="edge dr" style="--t:25.8s;--d:.4s" pathLength="1" d="M980,400 H1042"/>
+    <path class="arrow fi" style="--t:26.1s" d="M1056,400 l-16,-9 v18 z"/>
+    <rect class="n-box dr" style="--t:26.0s" pathLength="1" x="1060" y="40" width="620" height="220"/>
+    <g class="fi" style="--t:26.25s">
+      <text class="n-id" x="1084" y="76">SON CLAUDE DESKTOP</text>
+      <text class="n-label" x="1084" y="140">L'entrée « junior » écrite</text>
+      <text class="n-label" x="1084" y="178">dans sa configuration</text>
+      <text class="val" x="1084" y="228">puis Claude redémarre</text>
+    </g>
+    <rect class="n-box dr" style="--t:26.3s" pathLength="1" x="1060" y="290" width="620" height="200"/>
+    <g class="fi" style="--t:26.55s">
+      <text class="n-id" x="1084" y="326">SON PROJET</text>
+      <text class="n-label" x="1084" y="390">Une réinstallation le garde</text>
+      <text class="val" x="1084" y="436">sauf réinitialisation complète,</text>
+      <text class="val" x="1084" y="464">choisie dans /admin</text>
+    </g>
+
+    <!-- red pen: the method never ships -->
+    <path class="flag dr" style="--t:27.3s;--d:.3s" pathLength="1" d="M684,304 L946,476"/>
+    <path class="flag dr" style="--t:27.55s;--d:.3s" pathLength="1" d="M946,304 L684,476"/>
+  </svg>
+  <div class="bpstamp mono stamp" style="--t:27.95s;left:812px;top:880px">Reste chez nous</div>
+  <p class="figcap mono fu" style="--t:23.3s">Fig. 04 · Un kit sans méthode</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 205</div><div><small>Feuille</small>04 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S5 · L'INSTALLATION  31.3 – 39.4s ============ -->
+<section class="scene s5" style="--in:31.3s">
+ <div class="so" style="--out:39.25s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:31.4s">Junior 205 · Création d'un client</p>
+  <div class="ruler mono fi" style="--t:31.4s">
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Entreprise</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Employé</div>
+    <div class="st on"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag dr" style="--t:35.7s;--d:.35s" pathLength="1" d="M5,14 L11,20 L24,3"/></svg>Installation</div>
+    <div class="st on"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag dr" style="--t:37.9s;--d:.35s" pathLength="1" d="M5,14 L11,20 L24,3"/></svg>Autoriser</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/></svg>Accueil</div>
+  </div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:31.5s">Il colle la commande.</span></span>
+    <span class="ln"><span style="--t:31.62s">Quatre lignes vertes,</span></span>
+    <span class="ln"><span class="red" style="--t:36.5s">puis un seul clic.</span></span>
+  </h2>
+  <p class="lede fi" style="--t:33.6s">Sans mot de passe admin.<br>Une étape bloque? Rien n'est perdu :<br>il relance la même commande.</p>
+
+  <div class="term fu" style="--t:31.8s">
+    <div class="tb"><i></i><i></i><i></i><span>TERMINAL</span></div>
+    <div class="tx">
+      <div><span class="pr">$ </span><span class="type" style="--t:32.0s;--d:.8s">curl -fsSL https://…/i/k7m3qx9p2d | bash</span></div>
+      <div class="lg fi" style="--t:32.95s">
+        <svg width="66" height="88" viewBox="0 0 6 8"><g fill="#E8EDF2">
+          <rect x="2" y="0" width="4" height="1"/><rect x="4" y="1" width="2" height="5"/><rect x="0" y="5" width="2" height="2"/><rect x="1" y="7" width="4" height="1"/><rect x="2" y="6" width="3" height="1"/>
+        </g><g fill="#8A96A3"><rect x="5" y="6" width="1" height="1"/><rect x="0" y="4" width="2" height="1"/></g></svg>
+        <b>JUNIOR</b>
+      </div>
+      <div class="sl fi" style="--t:33.35s"><span class="ic"><span class="fo" style="--t:33.85s"><span class="spin" style="--t:33.35s;display:block"></span></span><svg class="pop" style="--t:33.9s" viewBox="0 0 22 22"><path d="M4,12 L9,17 L19,5" fill="none" stroke="#5BC48C" stroke-width="3"/></svg></span>Préparation de Node.js</div>
+      <div class="sl fi" style="--t:33.9s"><span class="ic"><span class="fo" style="--t:34.4s"><span class="spin" style="--t:33.9s;display:block"></span></span><svg class="pop" style="--t:34.45s" viewBox="0 0 22 22"><path d="M4,12 L9,17 L19,5" fill="none" stroke="#5BC48C" stroke-width="3"/></svg></span>Installation des dépendances</div>
+      <div class="sl fi" style="--t:34.45s"><span class="ic"><span class="fo" style="--t:34.95s"><span class="spin" style="--t:34.45s;display:block"></span></span><svg class="pop" style="--t:35.0s" viewBox="0 0 22 22"><path d="M4,12 L9,17 L19,5" fill="none" stroke="#5BC48C" stroke-width="3"/></svg></span>Connexion à Claude Desktop</div>
+      <div class="sl fi" style="--t:35.0s"><span class="ic"><span class="fo" style="--t:35.5s"><span class="spin" style="--t:35.0s;display:block"></span></span><svg class="pop" style="--t:35.55s" viewBox="0 0 22 22"><path d="M4,12 L9,17 L19,5" fill="none" stroke="#5BC48C" stroke-width="3"/></svg></span>Redémarrage de Claude Desktop</div>
+      <div class="ready fi" style="--t:35.7s">Junior est prêt.</div>
+      <div class="rem fi" style="--t:35.95s">│ Une dernière chose : au premier outil Junior
+│ que Claude te propose, clique sur
+│ <em>« Toujours autoriser »</em> plutôt que
+│ « Autoriser une fois ».</div>
+    </div>
+  </div>
+  <div class="perm fu" style="--t:36.6s">
+    <p class="kick mono">Son Claude · premier outil Junior</p>
+    <div class="btns"><span class="btnq" style="border-color:var(--line);color:var(--graphite)">Autoriser une fois</span><span class="btnp press" style="--t:37.75s">Toujours autoriser</span></div>
+  </div>
+  <svg class="over" viewBox="0 0 1920 1080">
+    <path class="flag dr" style="--t:37.15s;--d:.6s" pathLength="1" d="M1404,764 C1460,756 1580,756 1632,764 C1646,774 1646,796 1630,806 C1560,814 1450,814 1402,806 C1390,796 1390,774 1406,764 C1414,760 1426,758 1438,757"/>
+  </svg>
+  <p class="figcap mono fu" style="--t:31.7s">Fig. 05 · L'écran d'installation</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 205</div><div><small>Feuille</small>05 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S6 · L'ACCUEIL  39.3 – 47.4s ============ -->
+<section class="scene s6" style="--in:39.3s">
+ <div class="so" style="--out:47.25s">
+  <div class="grid"></div>
+  <p class="eyebrow mono">Junior 205 · Création d'un client</p>
+  <div class="ruler mono">
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Entreprise</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Employé</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Installation</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Autoriser</div>
+    <div class="st on"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag dr" style="--t:44.5s;--d:.35s" pathLength="1" d="M5,14 L11,20 L24,3"/></svg>Accueil</div>
+  </div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:39.5s">Quoi qu'il demande,</span></span>
+    <span class="ln"><span style="--t:39.62s">Junior se présente</span></span>
+    <span class="ln"><span style="--t:39.74s">d'abord.</span></span>
+  </h2>
+
+  <div class="stages">
+    <p class="kick mono fi" style="--t:40.3s">/admin · Clients · Progression de Camille</p>
+    <div class="rowc">
+      <span class="stage fi" style="--t:40.5s">Invité</span><span class="ar fi" style="--t:40.9s">→</span>
+      <span class="stage hot fi" style="--t:41.0s">Connecté · pas encore présenté</span><span class="ar fi" style="--t:42.7s">→</span>
+      <span class="stage fi" style="--t:42.8s">Présenté</span>
+    </div>
+  </div>
+
+  <div class="chat fu" style="--t:39.9s">
+    <div class="tb">Nouvelle conversation</div>
+    <div class="in">
+      <div class="bub fi" style="--t:40.4s">Bonjour! On peut regarder mon prix?</div>
+      <div class="tool fi" style="--t:41.0s"><i></i>junior · show_guide</div>
+      <div class="guide fu" style="--t:41.2s">
+        <p class="kick mono">Comment ça marche · 1 / 4</p>
+        <h5>Deux suites qui se parlent.</h5>
+        <div class="su"><span>Planification stratégique</span><span>21 canevas</span></div>
+        <div class="su"><span>Commercialisation</span><span>11 canevas</span></div>
+        <div class="nav"><div class="dots"><i class="on"></i><i></i><i></i><i></i></div><div><span class="btnq" style="border-color:var(--line);color:var(--graphite)">Précédent</span> <span class="btnp">Suivant</span></div></div>
+      </div>
+      <div class="reply fi" style="--t:42.5s">
+        <p class="tool" style="margin-top:0">Junior · puis il répond à sa question</p>
+        <i style="width:92%"></i><i style="width:78%"></i><i style="width:55%"></i>
+      </div>
+    </div>
+  </div>
+  <svg class="over" viewBox="0 0 1920 1080">
+    <path class="flag dr" style="--t:43.3s;--d:.8s" pathLength="1" d="M1044,311 C1300,305 1640,305 1786,312 C1802,390 1802,500 1788,574 C1600,586 1260,586 1022,576 C1006,500 1006,390 1026,314 C1034,308 1048,306 1062,305"/>
+  </svg>
+  <div class="note mono pop" style="--t:43.95s;left:1496px;top:618px">Une fois par personne</div>
+  <p class="figcap mono fu" style="--t:39.7s">Fig. 06 · La première conversation</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 205</div><div><small>Feuille</small>06 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S7 · ENSUITE : L'ÉQUIPE, LE COACH, LE PORTAIL  47.3 – 55.6s ============ -->
+<section class="scene s7" style="--in:47.3s">
+ <div class="so" style="--out:55.45s">
+  <div class="grid"></div>
+  <p class="eyebrow mono">Junior 205 · Création d'un client</p>
+  <div class="ruler mono">
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Entreprise</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Employé</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Installation</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Autoriser</div>
+    <div class="st"><svg viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24"/><path class="flag" d="M5,14 L11,20 L24,3"/></svg>Accueil</div>
+  </div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:47.5s">Toute l'équipe,</span></span>
+    <span class="ln"><span style="--t:47.62s">une seule progression.</span></span>
+  </h2>
+  <svg class="tm" viewBox="0 0 1680 540">
+    <!-- people -->
+    <g class="fu" style="--t:48.0s">
+      <rect class="pbox" x="0" y="20" width="330" height="130"/>
+      <text class="pn" x="24" y="76">Camille</text><text class="ps" x="24" y="116">SA CLÉ · SON ACCUEIL</text>
+    </g>
+    <g class="fu" style="--t:48.2s">
+      <rect class="pbox" x="0" y="200" width="330" height="130"/>
+      <text class="pn" x="24" y="256">Olivier</text><text class="ps" x="24" y="296">SA CLÉ · SON ACCUEIL</text>
+    </g>
+    <g class="fu" style="--t:48.4s">
+      <rect class="pbox" x="0" y="380" width="330" height="130"/>
+      <text class="pn" x="24" y="436">Nadia</text><text class="ps" x="24" y="476">SA CLÉ · SON ACCUEIL</text>
+    </g>
+    <path class="thin dr" style="--t:48.75s;--d:.5s" pathLength="1" d="M330,85 H380 V265 H430"/>
+    <path class="thin dr" style="--t:48.8s;--d:.4s" pathLength="1" d="M330,265 H430"/>
+    <path class="thin dr" style="--t:48.85s;--d:.5s" pathLength="1" d="M330,445 H380 V265"/>
+    <path class="fi" style="--t:49.15s" d="M444,265 l-16,-9 v18 z" fill="var(--graphite)"/>
+
+    <!-- one record per entreprise -->
+    <rect class="fi" style="--t:49.1s" x="450" y="20" width="700" height="490" fill="var(--sheet)"/>
+    <rect class="dr" style="--t:49.1s" pathLength="1" x="450" y="20" width="700" height="490" fill="none" stroke="var(--ink)" stroke-width="2.6"/>
+    <g class="fi" style="--t:49.4s">
+      <text class="sm" x="476" y="62">Progression · Cornets Boréal inc.</text>
+      <line x1="476" y1="82" x2="1124" y2="82" stroke="var(--ink)" stroke-width="2"/>
+    </g>
+    <g class="fi" style="--t:49.6s">
+      <text class="rowl" x="476" y="140">ICP + Proposition de valeur</text>
+      <rect x="976" y="117" width="124" height="32" rx="5" fill="var(--ok)"/><text class="chipt" x="1038" y="139" text-anchor="middle">PRÊT</text>
+      <text class="by" x="476" y="172">par Camille</text>
+      <line x1="476" y1="196" x2="1124" y2="196" stroke="var(--line)" stroke-width="1.5"/>
+    </g>
+    <g class="fi" style="--t:49.8s">
+      <text class="rowl" x="476" y="254">Audit concurrentiel</text>
+      <rect x="976" y="231" width="124" height="32" rx="5" fill="var(--ok)"/><text class="chipt" x="1038" y="253" text-anchor="middle">PRÊT</text>
+      <text class="by" x="476" y="286">par Olivier</text>
+      <line x1="476" y1="310" x2="1124" y2="310" stroke="var(--line)" stroke-width="1.5"/>
+    </g>
+    <g class="fi" style="--t:50.0s">
+      <text class="rowl" x="476" y="368">Prix</text>
+      <rect x="976" y="345" width="124" height="32" rx="5" fill="var(--prog)"/><text class="chipt" x="1038" y="367" text-anchor="middle">EN COURS</text>
+      <text class="by" x="476" y="400">par Nadia</text>
+    </g>
+    <text class="sm fi" style="--t:50.2s" x="476" y="480">ID · statuts · dates — aucune réponse</text>
+
+    <!-- who reads it -->
+    <path class="thin dr" style="--t:50.4s;--d:.4s" pathLength="1" d="M1150,130 H1222"/>
+    <path class="fi" style="--t:50.7s" d="M1236,130 l-16,-9 v18 z" fill="var(--graphite)"/>
+    <path class="thin dr" style="--t:50.6s;--d:.4s" pathLength="1" d="M1150,330 H1222"/>
+    <path class="fi" style="--t:50.9s" d="M1236,330 l-16,-9 v18 z" fill="var(--graphite)"/>
+    <g class="fu" style="--t:50.6s">
+      <rect class="pbox" x="1240" y="60" width="440" height="140"/>
+      <text class="ps" x="1264" y="98">/COACH</text>
+      <text class="pn" x="1264" y="144">Mathieu, son coach</text>
+      <text class="by" x="1264" y="180">voit où chacun en est</text>
+    </g>
+    <g class="fu" style="--t:50.9s">
+      <rect class="pbox" x="1240" y="260" width="440" height="140"/>
+      <text class="ps" x="1264" y="298">LE PORTAIL</text>
+      <text class="pn" x="1264" y="344">Lien par courriel</text>
+      <text class="by" x="1264" y="380">valide 15 minutes</text>
+    </g>
+  </svg>
+  <div class="tmstamp mono stamp" style="--t:51.7s">Vos statuts, jamais vos mots.</div>
+  <p class="figcap mono fu" style="--t:47.7s">Fig. 07 · Une progression par entreprise</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 205</div><div><small>Feuille</small>07 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ CLOSER  55.6 – 60s (keep this block identical across the series; only the headline changes) ============ -->
+<section class="scene dark closer" style="--in:55.6s">
+ <div class="so" style="--out:99s">
+  <div class="cmark pop" style="--t:55.85s"><img src="../../assets/logo.png" alt=""><i></i><i class="r"></i></div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:56.0s">Un lien, un clic.</span></span>
+    <span class="ln"><span style="--t:56.12s">Junior se présente.</span></span>
+  </h2>
+  <p class="sub mono fi" style="--t:56.7s">Rien à connecter · Rien à migrer · Rien à perdre si vous arrêtez</p>
+  <div class="btn-wrap fu" style="--t:57.2s"><span class="btn mono">Faire mon diagnostic →</span></div>
+  <p class="url fu" style="--t:57.45s">junior<em>.</em>coach</p>
+  <p class="fine mono fi" style="--t:57.7s">Stratégie + commercialisation · dans votre Claude</p>
+ </div>
+</section>
+
+<!-- sheet border, drawn once -->
+<svg class="sheetframe" viewBox="0 0 1920 1080">
+  <rect class="dr" style="--t:0s;--d:1.1s" pathLength="1" x="32" y="32" width="1856" height="1016" fill="none" stroke="#8D98A5" stroke-opacity=".55" stroke-width="2"/>
+</svg>
+<script src="../_kit/kit.js"></script>
+</body>
+</html>

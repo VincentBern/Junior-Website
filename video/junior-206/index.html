@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<!--
+JUNIOR 206 · TESTEUR E2E — « le harnais e2e » (scripts/e2e, roadmap §17) · 16:9 · 60 s · FR (Québec)
+
+S1  0.0 – 6.6   HOOK · Feuille 01/07
+    « Les tests unitaires passent. Et la vraie conversation? »
+    Fig. 01 : tests unitaires ✓ (server-remote, server-local, garde-fous) · en pointillé « Ce que le client touche » :
+    le kit installé, une vraie conversation, de vrais livrables, le serveur en production → « ? » ; stylo rouge : « D'où le harnais e2e ».
+S2  6.6 – 14.4  LE LANCEUR · Feuille 02/07
+    « Une entreprise. Un utilisateur. Jouer. » · Entreprise = une fiche fictive (les valeurs que le client fournit) ·
+    Utilisateur = une clé de test, son snapshot, ses exécutions.
+    Figure : vue Test E2E › Lanceur (Entreprises / Utilisateurs) ; stylo rouge sur « + Nouvel utilisateur » : « émet une clé de test » ;
+    boîte « Nouvel utilisateur » : mode Scénario, portée Suite — 11 canevas, comportements, modèle Junior Haiku → Démarrer.
+S3  14.4 – 22.2 AVANT LE PREMIER MESSAGE · Feuille 03/07
+    « Vraie clé. Vrai kit. Départ à zéro. » · 01 Clé de test · 02 Le vrai kit · 03 Vérifs de départ (entreprise, droits, nuage vide)
+    stylo rouge : « Un ✗ ici : arrêt sur-le-champ, avant toute dépense. » · Fig. 03 : seule la fenêtre de clavardage est remplacée.
+S4  22.2 – 31.7 BLEU · LE PLAN, PUIS LA PARTIE · Feuille 04/07
+    « Un plan fixé d'avance. Chaque pas, vérifié. » · Client (le script, la fiche) → Junior (le kit installé, ne sait pas qu'il est testé)
+    → server-remote ; le harnais regarde les appels, lit le snapshot, note chaque pas. Plan : 01 ✓, 02 ✓, 03 « 3 champs » ✗ →
+    stylo rouge : n-fields.count · « 5 champs envoyés pour 3 demandés ».
+S5  31.75 – 39.6 L'EXÉCUTION, EN DIRECT · Feuille 05/07
+    « On le regarde jouer, en direct. » · vue Exécution (Tour 12 · Le serveur travaille — populate_canevas(pricing) · depuis 0:41,
+    compteurs, onglets, index des tours) + le widget toujours au-dessus ; stylo rouge : « toujours par-dessus vos fenêtres ».
+S6  39.6 – 47.4 LES GARDE-FOUS · Feuille 06/07
+    « Deux systèmes qui jasent, ça ne teste rien. » · 3 fois la même erreur → arrêt · Module refusé à la clé → arrêt ·
+    6 tours sans enregistrement → arrêt · Relance du harnais → échec de guidage. Index : T7–T9 ✗ → tampon « Arrêté par le harnais ».
+S7  47.4 – 55.6 LE RAPPORT · Feuille 07/07
+    « La régression, attrapée avant un vrai client. » · Vérifications + report --compare 12 14 : scenario.edit.cloud · icp pass → fail
+    « Pas de marqueur de revue au nuage pour : pricing » · tampon « Attrapée avant le client » · coût et latence réels, tirés du serveur.
+CLOSER 55.6 – 60 « Testé comme un client. Avant un client. »
+-->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Junior 206</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../_kit/kit.css">
+<link rel="stylesheet" href="../_kit/kit-16x9.css">
+<style>
+/* ---------- shared helpers ---------- */
+.lin{animation-timing-function:linear !important}
+.stk{display:inline-grid !important}
+.stk>*{grid-area:1/1}
+.abs{position:absolute}
+.ink{color:var(--ink)}
+.gr{color:var(--graphite)}
+.sans{font-family:"IBM Plex Sans",sans-serif}
+.arch{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;letter-spacing:-.015em}
+.emo{font-family:"Noto Color Emoji",sans-serif;letter-spacing:0}
+.bump{animation:bump .5s ease var(--t) both;transform-box:fill-box;transform-origin:center}
+@keyframes bump{0%,100%{transform:none}40%{transform:scale(1.08)}}
+.ok{color:var(--ok)}
+.ghost{fill:none;stroke:var(--graphite);stroke-width:2.4;stroke-dasharray:12 9}
+.q{fill:var(--revision);font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:800;font-size:46px}
+.redtag{position:absolute;background:var(--revision);color:#fff;font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.12em;text-transform:uppercase;padding:9px 16px;white-space:nowrap;transform:rotate(-3deg)}
+.redtag.pop{transform-origin:center}
+.rednote{position:absolute;color:var(--revision);font-family:"IBM Plex Sans",sans-serif;font-weight:500;font-size:26px;line-height:1.3}
+.overlay{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible;pointer-events:none}
+
+/* viewer chrome (charcoal header of the real page, redrawn in ink) */
+.win{position:absolute;background:var(--sheet);border:2px solid var(--ink);overflow:hidden}
+.wbar{height:46px;background:var(--ink);color:#E9EEF3;display:flex;align-items:center;gap:16px;padding:0 18px;font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+.wbar img{height:26px;filter:brightness(0) invert(1)}
+.wbar .tag{color:#E9EEF3;font-weight:500}
+.wbar .sep{width:1px;height:20px;background:rgba(255,255,255,.3)}
+.wbar .tb{color:#8D98A5}
+.wbar .tb.on{color:#fff;box-shadow:inset 0 -3px 0 #fff;padding:12px 0 10px}
+.btn2{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--ink);padding:8px 14px;background:var(--sheet);color:var(--ink);white-space:nowrap}
+.pz{display:inline-block;width:11px;height:13px;border-left:3.5px solid currentColor;border-right:3.5px solid currentColor;margin-right:9px;vertical-align:-1px}
+.btn2.pri{background:var(--ink);color:var(--sheet)}
+.pill{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:#E1E6EC;color:var(--graphite);white-space:nowrap}
+.pill.on{background:var(--ink);color:#fff}
+.pill.run{background:var(--prog);color:#fff}
+.pill.later{background:#F3E3BD;color:#7A520B}
+.pill.fail{background:var(--revision);color:#fff}
+.pill.pass{background:#DCEBE3;color:var(--ok)}
+.kick{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--graphite)}
+
+/* ---------- S1 ---------- */
+.s1 .h{position:absolute;left:120px;top:170px;font-size:96px;width:880px}
+.s1 svg{position:absolute;left:1040px;top:160px;width:760px;height:740px;overflow:visible}
+.s1 .lbl{font-size:30px}
+.tick-ok{fill:var(--ok);font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:34px}
+.s1 .redtag{left:120px;top:640px;font-size:22px;padding:12px 20px}
+
+/* ---------- S2 lanceur ---------- */
+.s2 .h{position:absolute;left:120px;top:170px;font-size:100px;width:760px}
+.s2 .defs{position:absolute;left:120px;top:560px;width:780px;display:grid;gap:26px}
+.s2 .defs div{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:baseline;border-top:1.5px solid var(--line);padding-top:16px}
+.s2 .defs b{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.s2 .defs span{font-size:26px;line-height:1.3;color:var(--graphite)}
+.lx{left:930px;top:150px;width:870px;height:760px}
+.lx .body{display:grid;grid-template-columns:240px 1fr;height:calc(100% - 46px)}
+.lx nav{border-right:1.5px solid var(--line);background:#E9EDF1;padding:16px 0}
+.lx nav .bar{display:flex;justify-content:space-between;padding:0 16px 14px;font-size:15px;color:var(--graphite)}
+.lx nav .bar b{font-weight:500;color:var(--ink)}
+.lx nav .gh{padding:10px 16px;border-top:1.5px solid var(--line);border-bottom:1.5px solid var(--line)}
+.lx nav .it{padding:14px 16px;font-size:20px;border-bottom:1px solid var(--line);display:flex;gap:10px}
+.lx nav .it.sel{background:var(--ink);color:#fff}
+.lx nav .it small{display:block;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#93A0AD;margin-top:4px}
+.lx nav .it:not(.sel) small{color:var(--graphite)}
+.lx .det{padding:22px 26px;position:relative}
+.lx h2{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:40px;letter-spacing:-.015em;margin:6px 0 8px}
+.lx .meta{font-size:18px;color:var(--graphite)}
+.lx .meta b{color:var(--ink);font-weight:600}
+.lx .fiche{margin-top:16px;font-size:17px;color:var(--graphite);border:1.5px solid var(--line);padding:10px 14px;background:#fff}
+.lx .uh{display:flex;justify-content:space-between;align-items:center;margin:24px 0 14px}
+.lx .uh h3{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 92;font-weight:700;font-size:26px}
+.ucard{border:1.5px solid var(--ink);background:#fff;padding:14px 16px;margin-bottom:14px}
+.ucard .who{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.ucard .who b{font-size:19px;font-weight:600}
+.ucard .st{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.ucard .st span{display:block;font-size:17px}
+.ucard .st span.pill{display:inline-block}
+.ucard .st .k{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);margin-bottom:3px}
+.ucard.new{border-color:var(--prog);box-shadow:0 0 0 3px var(--prog-soft)}
+.dlg{position:absolute;left:1060px;top:236px;width:640px;background:#fff;border:2px solid var(--ink);box-shadow:0 26px 60px rgba(20,26,34,.28);padding:22px 26px}
+.dlg h4{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:34px;margin:4px 0 14px}
+.dlg .f{border-top:1px solid var(--line);padding:10px 0;display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:baseline}
+.dlg .f .k{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite)}
+.dlg .f .v{font-size:19px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-size:15px;border:1.5px solid var(--ink);padding:3px 9px;white-space:nowrap}
+.chips span::before{content:"☑ ";color:var(--prog)}
+.dlg .foot{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+.s2 .redtag{left:1580px;top:420px}
+
+/* ---------- S3 stations ---------- */
+.s3 .h{position:absolute;left:120px;top:168px;font-size:96px;white-space:nowrap}
+.stn{position:absolute;top:360px;width:500px;height:360px;border:2px solid var(--ink);background:var(--sheet);padding:24px 28px}
+.stn .no{font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.16em;color:var(--graphite);text-transform:uppercase}
+.stn h3{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:40px;letter-spacing:-.015em;margin:10px 0 18px}
+.stn ul{list-style:none;display:grid;gap:14px}
+.stn li{font-size:23px;line-height:1.3;display:grid;grid-template-columns:30px 1fr;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.stn li i{font-style:normal;font-family:"IBM Plex Mono",monospace;color:var(--graphite);font-size:18px;padding-top:3px}
+.stn li i.ok{color:var(--ok);font-family:"IBM Plex Sans",sans-serif;font-weight:700;font-size:24px;padding-top:0}
+.stn .mono2{font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.06em;color:var(--ink)}
+.s3 .rednote{left:1300px;top:752px;width:520px}
+
+/* ---------- S4 blueprint ---------- */
+.s4 .h{position:absolute;left:120px;top:160px;font-size:92px}
+.s4 svg.g{position:absolute;left:120px;top:400px;width:1100px;height:480px;overflow:visible}
+.s4 .n-label{font-size:30px}
+.s4 .n-id{font-size:16px}
+.val{fill:#B9D3E8;font-family:"IBM Plex Sans",sans-serif;font-size:21px}
+.arrow{fill:#4E86B4}
+.pk{fill:#FFD27A}
+.pkh{fill:#FFD27A;opacity:.3}
+.pA{animation:pA .5s linear var(--t) both}
+@keyframes pA{0%{opacity:0;transform:translate(0,0)}12%{opacity:1}88%{opacity:1;transform:translate(100px,0)}100%{opacity:0;transform:translate(100px,0)}}
+.pB{animation:pB .9s linear var(--t) both}
+@keyframes pB{0%{opacity:0;transform:translate(0,0)}8%{opacity:1}42%{transform:translate(100px,0)}58%{transform:translate(100px,0)}92%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(0,0)}}
+.pC{animation:pC .5s linear var(--t) both}
+@keyframes pC{0%{opacity:0;transform:translate(0,0)}12%{opacity:1}88%{opacity:1;transform:translate(0,110px)}100%{opacity:0;transform:translate(0,110px)}}
+.plan{position:absolute;left:1260px;top:400px;width:540px;height:434px;border:1.5px solid rgba(255,255,255,.32);padding:18px 22px}
+.plan .cap{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:#93B4CE;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.22)}
+.plan .hl{position:absolute;left:12px;right:12px;height:50px;background:rgba(255,255,255,.09)}
+.prow{position:relative;display:grid;grid-template-columns:44px 1fr 90px;align-items:center;height:50px;border-bottom:1px solid rgba(255,255,255,.12);padding:0 8px;margin:0 -8px}
+.prow .n{font-family:"IBM Plex Mono",monospace;font-size:16px;color:#7FA6C4;letter-spacing:.1em}
+.prow .l{font-size:22px;color:#EAF3FA}
+.prow .l small{font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#93B4CE;margin-left:10px}
+.prow .s{justify-self:end;font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.1em;text-transform:uppercase}
+.prow .s .y{color:#7FD3A6}
+.prow .s .x{color:#FF8A78;font-weight:500}
+.prow .s .w{color:#93B4CE}
+.s4 .rtag{position:absolute;left:1262px;top:846px;background:var(--revision);color:#fff;font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.12em;padding:7px 12px;transform:rotate(-4deg);white-space:nowrap}
+.s4 .rnote{position:absolute;left:1260px;top:892px;width:560px;color:#F0A79D;font-size:24px;font-weight:500}
+
+/* ---------- S5 viewer + widget ---------- */
+.s5 .h{position:absolute;left:120px;top:160px;font-size:92px}
+.vx{left:120px;top:400px;width:1680px;height:530px}
+.vx .sb{display:flex;align-items:center;gap:18px;padding:14px 22px 12px;border-bottom:1.5px solid var(--line)}
+.vx .sb .id{flex:1}
+.vx .sb h5{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 92;font-weight:700;font-size:30px;margin-top:4px}
+.vx .now{display:flex;align-items:center;gap:12px;padding:9px 22px;background:var(--prog-soft);font-size:20px;color:#1E3F8F;border-bottom:1.5px solid var(--line)}
+.vx .now .dot{width:12px;height:12px;border-radius:50%;background:var(--prog)}
+.vx .now .tm{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.06em}
+.ctr{display:grid;grid-template-columns:repeat(8,1fr);border-bottom:1.5px solid var(--line)}
+.ctr div{padding:10px 16px;border-right:1px solid var(--line)}
+.ctr div:last-child{border-right:0}
+.ctr .k{display:block;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite)}
+.ctr .v{display:block;font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 92;font-weight:700;font-size:28px;margin-top:2px}
+.vtabs{display:flex;gap:30px;padding:0 22px;border-bottom:1.5px solid var(--line);font-size:18px;color:var(--graphite)}
+.vtabs span{padding:10px 0 9px}
+.vtabs span.on{color:var(--ink);font-weight:600;box-shadow:inset 0 -3px 0 var(--ink)}
+.vtabs b{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:13px;background:#E1E6EC;padding:2px 7px;border-radius:9px;margin-left:6px;color:var(--ink)}
+.convo{display:grid;grid-template-columns:330px 1fr}
+.tix{border-right:1.5px solid var(--line);padding:8px 0}
+.tix div{display:grid;grid-template-columns:52px 1fr 26px 22px 26px;align-items:center;padding:6px 18px;font-size:17px}
+.tix .t{font-family:"IBM Plex Mono",monospace;font-size:15px;color:var(--graphite)}
+.tix .on{background:#E6ECF4}
+.thr{padding:10px 24px;font-size:18px;height:232px;overflow:hidden}
+.thr .hd{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.thr .hd b{font-weight:600;font-size:18px}
+.thr .sp{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);margin:6px 0 3px}
+.thr .msg{background:#fff;border:1px solid var(--line);padding:6px 12px;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thr .msg.cl{background:#EEF1F5}
+.thr .tool{display:inline-block;margin-top:6px;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.04em;border:1.5px solid var(--ink);padding:3px 9px}
+.wdg{position:absolute;left:1190px;top:132px;width:580px;height:282px;border-radius:28px;background:#22272E;box-shadow:0 30px 60px rgba(20,26,34,.38),0 0 0 1.5px rgba(255,255,255,.08) inset;color:#F2F5F8;font-family:"IBM Plex Sans",sans-serif;overflow:hidden}
+.wdg img{position:absolute;left:26px;top:20px;height:66px;filter:brightness(0) invert(1)}
+.wdg .dot{position:absolute;left:116px;top:31px;width:16px;height:16px;border-radius:50%;background:#34C759}
+.wdg .stt{position:absolute;left:144px;top:22px;font-size:20px;color:#AEB6BF}
+.wdg .ttl{position:absolute;left:116px;top:54px;width:296px;font-size:26px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wdg .tmr{position:absolute;right:26px;top:44px;font-family:"IBM Plex Mono",monospace;font-size:40px;font-weight:500;letter-spacing:0}
+.wdg .dtl{position:absolute;left:116px;top:96px;font-size:20px;color:#AEB6BF;white-space:nowrap}
+.wdg .rule{position:absolute;left:24px;right:24px;top:140px;height:1.5px;background:rgba(255,255,255,.16)}
+.wdg .rows{position:absolute;left:26px;top:154px;display:grid;gap:6px;font-size:20px;color:#D6DCE2}
+.wdg .rows b{font-weight:500;color:#34C759;display:inline-block;width:70px}
+.s5 .redtag{left:1376px;top:84px}
+
+/* ---------- S6 guardrails ---------- */
+.s6 .h{position:absolute;left:120px;top:170px;font-size:96px;width:860px}
+.rules{position:absolute;left:120px;top:530px;width:820px;display:grid}
+.rules div{display:grid;grid-template-columns:124px 1fr;align-items:center;gap:18px;border-top:1.5px solid var(--line);padding:16px 0;font-size:28px}
+.rules div:last-child{border-bottom:1.5px solid var(--line)}
+.rules i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.1em;text-align:center;border:1.5px solid var(--ink);padding:6px 0}
+.rules em{font-style:normal;color:var(--graphite)}
+.ix{left:1040px;top:160px;width:760px;height:620px}
+.ix .tabs2{display:flex;gap:10px;padding:16px 20px;border-bottom:1.5px solid var(--line)}
+.ix .tabs2 span{font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--line);padding:5px 12px;color:var(--graphite)}
+.ix .tabs2 span.on{border-color:var(--ink);color:var(--ink)}
+.trow{display:grid;grid-template-columns:70px 120px 40px 34px 34px 1fr;align-items:center;height:76px;padding:0 22px;border-bottom:1px solid var(--line);font-size:20px;position:relative}
+.trow .t{font-family:"IBM Plex Mono",monospace;font-size:17px;color:var(--graphite)}
+.trow .k{font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.06em}
+.trow .x{color:var(--revision);font-weight:700;font-size:24px}
+.trow .er{font-family:"IBM Plex Mono",monospace;font-size:15px;color:var(--revision);letter-spacing:.02em;white-space:nowrap}
+.trow .bar{position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--revision)}
+.ix .div{padding:16px 22px;font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite);text-align:center;border-bottom:1px solid var(--line)}
+.stampx{position:absolute;left:1270px;top:720px;border:5px solid var(--revision);color:var(--revision);background:rgba(242,245,248,.92);font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:30px;letter-spacing:.14em;text-transform:uppercase;padding:14px 24px;text-align:center;line-height:1.25}
+.stampx small{display:block;font-size:17px;letter-spacing:.14em}
+.cnt{position:absolute;left:1600px;top:420px;font-family:"IBM Plex Mono",monospace;font-size:22px;color:var(--revision);letter-spacing:.1em}
+
+/* ---------- S7 report ---------- */
+.s7 .h{position:absolute;left:120px;top:160px;font-size:92px}
+.vf{left:120px;top:410px;width:960px;height:450px}
+.vf .hd{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1.5px solid var(--ink)}
+.vf .hd h5{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 92;font-weight:700;font-size:30px;flex:1}
+.crow{display:grid;grid-template-columns:1fr 90px 88px;align-items:center;height:56px;padding:0 22px;border-bottom:1px solid var(--line)}
+.crow .c{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.02em}
+.crow .m{font-family:"IBM Plex Mono",monospace;font-size:16px;color:var(--graphite)}
+.crow .s{justify-self:end}
+.crow.bad{background:#F8E2DE}
+.vf .ft{padding:12px 22px;font-size:18px;color:var(--graphite)}
+.cmp{left:1140px;top:410px;width:660px;height:280px}
+.cmp .hd{padding:14px 22px;border-bottom:1.5px solid var(--ink)}
+.cmp .hd .c{font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.04em}
+.cmp .hd p{font-size:18px;color:var(--graphite);margin-top:4px}
+.cmp .th,.cmp .tr{display:grid;grid-template-columns:1fr 104px 104px;align-items:center;padding:0 22px}
+.cmp .th{height:44px;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);border-bottom:1px solid var(--line)}
+.cmp .tr{height:64px;border-bottom:1px solid var(--line)}
+.cmp .tr .c{font-family:"IBM Plex Mono",monospace;font-size:17px}
+.cmp .det{padding:12px 22px;font-size:20px;color:var(--revision);font-weight:500}
+.s7 .side{position:absolute;left:1140px;top:826px;width:660px;font-size:22px;color:var(--graphite);line-height:1.5}
+.s7 .side b{color:var(--ink);font-weight:600}
+.s7 .stampx{left:1420px;top:706px;font-size:26px;padding:12px 20px}
+</style>
+</head>
+<body data-size="1920x1080" data-duration="60" data-out="junior-206-fr-16x9">
+
+<!-- ============ S1 · HOOK  0 – 6.6s ============ -->
+<section class="scene s1" style="--in:0s">
+ <div class="so" style="--out:6.55s">
+  <div class="grid fi" style="--t:0s"></div>
+  <img class="watermark" src="../../assets/logo.png" alt="">
+  <p class="eyebrow mono fu" style="--t:.25s">Junior 206 · Testeur e2e</p>
+  <h1 class="h">
+    <span class="ln"><span style="--t:.35s">Les tests unitaires</span></span>
+    <span class="ln"><span style="--t:.47s">passent.</span></span>
+    <span class="ln"><span class="red" style="--t:1.5s">Et la vraie</span></span>
+    <span class="ln"><span class="red" style="--t:1.62s">conversation?</span></span>
+  </h1>
+  <svg viewBox="0 0 760 740">
+    <g class="fu" style="--t:.8s">
+      <rect class="bx" x="0" y="0" width="760" height="260"/>
+      <text class="sm" x="30" y="46">Tests unitaires · pnpm test</text>
+      <line x1="30" y1="70" x2="730" y2="70" stroke="var(--line)" stroke-width="1.5"/>
+      <text class="lbl" x="30" y="122">server-remote</text>
+      <text class="lbl" x="30" y="174">server-local · le kit</text>
+      <text class="lbl" x="30" y="226">Garde-fous</text>
+    </g>
+    <text class="tick-ok pop" style="--t:1.15s" x="700" y="124">✓</text>
+    <text class="tick-ok pop" style="--t:1.3s" x="700" y="176">✓</text>
+    <text class="tick-ok pop" style="--t:1.45s" x="700" y="228">✓</text>
+    <path class="thin dr" style="--t:1.9s;--d:.4s" pathLength="1" d="M380,260 V330"/>
+    <rect class="ghost fi" style="--t:2.1s" x="0" y="330" width="760" height="380"/>
+    <g class="fi" style="--t:2.25s">
+      <text class="sm" x="30" y="378">Ce que le client touche</text>
+      <line x1="30" y1="402" x2="730" y2="402" stroke="var(--line)" stroke-width="1.5"/>
+    </g>
+    <text class="lbl fi" style="--t:2.4s" x="30" y="456">Le kit installé</text>
+    <text class="lbl fi" style="--t:2.55s" x="30" y="530">Une vraie conversation</text>
+    <text class="lbl fi" style="--t:2.7s" x="30" y="604">De vrais livrables</text>
+    <text class="lbl fi" style="--t:2.85s" x="30" y="678">Le serveur en production</text>
+    <text class="q pop" style="--t:3.1s" x="700" y="462" text-anchor="middle">?</text>
+    <text class="q pop" style="--t:3.25s" x="700" y="536" text-anchor="middle">?</text>
+    <text class="q pop" style="--t:3.4s" x="700" y="610" text-anchor="middle">?</text>
+    <text class="q pop" style="--t:3.55s" x="700" y="684" text-anchor="middle">?</text>
+    <path class="flag dr" style="--t:3.9s;--d:.8s;stroke-width:3.5" pathLength="1" d="M640,412 C700,396 760,404 770,430 C784,520 784,620 770,700 C740,722 680,724 640,708 C622,620 622,520 630,428 C634,414 646,410 662,408"/>
+  </svg>
+  <div class="redtag pop" style="--t:4.6s">→ D'où le harnais e2e</div>
+  <p class="figcap mono fu" style="--t:.6s">Fig. 01 · Le seul test qui touche ce que le client touche</p>
+  <div class="cart mono fu" style="--t:.5s"><div><small>Projet</small>Junior 206</div><div><small>Feuille</small>01 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S2 · LE LANCEUR  6.6 – 14.4s ============ -->
+<section class="scene s2" style="--in:6.6s">
+ <div class="so" style="--out:14.35s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:6.75s">Le lanceur</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:6.85s">Une entreprise.</span></span>
+    <span class="ln"><span style="--t:6.97s">Un utilisateur.</span></span>
+    <span class="ln"><span style="--t:7.09s">Jouer.</span></span>
+  </h2>
+  <div class="defs">
+    <div class="fu" style="--t:7.9s"><b>Entreprise</b><span>Une fiche fictive : ce que le client sait.</span></div>
+    <div class="fu" style="--t:8.3s"><b>Utilisateur</b><span>Une clé de test, son snapshot, ses exécutions.</span></div>
+  </div>
+
+  <div class="win lx fu" style="--t:7.3s">
+    <div class="wbar"><img src="../../assets/logo.png" alt=""><span class="tag">Test E2E</span><span class="sep"></span><span class="tb on">Lanceur</span><span class="tb">›</span><span class="tb">Exécution</span></div>
+    <div class="body">
+      <nav>
+        <div class="bar"><span>2 entreprises</span><b>+ Nouvelle</b></div>
+        <div class="gh kick">Entreprises</div>
+        <div class="it sel"><span>▶</span><span>Cornets Boréal inc.<small>Commercialisation</small></span></div>
+        <div class="it"><span>&nbsp;</span><span>Vélos Nordet<small>Planification</small></span></div>
+      </nav>
+      <div class="det fi" style="--t:7.75s">
+        <span class="kick">Entreprise</span>
+        <h2>Cornets Boréal inc.</h2>
+        <p class="meta">Suite de départ <b>Commercialisation</b></p>
+        <p class="fiche">▸ Fiche — les valeurs que le client fournit aux canevas</p>
+        <div class="uh"><h3>Utilisateurs</h3><span class="btn2">+ Nouvel utilisateur</span></div>
+        <div class="ucard">
+          <div class="who"><b>Testing Hugo - October 2 09h40</b><span><span class="btn2">Voir</span> <span class="btn2 pri">Jouer</span></span></div>
+          <div class="st">
+            <div><span class="k">Snapshot local</span><span>4 canevas avec réponses</span></div>
+            <div><span class="k">Avancement nuage</span><span>4 canevas</span></div>
+            <div><span class="k">Dernière exécution</span><span><span class="pill later">À suivre</span> 4 / 11</span></div>
+          </div>
+        </div>
+        <div class="fi" style="--t:12.75s">
+        <div class="ucard new">
+          <div class="who"><b>Testing Mireille - October 4 14h05</b><span class="pill run">En cours</span></div>
+          <div class="st">
+            <div><span class="k">Snapshot local</span><span>Aucun</span></div>
+            <div><span class="k">Avancement nuage</span><span>Vide</span></div>
+            <div><span class="k">Dernière exécution</span><span>Scénario · 0 / 11</span></div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg class="overlay" viewBox="0 0 1920 1080">
+    <path class="flag dr" style="--t:9.0s;--d:.7s;stroke-width:3.5" pathLength="1" d="M1570,394 C1650,384 1760,386 1784,400 C1796,418 1790,436 1768,442 C1690,452 1590,450 1540,440 C1524,428 1528,404 1552,398 C1566,394 1582,392 1600,392"/>
+    <path class="flag dr" style="--t:9.45s;--d:.45s;stroke-width:3" pathLength="1" d="M1786,430 C1794,520 1794,690 1770,770"/>
+  </svg>
+  <div class="redtag pop" style="--t:9.7s;left:1420px;top:772px">Émet une clé de test</div>
+
+  <div class="fi" style="--t:10.0s"><div class="fo" style="--t:12.3s">
+   <div class="dlg">
+    <span class="kick">Cornets Boréal inc.</span>
+    <h4>Nouvel utilisateur</h4>
+    <div class="f"><span class="k">Nom</span><span class="v">Mireille</span></div>
+    <div class="f"><span class="k">Mode</span><span class="v">Scénario — script de test</span></div>
+    <div class="f"><span class="k">Portée</span><span class="v">Suite — 11 canevas</span></div>
+    <div class="f"><span class="k">Comportements</span><span class="chips"><span>Module d'un coup</span><span>Champ par champ</span><span>Chapitre suivant</span><span>Livrables et export</span><span>Régression</span></span></div>
+    <div class="f"><span class="k">Modèle Junior</span><span class="v">Haiku 4.5</span></div>
+    <div class="foot"><span class="btn2">Annuler</span><span class="btn2 pri bump" style="--t:11.75s">Démarrer</span></div>
+   </div>
+  </div></div>
+  <div class="cart mono"><div><small>Projet</small>Junior 206</div><div><small>Feuille</small>02 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S3 · AVANT LE PREMIER MESSAGE  14.4 – 22.2s ============ -->
+<section class="scene s3" style="--in:14.4s">
+ <div class="so" style="--out:22.15s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:14.55s">Avant le premier message</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:14.65s">Vraie clé. Vrai kit. Départ à zéro.</span></span>
+  </h2>
+  <div class="stn fu" style="--t:15.2s;left:120px">
+    <p class="no">01 · Provision</p>
+    <h3>Une clé de test</h3>
+    <ul>
+      <li><i>›</i><span class="mono2">Testing Mireille - October 4 14h05</span></li>
+      <li><i>›</i><span class="mono2">clé ••••••••3f9a · jamais affichée</span></li>
+      <li><i>›</i><span>Le nom doit contenir « test »</span></li>
+      <li><i>›</i><span>Entreprise marquée TEST dans /admin</span></li>
+    </ul>
+  </div>
+  <div class="stn fu" style="--t:16.2s;left:710px">
+    <p class="no">02 · Installation</p>
+    <h3>Le vrai kit</h3>
+    <ul>
+      <li><i>›</i><span>Empaqueté par le vrai script</span></li>
+      <li><i>›</i><span>Garde : rien de <span class="mono2">content/</span> dans le kit</span></li>
+      <li><i>›</i><span>Branché sur le serveur en production</span></li>
+    </ul>
+  </div>
+  <div class="stn fu" style="--t:17.2s;left:1300px">
+    <p class="no">03 · Préconditions</p>
+    <h3>Les vérifs de départ</h3>
+    <ul>
+      <li><i class="ok pop" style="--t:17.9s">✓</i><span>La clé appartient à Cornets Boréal inc.</span></li>
+      <li><i class="ok pop" style="--t:18.25s">✓</i><span>Droits sur chaque suite du plan</span></li>
+      <li><i class="ok pop" style="--t:18.6s">✓</i><span>Progression au nuage : vide</span></li>
+    </ul>
+  </div>
+  <svg class="overlay" viewBox="0 0 1920 1080">
+    <path class="thin dr" style="--t:15.9s;--d:.35s" pathLength="1" d="M620,540 H706"/>
+    <path class="fi" style="--t:16.2s" d="M710,540 l-16,-9 v18 z" fill="var(--graphite)"/>
+    <path class="thin dr" style="--t:16.9s;--d:.35s" pathLength="1" d="M1210,540 H1296"/>
+    <path class="fi" style="--t:17.2s" d="M1300,540 l-16,-9 v18 z" fill="var(--graphite)"/>
+    <path class="flag dr" style="--t:18.95s;--d:.7s;stroke-width:3.5" pathLength="1" d="M1340,346 C1520,332 1760,334 1814,350 C1828,460 1828,620 1816,730 C1700,744 1460,746 1300,736 C1282,630 1282,460 1290,358 C1298,348 1312,346 1332,346"/>
+  </svg>
+  <p class="rednote fu" style="--t:19.45s">Un ✗ ici : arrêt sur-le-champ,<br>avant toute dépense.</p>
+  <p class="figcap mono fu" style="--t:18.9s">Fig. 03 · Seule la fenêtre de clavardage est remplacée</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 206</div><div><small>Feuille</small>03 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S4 · BLUEPRINT · LE PLAN, PUIS LA PARTIE  22.2 – 31.7s ============ -->
+<section class="scene blue wipe s4" style="--in:22.2s">
+ <div class="so" style="--out:31.7s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:22.6s">Le plan, puis la partie</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:22.7s">Un plan fixé d'avance.</span></span>
+    <span class="ln"><span style="--t:22.82s">Chaque pas, vérifié.</span></span>
+  </h2>
+  <svg class="g" viewBox="0 0 1100 480">
+    <!-- edges -->
+    <path class="edge dr" style="--t:24.0s;--d:.35s" pathLength="1" d="M320,105 H418"/>
+    <path class="arrow fi" style="--t:24.3s" d="M420,105 l-16,-9 v18 z"/>
+    <path class="edge dr" style="--t:24.15s;--d:.35s" pathLength="1" d="M740,105 H838"/>
+    <path class="arrow fi" style="--t:24.45s" d="M840,105 l-16,-9 v18 z"/>
+    <path class="arrow fi" style="--t:24.45s" d="M740,105 l16,-9 v18 z"/>
+    <path class="edge fi" style="--t:24.5s" stroke-dasharray="8 7" d="M580,190 V298"/>
+    <path class="arrow fi" style="--t:24.6s" d="M580,300 l-9,-16 h18 z"/>
+    <!-- nodes -->
+    <rect class="n-box dr" style="--t:23.3s" pathLength="1" x="0" y="20" width="320" height="170"/>
+    <g class="fi" style="--t:23.6s">
+      <text class="n-id" x="24" y="56">CLIENT · LE SCRIPT</text>
+      <text class="n-label" x="24" y="112">Cornets Boréal</text>
+      <text class="val" x="24" y="156">la fiche, pas la méthode</text>
+    </g>
+    <rect class="n-box dr" style="--t:23.45s" pathLength="1" x="420" y="20" width="320" height="170"/>
+    <g class="fi" style="--t:23.75s">
+      <text class="n-id" x="444" y="56">JUNIOR · LE KIT INSTALLÉ</text>
+      <text class="n-label" x="444" y="112">Junior</text>
+      <text class="val" x="444" y="156">ne sait pas qu'il est testé</text>
+    </g>
+    <rect class="n-box dr" style="--t:23.6s" pathLength="1" x="840" y="20" width="240" height="170"/>
+    <g class="fi" style="--t:23.9s">
+      <text class="n-id" x="864" y="56">PRODUCTION</text>
+      <text class="n-label" x="864" y="112">server-remote</text>
+      <text class="val" x="864" y="156">les vrais outils</text>
+    </g>
+    <rect class="n-box dr" style="--t:24.2s" pathLength="1" x="0" y="300" width="1080" height="130"/>
+    <g class="fi" style="--t:24.5s">
+      <text class="n-id" x="24" y="338">LE HARNAIS · NE JOUE AUCUN RÔLE</text>
+      <text class="n-label" x="24" y="398">Regarde les appels d'outil, lit le snapshot, note chaque pas.</text>
+    </g>
+    <!-- packets: 3 cycles -->
+    <g class="pA" style="--t:24.6s"><circle class="pkh" cx="320" cy="105" r="16"/><circle class="pk" cx="320" cy="105" r="8"/></g>
+    <g class="pB" style="--t:25.05s"><circle class="pkh" cx="740" cy="105" r="16"/><circle class="pk" cx="740" cy="105" r="8"/></g>
+    <g class="pC" style="--t:25.8s"><circle class="pkh" cx="580" cy="190" r="16"/><circle class="pk" cx="580" cy="190" r="8"/></g>
+    <g class="pA" style="--t:26.35s"><circle class="pkh" cx="320" cy="105" r="16"/><circle class="pk" cx="320" cy="105" r="8"/></g>
+    <g class="pB" style="--t:26.8s"><circle class="pkh" cx="740" cy="105" r="16"/><circle class="pk" cx="740" cy="105" r="8"/></g>
+    <g class="pC" style="--t:27.55s"><circle class="pkh" cx="580" cy="190" r="16"/><circle class="pk" cx="580" cy="190" r="8"/></g>
+    <g class="pA" style="--t:28.05s"><circle class="pkh" cx="320" cy="105" r="16"/><circle class="pk" cx="320" cy="105" r="8"/></g>
+    <g class="pB" style="--t:28.5s"><circle class="pkh" cx="740" cy="105" r="16"/><circle class="pk" cx="740" cy="105" r="8"/></g>
+    <g class="pC" style="--t:29.25s"><circle class="pkh" cx="580" cy="190" r="16"/><circle class="pk" cx="580" cy="190" r="8"/></g>
+  </svg>
+
+  <div class="plan fi" style="--t:24.4s">
+    <div class="fi" style="--t:24.6s"><div class="fo" style="--t:26.3s"><div class="hl" style="top:63px"></div></div></div>
+    <div class="fi" style="--t:26.35s"><div class="fo" style="--t:28.0s"><div class="hl" style="top:113px"></div></div></div>
+    <div class="fi" style="--t:28.05s"><div class="hl" style="top:163px"></div></div>
+    <div class="cap"><span>Plan · fixé avant le tour 1</span><span>7 pas</span></div>
+    <div class="prow"><span class="n">01</span><span class="l">Module d'un coup<small>icp</small></span><span class="s stk"><span class="w fo" style="--t:26.2s">—</span><span class="y fi" style="--t:26.2s">✓ Pass</span></span></div>
+    <div class="prow"><span class="n">02</span><span class="l">Un champ<small>pricing</small></span><span class="s stk"><span class="w fo" style="--t:27.95s">—</span><span class="y fi" style="--t:27.95s">✓ Pass</span></span></div>
+    <div class="prow"><span class="n">03</span><span class="l"><span class="strike" style="--t:29.65s">3 champs</span><small>pricing</small></span><span class="s stk"><span class="w fo" style="--t:29.6s">—</span><span class="x fi" style="--t:29.6s">✗ Fail</span></span></div>
+    <div class="prow"><span class="n">04</span><span class="l">Le reste<small>pricing</small></span><span class="s"><span class="w">—</span></span></div>
+    <div class="prow"><span class="n">05</span><span class="l">« Chapitre suivant »</span><span class="s"><span class="w">—</span></span></div>
+    <div class="prow"><span class="n">06</span><span class="l">Livrable<small>icp</small></span><span class="s"><span class="w">—</span></span></div>
+    <div class="prow"><span class="n">07</span><span class="l">Modifier une réponse<small>icp</small></span><span class="s"><span class="w">—</span></span></div>
+  </div>
+  <div class="rtag pop" style="--t:29.75s">scenario.n-fields.count</div>
+  <p class="rnote fu" style="--t:29.85s">5 champs envoyés pour 3 demandés.</p>
+  <p class="figcap mono fu" style="--t:24.8s">Fig. 04 · Le snapshot comparé à lui-même, sans corrigé</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 206</div><div><small>Feuille</small>04 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S5 · L'EXÉCUTION, EN DIRECT  31.75 – 39.6s ============ -->
+<section class="scene s5" style="--in:31.75s">
+ <div class="so" style="--out:39.55s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:31.9s">L'exécution, en direct</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:32.0s">On le regarde</span></span>
+    <span class="ln"><span style="--t:32.12s">jouer, en direct.</span></span>
+  </h2>
+  <div class="win vx fu" style="--t:32.5s">
+    <div class="wbar"><img src="../../assets/logo.png" alt=""><span class="tag">Test E2E</span><span class="sep"></span><span class="tb">Lanceur</span><span class="tb">›</span><span class="tb on">Exécution</span></div>
+    <div class="sb">
+      <div class="id"><span class="kick">Cornets Boréal inc. · Scénario · portée suite</span><h5>Mireille - Cornets Boréal inc. - 00014</h5></div>
+      <span class="pill run">● En cours</span><span class="btn2"><i class="pz"></i>Pause</span><span class="btn2">■ Arrêter</span>
+    </div>
+    <div class="now"><span class="dot"></span><span>Tour 12 · Le serveur travaille — populate_canevas(pricing)</span>
+      <span class="tm">depuis <span class="stk">
+        <span class="fo" style="--t:33.6s">0:38</span>
+        <span class="fi" style="--t:33.6s"><span class="fo" style="--t:34.6s">0:39</span></span>
+        <span class="fi" style="--t:34.6s"><span class="fo" style="--t:35.6s">0:40</span></span>
+        <span class="fi" style="--t:35.6s"><span class="fo" style="--t:36.6s">0:41</span></span>
+        <span class="fi" style="--t:36.6s"><span class="fo" style="--t:37.6s">0:42</span></span>
+        <span class="fi" style="--t:37.6s"><span class="fo" style="--t:38.6s">0:43</span></span>
+        <span class="fi" style="--t:38.6s">0:44</span>
+      </span></span></div>
+    <div class="ctr">
+      <div><span class="k">Temps écoulé</span><span class="v"><span class="stk">
+        <span class="fo" style="--t:33.6s">12:44</span>
+        <span class="fi" style="--t:33.6s"><span class="fo" style="--t:34.6s">12:45</span></span>
+        <span class="fi" style="--t:34.6s"><span class="fo" style="--t:35.6s">12:46</span></span>
+        <span class="fi" style="--t:35.6s"><span class="fo" style="--t:36.6s">12:47</span></span>
+        <span class="fi" style="--t:36.6s"><span class="fo" style="--t:37.6s">12:48</span></span>
+        <span class="fi" style="--t:37.6s"><span class="fo" style="--t:38.6s">12:49</span></span>
+        <span class="fi" style="--t:38.6s">12:50</span></span></span></div>
+      <div><span class="k">Interactions</span><span class="v">24</span></div>
+      <div><span class="k">Canevas</span><span class="v">3 / 11</span></div>
+      <div><span class="k">Tours</span><span class="v">12</span></div>
+      <div><span class="k">Relances</span><span class="v">0</span></div>
+      <div><span class="k">Erreurs d'outil</span><span class="v">0</span></div>
+      <div><span class="k">Tokens laptop</span><span class="v">182k</span></div>
+      <div><span class="k">Tokens serveur</span><span class="v">41k</span></div>
+    </div>
+    <div class="vtabs"><span class="on">Conversation<b>12</b></span><span>Avancement<b>3/11</b></span><span>Temps</span><span>Tokens</span><span>Vérifications</span><span>Détails</span></div>
+    <div class="convo">
+      <div class="tix">
+        <div class="on"><span class="t">T12</span><span>pricing</span><span class="emo">☁️</span><span>✎</span><span></span></div>
+        <div><span class="t">T11</span><span>pricing</span><span class="emo">☁️</span><span>✎</span><span></span></div>
+        <div><span class="t">T10</span><span>icp</span><span class="emo">☁️</span><span></span><span class="emo">☑️</span></div>
+      </div>
+      <div class="thr">
+        <div class="hd"><b>Tour 12</b><span class="pill">pricing</span></div>
+        <div class="sp">Script — n-fields · pricing</div>
+        <div class="msg cl">Chapitre pricing : enregistre maintenant 3 champs, les prochains qui manquent…</div>
+        <div class="hd" style="margin-top:14px"><b>Tour 11</b><span class="pill">pricing</span></div>
+        <div class="sp">Junior</div>
+        <div class="msg">C'est enregistré : un seul champ, comme demandé. Il en reste d'autres pour ce chapitre.</div>
+        <span class="tool">populate_canevas(pricing) · 6s</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wdg sl" style="--t:34.4s">
+    <img src="../../assets/logo.png" alt="">
+    <span class="dot"></span><span class="stt">Connected</span>
+    <span class="ttl">Mireille - Cornets Boréal inc. - 00014</span>
+    <span class="tmr stk">
+      <span class="fo" style="--t:35.6s">12:46</span>
+      <span class="fi" style="--t:35.6s"><span class="fo" style="--t:36.6s">12:47</span></span>
+      <span class="fi" style="--t:36.6s"><span class="fo" style="--t:37.6s">12:48</span></span>
+      <span class="fi" style="--t:37.6s"><span class="fo" style="--t:38.6s">12:49</span></span>
+      <span class="fi" style="--t:38.6s">12:50</span>
+    </span>
+    <span class="dtl">3/11 chapters · turn 12 · 182k tok · scenario</span>
+    <span class="rule"></span>
+    <div class="rows"><span><b>Cloud</b>12 min ago · Upkeep</span><span><b>E2E</b>2 h ago · Upkeep</span><span><b>Users</b>1 live on Junior</span></div>
+  </div>
+  <svg class="overlay" viewBox="0 0 1920 1080">
+    <path class="flag dr" style="--t:35.6s;--d:.8s;stroke-width:3.5" pathLength="1" d="M1240,122 C1460,104 1700,108 1790,124 C1812,200 1812,360 1792,428 C1600,442 1380,442 1176,428 C1158,340 1160,200 1176,134 C1190,124 1210,122 1236,121"/>
+  </svg>
+  <div class="redtag pop" style="--t:36.2s;left:1300px;top:72px">Toujours par-dessus vos fenêtres</div>
+  <p class="figcap mono fu" style="--t:33.0s">Fig. 05 · Cache de prompt, comme Claude Desktop</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 206</div><div><small>Feuille</small>05 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S6 · LES GARDE-FOUS  39.6 – 47.4s ============ -->
+<section class="scene s6" style="--in:39.6s">
+ <div class="so" style="--out:47.35s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:39.75s">Les garde-fous</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:39.85s">Deux systèmes</span></span>
+    <span class="ln"><span style="--t:39.97s">qui jasent, ça</span></span>
+    <span class="ln"><span style="--t:40.09s">ne teste rien.</span></span>
+  </h2>
+  <div class="rules">
+    <div class="fu" style="--t:40.9s"><i>✗ × 3</i><span>Même erreur 3 fois <em>→ arrêt</em></span></div>
+    <div class="fu" style="--t:41.15s"><i>Droits</i><span>Module refusé à la clé <em>→ arrêt</em></span></div>
+    <div class="fu" style="--t:41.4s"><i>6 tours</i><span>Rien d'enregistré <em>→ arrêt</em></span></div>
+    <div class="fu" style="--t:41.65s"><i>⚠</i><span>Relance du harnais <em>→ échec de guidage</em></span></div>
+  </div>
+  <div class="win ix fu" style="--t:40.5s">
+    <div class="wbar"><img src="../../assets/logo.png" alt=""><span class="tag">Test E2E</span><span class="sep"></span><span class="tb on">Exécution</span><span class="tb">· Conversation</span></div>
+    <div class="tabs2"><span>Tout</span><span>Outils</span><span class="on">Problèmes</span></div>
+    <div class="trow fi" style="--t:41.4s"><span class="t">T5</span><span class="k">icp</span><span class="emo">☁️</span><span>✎</span><span></span><span></span></div>
+    <div class="trow fi" style="--t:41.6s"><span class="t">T6</span><span class="k">icp</span><span class="emo">☁️</span><span></span><span></span><span></span></div>
+    <div class="trow fi" style="--t:42.6s"><span class="bar"></span><span class="t">T7</span><span class="k">icp</span><span class="emo">☁️</span><span></span><span class="x">✗</span><span class="er">populate_canevas · erreur 1 / 3</span></div>
+    <div class="trow fi" style="--t:43.2s"><span class="bar"></span><span class="t">T8</span><span class="k">icp</span><span class="emo">☁️</span><span></span><span class="x">✗</span><span class="er">même erreur · 2 / 3</span></div>
+    <div class="trow fi" style="--t:43.8s"><span class="bar"></span><span class="t">T9</span><span class="k">icp</span><span class="emo">☁️</span><span></span><span class="x">✗</span><span class="er">même erreur · 3 / 3</span></div>
+  </div>
+  <div class="stampx stamp" style="--t:44.6s">Arrêté par<br>le harnais<small>au tour 9</small></div>
+  <p class="figcap mono fu" style="--t:41.0s">Fig. 06 · L'arrêt est inscrit au rapport : run.halted</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 206</div><div><small>Feuille</small>06 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ S7 · LE RAPPORT  47.4 – 55.6s ============ -->
+<section class="scene s7" style="--in:47.4s">
+ <div class="so" style="--out:55.45s">
+  <div class="grid"></div>
+  <p class="eyebrow mono fu" style="--t:47.55s">Le rapport</p>
+  <h2 class="h">
+    <span class="ln"><span style="--t:47.65s">La régression, attrapée</span></span>
+    <span class="ln"><span style="--t:47.77s">avant un vrai client.</span></span>
+  </h2>
+  <div class="win vf fu" style="--t:48.2s">
+    <div class="hd"><h5>Vérifications</h5><span class="pill">Échecs</span><span class="pill on">Tout</span><span class="pill fail">1</span></div>
+    <div class="crow fi" style="--t:48.5s"><span class="c">start.cloud-empty</span><span class="m">—</span><span class="s pill pass">pass</span></div>
+    <div class="crow fi" style="--t:48.62s"><span class="c">scenario.fill.one-save</span><span class="m">icp</span><span class="s pill pass">pass</span></div>
+    <div class="crow fi" style="--t:48.74s"><span class="c">scenario.deliverable.reflects</span><span class="m">icp</span><span class="s pill pass">pass</span></div>
+    <div class="crow fi" style="--t:48.86s"><span class="c">scenario.edit.coherence</span><span class="m">icp</span><span class="s pill pass">pass</span></div>
+    <div class="crow bad fi" style="--t:48.98s"><span class="c">scenario.edit.cloud</span><span class="m">icp</span><span class="s pill fail">fail</span></div>
+    <div class="crow fi" style="--t:49.1s"><span class="c">boundary.template_leak</span><span class="m">icp</span><span class="s pill pass">pass</span></div>
+    <p class="ft fi" style="--t:49.3s">pnpm e2e:report · sortie non nulle en cas d'échec</p>
+  </div>
+  <div class="win cmp fu" style="--t:49.4s">
+    <div class="hd"><span class="c">report --compare 12 14</span><p>Seulement ce qui change · le pire d'abord</p></div>
+    <div class="th"><span>Vérification</span><span>#00012</span><span>#00014</span></div>
+    <div class="tr"><span class="c">scenario.edit.cloud · icp</span><span><span class="pill pass">pass</span></span><span><span class="pill fail pop" style="--t:50.1s">fail</span></span></div>
+    <p class="det fu" style="--t:50.4s">Pas de marqueur de revue au nuage pour : pricing</p>
+  </div>
+  <p class="side fu" style="--t:51.3s"><b>Coût et latence réels</b>, tirés du serveur.<br><b>Synchro du nuage</b> vérifiée.</p>
+  <svg class="overlay" viewBox="0 0 1920 1080">
+    <path class="flag dr" style="--t:50.5s;--d:.8s;stroke-width:3.5" pathLength="1" d="M1180,594 C1400,580 1700,582 1812,596 C1824,612 1822,634 1808,650 C1600,664 1360,664 1150,656 C1132,640 1134,612 1150,600 C1160,594 1172,592 1190,592"/>
+  </svg>
+  <div class="stampx stamp" style="--t:51.9s">Attrapée<br>avant le client</div>
+  <p class="figcap mono fu" style="--t:48.4s">Fig. 07 · Deux exécutions : seule la différence remonte</p>
+  <div class="cart mono"><div><small>Projet</small>Junior 206</div><div><small>Feuille</small>07 / 07</div><div><small>Rév.</small>2026</div></div>
+ </div>
+</section>
+
+<!-- ============ CLOSER  55.6 – 60s (keep this block identical across the series; only the headline changes) ============ -->
+<section class="scene dark closer" style="--in:55.6s">
+ <div class="so" style="--out:99s">
+  <div class="cmark pop" style="--t:55.85s"><img src="../../assets/logo.png" alt=""><i></i><i class="r"></i></div>
+  <h2 class="h">
+    <span class="ln"><span style="--t:56.0s">Testé comme un client.</span></span>
+    <span class="ln"><span style="--t:56.12s">Avant un client.</span></span>
+  </h2>
+  <p class="sub mono fi" style="--t:56.7s">Rien à connecter · Rien à migrer · Rien à perdre si vous arrêtez</p>
+  <div class="btn-wrap fu" style="--t:57.2s"><span class="btn mono">Faire mon diagnostic →</span></div>
+  <p class="url fu" style="--t:57.45s">junior<em>.</em>coach</p>
+  <p class="fine mono fi" style="--t:57.7s">Stratégie + commercialisation · dans votre Claude</p>
+ </div>
+</section>
+
+<!-- sheet border, drawn once -->
+<svg class="sheetframe" viewBox="0 0 1920 1080">
+  <rect class="dr" style="--t:0s;--d:1.1s" pathLength="1" x="32" y="32" width="1856" height="1016" fill="none" stroke="#8D98A5" stroke-opacity=".55" stroke-width="2"/>
+</svg>
+<script src="../_kit/kit.js"></script>
+</body>
+</html>
