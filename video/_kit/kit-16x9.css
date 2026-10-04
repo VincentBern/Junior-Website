@@ -1,0 +1,39 @@
+/* Junior video kit — 16:9 overrides (1920x1080). Load AFTER kit.css.
+   Same tokens, primitives and grammar as the 9:16 series; only the sheet geometry changes.
+   Content zone: x 120–1800, y 96–930. The cartouche sits bottom-right like a real title block. */
+html,body{width:1920px;height:1080px}
+
+.eyebrow{left:120px;top:104px;font-size:22px}
+.eyebrow::after{width:180px}
+
+/* headline: place it per scene (top ~160), 76–108 px */
+.h{line-height:1.02}
+
+/* title block, bottom right */
+.cart{left:auto;right:120px;top:952px;width:800px;height:60px;font-size:16px;grid-template-columns:1.3fr 1fr .7fr}
+.cart>div{padding:0 18px;gap:2px}
+.cart small{font-size:12px}
+/* left of the title block: a figure caption line, optional */
+.figcap{position:absolute;left:120px;top:968px;font-size:18px;color:var(--graphite);display:flex;align-items:center;gap:16px}
+.figcap::before{content:"";width:48px;height:2px;background:var(--revision)}
+.blue .figcap{color:#93B4CE}
+
+.watermark{left:-260px;bottom:-200px;height:1300px}
+
+/* SVG drafting classes, re-tuned for a 1:1 viewBox on a 1920 canvas */
+.lbl{font-size:30px}
+.sm{font-size:17px}
+.smr{font-size:18px}
+.n-label{font-size:28px}
+.n-id{font-size:17px}
+.note{font-size:18px;padding:8px 14px}
+
+/* ---------- closer (end card) 16:9 — identical across the 2NN series ---------- */
+.closer .cmark{top:190px}
+.closer .cmark img{height:84px}
+.closer .cmark i{width:16px;height:16px}
+.closer .h{left:120px;right:120px;top:330px;font-size:104px}
+.closer .sub{top:660px;font-size:21px;line-height:1.6}
+.closer .btn{top:730px;font-size:26px;padding:24px 40px}
+.closer .url{top:842px;font-size:58px}
+.closer .fine{top:930px;font-size:17px}

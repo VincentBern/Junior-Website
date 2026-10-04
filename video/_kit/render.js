@@ -1,4 +1,4 @@
-// Renders a kit video page to MP4 (1080x1920, 30 fps) or to PNG stills.
+// Renders a kit video page to MP4 (1080x1920, or 1920x1080 with <body data-size="1920x1080">; 30 fps) or to PNG stills.
 //   node video/_kit/render.js video/junior-102            -> video/junior-102/<data-out>.mp4
 //   node video/_kit/render.js video/junior-102 3,12.5,29  -> still_<t>.png in that folder
 // The page's <body> carries data-duration (seconds) and data-out (file name, no extension).
@@ -13,6 +13,9 @@ const { spawn } = require('child_process');
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
   await p.goto('file://' + path.join(dir, 'index.html'));
+  const size = await p.evaluate(() => document.body.dataset.size || '1080x1920');
+  const [w, h] = size.split('x').map(Number);
+  await p.setViewportSize({ width: w, height: h });
   await p.evaluate(() => window.ready);
   await p.waitForTimeout(500);
   if (stills) {
