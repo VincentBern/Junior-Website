@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Junior : premiers pas</title>
+<!--
+  Scène de la vidéo « Premiers pas avec Junior » (30 s), rendue image par image
+  par video/record.mjs. Tout l'état découle de render(t) : aucune animation CSS.
+  Copie réelle : GUIDE_COPY (packages/shared), progress-app.ts, instructions.ts
+  et le graphe des canevas du dépôt junior. Entreprise fictive : Cornets Boréal.
+  Ouvrir avec ?play pour la voir en temps réel dans un navigateur.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E4E8ED; --sheet:#F2F5F8; --ink:#141A22; --graphite:#5C6673; --blueprint:#0D3557; --line:#B9C2CC; --revision:#C42B1C;
+  --w-cream:#E4E8ED; --w-cream-deep:#F2F5F8; --w-ink:#141A22; --w-soft:#5C6673; --w-card:#fff;
+  --st-ready:#2E7A57; --st-revisit:#B97C12; --st-progress:#2D5BD0; --st-progress-soft:#D6E0F7;
+  --st-todo:#F7F9FB; --st-locked:#9AA4AE; --star-bg:#FBEFD5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:1440px;height:810px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",sans-serif}
+#stage{position:relative;width:1440px;height:810px;overflow:hidden;
+  background:
+    linear-gradient(rgba(13,53,87,.055) 1px,transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg,rgba(13,53,87,.055) 1px,transparent 1px) 0 0/24px 24px,
+    var(--paper)}
+
+/* ---------- colonne gauche : marque + étapes ---------- */
+.brand{position:absolute;left:44px;top:40px;display:flex;align-items:center;gap:12px}
+.brand img{height:40px}
+.brand .mark{font-family:"Archivo",sans-serif;font-weight:800;letter-spacing:.18em;font-size:20px}
+.brand-sub{position:absolute;left:44px;top:96px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--graphite)}
+.steps{position:absolute;left:44px;top:150px;list-style:none;margin:0;padding:0;width:250px}
+.steps li{display:flex;align-items:baseline;gap:12px;padding:11px 0;border-top:1px solid var(--line);font-size:15px;color:var(--graphite)}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.steps .n{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;width:22px}
+.steps li .tick{margin-left:auto;width:9px;height:9px;border-radius:50%;background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.steps li.done{color:var(--ink)}
+.steps li.done .tick{background:var(--st-ready);box-shadow:none}
+.steps li.on{color:var(--ink);font-weight:600}
+.steps li.on .tick{background:var(--revision);box-shadow:none}
+
+/* ---------- carte d'instruction (par-dessus la vidéo) ---------- */
+.cap{position:absolute;left:44px;bottom:40px;width:440px;z-index:20;background:rgba(13,53,87,.96);color:#F2F5F8;border-radius:16px;padding:20px 24px 22px;
+  box-shadow:0 30px 60px -20px rgba(9,39,64,.55),0 8px 18px -8px rgba(9,39,64,.35);overflow:hidden}
+.cap .k{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9DB5F5;display:flex;justify-content:space-between}
+.cap h3{margin:10px 0 0;font-family:"Archivo",sans-serif;font-weight:700;font-size:27px;line-height:1.15;letter-spacing:-.015em}
+.cap p{margin:8px 0 0;font-size:15px;line-height:1.45;color:#C9D4E0}
+.cap .meter{position:absolute;left:0;bottom:0;height:3px;background:#9DB5F5}
+.cap .inner{will-change:transform,opacity}
+
+/* ---------- fenêtre macOS + app de chat (repris de la page d'accueil) ---------- */
+.mac{position:absolute;left:330px;top:28px;width:1074px;height:754px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;border-radius:12px;overflow:hidden;background:#FBFCFD;line-height:normal;display:flex;flex-direction:column;
+  box-shadow:0 0 0 .5px rgba(0,0,0,.28),0 1px 0 rgba(255,255,255,.6) inset,0 28px 60px -18px rgba(20,26,34,.42),0 10px 22px -10px rgba(20,26,34,.22)}
+.mac svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.titlebar{height:38px;flex:none;display:flex;align-items:center;gap:14px;padding:0 13px;background:linear-gradient(#F4F5F7,#E8EAED);border-bottom:1px solid #D3D8DE;position:relative}
+.lights{display:flex;gap:8px;flex:none}
+.lights i{width:12px;height:12px;border-radius:50%;display:block;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
+.lights i:nth-child(1){background:#FF5F57}.lights i:nth-child(2){background:#FEBC2E}.lights i:nth-child(3){background:#28C840}
+.ttl{position:absolute;inset:0;display:grid;place-items:center;font-size:13px;font-weight:600;color:#3A414A}
+.app-body{flex:1;min-height:0;display:grid;grid-template-columns:184px minmax(0,1fr)}
+.sidebar{background:#F0F2F5;border-right:1px solid #DFE3E8;padding:12px 10px;font-size:13px;color:#3A414A}
+.newchat{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;font-weight:500;color:#1D2228;white-space:nowrap}
+.newchat svg{width:14px;height:14px;padding:3px;box-sizing:content-box;border-radius:50%;background:#DFE3E8}
+.side-lbl{margin:16px 8px 6px;font-size:11.5px;color:#848C96}
+.sidebar ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.sidebar li{padding:6px 8px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar li.on{background:#E1E5EA;color:#161A20}
+.main{display:flex;flex-direction:column;min-width:0;min-height:0;background:#FBFCFD;position:relative}
+.vp{flex:1;min-height:0;overflow:hidden;position:relative}
+.msgs{width:760px;max-width:calc(100% - 48px);margin:0 auto;padding:24px 0 18px;display:flex;flex-direction:column;gap:14px;will-change:transform}
+.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#3A414A}
+.empty h2{font-family:Georgia,"Iowan Old Style",serif;font-weight:400;font-size:32px;margin:0;color:#262C33}
+.empty p{margin:10px 0 0;font-size:14px;color:#848C96}
+.u-msg{align-self:flex-end;max-width:80%;background:#ECEFF3;color:#161A20;border-radius:18px;padding:9px 15px;font-size:15px}
+.toolrow{align-self:flex-start;display:flex;align-items:center;gap:7px;padding:6px 10px 6px 9px;border:1px solid #DFE3E8;border-radius:9px;background:#fff;font-size:12.5px;color:#69717B}
+.toolrow b{font-weight:500;color:#3A414A;font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12px}
+.toolrow svg{width:14px;height:14px}.toolrow .chev{width:12px;height:12px;color:#9EA6AF}
+.toolrow .ok{color:var(--st-ready);font-weight:600}
+.a-msg{font-size:15px;line-height:1.55;color:#161A20;margin:0}
+.a-msg q{quotes:"« " " »"}
+.skip{align-self:center;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#848C96;display:flex;align-items:center;gap:12px;width:100%}
+.skip::before,.skip::after{content:"";flex:1;border-top:1px dashed #C9CFD6}
+.composer2{flex:none;width:760px;max-width:calc(100% - 48px);margin:8px auto 16px;border:1px solid #D8DDE3;border-radius:18px;background:#fff;padding:12px 12px 10px 16px;box-shadow:0 2px 10px -4px rgba(0,0,0,.12)}
+.ph{display:block;font-size:15px;color:#939BA5;padding-bottom:12px;min-height:30px;white-space:nowrap}
+.ph.typed{color:#161A20}
+.caret{display:inline-block;width:1.5px;height:17px;background:#161A20;vertical-align:-3px;margin-left:1px}
+.cbar{display:flex;justify-content:space-between;align-items:center}
+.cbtn{width:28px;height:28px;border-radius:8px;border:1px solid #DFE3E8;display:grid;place-items:center;color:#5C6673}
+.send{width:30px;height:30px;border-radius:9px;background:#161A20;color:#fff;display:grid;place-items:center;opacity:.3}
+
+/* ---------- carte « Comment ça marche » (guide-app.ts) ---------- */
+.gd{background:var(--w-cream);color:var(--w-ink);border:1px solid #DFE3E8;border-radius:12px;font-family:"IBM Plex Sans",sans-serif;padding:20px 20px 16px;line-height:normal}
+.gd .kicker{margin:0;color:var(--w-soft);font-size:13px;font-weight:500}
+.gd h1{margin:8px 0 12px;font-family:"Archivo",sans-serif;font-weight:700;font-size:22px;line-height:1.2;letter-spacing:-.015em}
+.gd p{margin:0 0 12px;font-size:14.5px;line-height:1.5}
+.gd .small{color:var(--w-soft);font-size:13px}
+.gd .suites{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 14px}
+.gd .suite{border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--w-card)}
+.gd .suite h2{margin:0 0 4px;font-size:15px}
+.gd .suite .count{color:var(--w-soft);font-size:13px;margin:0 0 8px}
+.gd .suite p{font-size:14px;margin:0}
+.gd .chat{display:flex;flex-direction:column;gap:8px;margin:4px 0 14px;padding:14px;background:var(--w-cream-deep);border-radius:8px}
+.gd .bubble{max-width:85%;padding:8px 12px;border-radius:10px;font-size:13.5px;line-height:1.45}
+.gd .bubble .who{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--w-soft);margin-bottom:2px}
+.gd .bubble.junior{align-self:flex-start;background:var(--w-card);border:1px solid var(--line)}
+.gd .bubble.you{align-self:flex-end;background:var(--st-progress-soft)}
+.gd .stars{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:99px;background:var(--star-bg);font-size:12px;font-weight:600;color:var(--st-revisit)}
+.gd .says{list-style:none;margin:0 0 12px;padding:0}
+.gd .says li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.45}
+.gd .says li:last-child{border-bottom:0}
+.gd .says .q{display:block;font-weight:600;margin-bottom:2px}
+.gd .mark{flex:none;width:14px;height:14px;margin-top:3px;border-radius:3px}
+.gd .mark.ready{background:var(--st-ready)}
+.gd .mark.revisit{background:var(--st-revisit)}
+.gd .mark.locked{background:repeating-linear-gradient(135deg,var(--st-locked) 0 1.5px,transparent 1.5px 5px);box-shadow:inset 0 0 0 1px var(--line)}
+.gd .mark.bars{display:inline-flex;align-items:flex-end;gap:2px;border-radius:0}
+.gd .mark.bars i{display:block;width:4px;border-radius:1px;background:var(--ink)}
+.gd .mark.bars i:nth-child(1){height:5px}.gd .mark.bars i:nth-child(2){height:9px}.gd .mark.bars i:nth-child(3){height:14px;background:var(--line)}
+.gd .mark.act{background:var(--st-progress-soft);box-shadow:inset 0 0 0 2px var(--st-progress)}
+.gd .portal{margin:4px 0 12px;padding:12px 14px;border-radius:8px;background:var(--w-card);border:1px solid var(--line)}
+.gd .portal p{margin:0 0 4px;font-size:14px}
+.gd .portal a{color:var(--st-progress);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.gd .start{font-weight:600;margin:4px 0 0}
+.gd nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding-top:14px;border-top:1px solid var(--line)}
+.gd .dots{display:flex;gap:6px}
+.gd .dot{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.gd .dot.on{background:var(--ink)}
+.gd .btns{display:flex;gap:8px;min-height:36px}
+.gd .g{border-radius:8px;padding:9px 14px;font:600 13px "IBM Plex Sans",sans-serif;color:var(--ink);border:1px solid var(--line);background:none}
+.gd .g.primary{background:var(--st-progress);color:#fff;border-color:var(--st-progress)}
+.gd .g.press{filter:brightness(.82)}
+
+/* ---------- rapport Junior (livrable collé dans la conversation) ---------- */
+.rep{font-size:15px;line-height:1.55;color:#161A20}
+.rep .hdr{font-weight:600;margin:0 0 10px}
+.rep h4{font-family:"Archivo",sans-serif;font-size:17px;letter-spacing:-.01em;margin:14px 0 6px}
+.rep p{margin:0 0 6px}
+.rep blockquote{margin:4px 0 8px;padding:8px 14px;border-left:3px solid var(--blueprint);background:#F2F5F8;font-size:16px;font-style:italic}
+.rep table{border-collapse:collapse;width:100%;font-size:14px;margin:4px 0 6px}
+.rep td,.rep th{border-bottom:1px solid #E1E5EA;padding:6px 8px;text-align:left}
+.rep th{font-weight:600;color:#3A414A;background:#F4F6F8}
+.lv{display:inline-block;padding:1px 7px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.lv.h{background:var(--star-bg);color:var(--st-revisit)}
+.lv.v{background:#DCEFE5;color:var(--st-ready)}
+.files{display:flex;gap:10px;margin-top:10px}
+.file{display:flex;align-items:center;gap:10px;border:1px solid #DFE3E8;border-radius:10px;padding:8px 12px;background:#fff;font-size:13px}
+.file i{width:26px;height:30px;border-radius:4px;display:grid;place-items:center;font-style:normal;font-size:9px;font-weight:700;color:#fff}
+.file small{display:block;color:#848C96;font-size:11.5px}
+
+/* ---------- carte de progression (progress-app.ts) ---------- */
+.pc{background:var(--w-cream);color:var(--w-ink);border:1px solid #DFE3E8;border-radius:12px;padding:20px 20px 18px;font-family:"IBM Plex Sans",sans-serif;line-height:normal}
+.pc .company{color:var(--w-soft);font-size:13px;margin:0 0 4px}
+.pc h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:26px;line-height:1.1;letter-spacing:-.02em;margin:0}
+.pc .subline{color:var(--w-soft);font-size:14px;margin:6px 0 0}
+.strip{display:flex;gap:12px;margin:18px 0 0}
+.strip-group{display:flex;flex-direction:column;gap:6px;min-width:0}
+.segs{display:flex;gap:3px;height:40px;align-items:flex-end}
+.seg{min-width:4px;height:100%;border-radius:3px;transform-origin:bottom}
+.seg.ready{background:var(--st-ready)}
+.seg.todo{background:var(--st-todo);box-shadow:inset 0 0 0 1px var(--line)}
+.seg.locked{background:repeating-linear-gradient(135deg,var(--st-locked) 0 1.5px,transparent 1.5px 6px);box-shadow:inset 0 0 0 1px var(--line)}
+.strip-label{font-size:12px;color:var(--w-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin:12px 0 0;padding:0;list-style:none;font-size:12px;color:var(--w-soft)}
+.legend li{display:flex;align-items:center;gap:6px}
+.legend .seg{width:11px;height:11px;min-width:0;border-radius:2px}
+.next{margin:18px 0 0;background:var(--w-card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.next .kicker{margin:0 0 6px;font-size:13px;color:var(--w-soft)}
+.next h2{margin:0;font-family:"Archivo",sans-serif;font-weight:700;font-size:20px;letter-spacing:-.015em;line-height:1.2}
+.effort{display:flex;align-items:center;gap:7px;color:var(--w-soft);font-size:13px;margin:10px 0 0}
+.bars{display:inline-flex;align-items:flex-end;gap:2px;height:12px;flex:none}
+.bars i{display:block;width:4px;border-radius:1px;background:var(--line)}
+.bars i:nth-child(1){height:5px}.bars i:nth-child(2){height:8px}.bars i:nth-child(3){height:12px}
+.bars i.on{background:var(--w-ink)}
+.why{margin:10px 0 0;font-size:14px;line-height:1.45}
+.actions{margin:14px 0 0;font-size:14px;line-height:1.7}
+.act{padding:1px 6px;border-radius:4px;background:var(--st-progress-soft);color:var(--st-progress);font-weight:600;white-space:nowrap}
+
+/* ---------- curseur ---------- */
+#cursor{position:absolute;left:0;top:0;z-index:30;width:24px;height:24px;pointer-events:none;opacity:0;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+#ripple{position:absolute;z-index:29;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--st-progress);opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="brand"><img src="../assets/logo.png" alt=""><span class="mark">JUNIOR</span></div>
+  <div class="brand-sub">Premiers pas · dans votre Claude</div>
+  <ol class="steps" id="steps"></ol>
+
+  <div class="mac">
+    <div class="titlebar"><span class="lights"><i></i><i></i><i></i></span><span class="ttl" id="ttl">Nouvelle conversation</span></div>
+    <div class="app-body">
+      <aside class="sidebar">
+        <div class="newchat"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg>Nouvelle conversation</div>
+        <p class="side-lbl">Récents</p>
+        <ul><li class="on" id="side-cur">Nouvelle conversation</li><li>Courriel aux distributeurs</li><li>Notes rencontre banque</li><li>Idées salon printemps</li></ul>
+      </aside>
+      <div class="main">
+        <div class="vp" id="vp">
+          <div class="empty" id="empty"><div><h2>Bon après-midi</h2><p>Junior est connecté à votre Claude.</p></div></div>
+          <div class="msgs" id="msgs"></div>
+        </div>
+        <div class="composer2">
+          <span class="ph" id="ph">Répondre…</span>
+          <div class="cbar"><span class="cbtn"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg></span><span class="send" id="send"><svg viewBox="0 0 16 16"><path d="M8 13V3M4 7l4-4 4 4"/></svg></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cap" id="cap"><div class="inner" id="capInner"><div class="k"><span id="capK"></span><span id="capN"></span></div><h3 id="capH"></h3><p id="capP"></p></div><div class="meter" id="capM"></div></div>
+  <div id="ripple"></div>
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2.5 19.5 13l-7 1.2 4 7.3-2.6 1.4-4-7.3L4.8 20Z" fill="#141A22" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
+</div>
+
+<script>
+// ===================== données réelles (dépôt junior) =====================
+const G = {
+  suitesTitle: "Deux suites qui se parlent.",
+  suitesIntro: "Une suite, c'est une série de canevas dans un ordre qui compte : chacun s'appuie sur ceux d'avant.",
+  suites: [
+    ["Planification stratégique", 21, "Où tu t'en vas : ton ambition, ton identité, ton modèle d'affaires, puis les objectifs et les tableaux de bord pour piloter l'année."],
+    ["Commercialisation", 11, "À qui tu vends et comment : ton client idéal, ton offre et ton prix, puis le pipeline et le pilotage des ventes."],
+  ],
+  suitesOutro: "Les deux sont reliées : ce que tu décides d'un côté nourrit l'autre, et Junior vérifie que tout reste cohérent.",
+  canevasTitle: "Un canevas, de près : l'ICP.",
+  canevasIntro: "Un canevas, c'est un sujet précis, travaillé avec Junior dans ta conversation Claude. Exemple avec « ICP + Proposition de valeur », pour une entreprise fictive qui fabrique des cornets de crème glacée :",
+  chat: [
+    ["you", "Voici notre site. On vend surtout aux crèmeries indépendantes du Québec."],
+    ["junior", "Parfait, je pars de ton site pour un premier jet. Une précision : une crèmerie de village et une chaîne de 40 comptoirs n'achètent pas pareil. Laquelle te rapporte le plus?"],
+    ["you", "Les petites crèmeries. Elles commandent chaque semaine, d'avril à septembre."],
+    ["junior", "Noté. Je l'enregistre comme hypothèse : quand trois clients te l'auront confirmé, elle passera à ★★.", "★☆ hypothèse"],
+  ],
+  canevasOutro: "Quand le canevas est complet, Junior te propose ton « rapport Junior », à télécharger en Word ou en PDF.",
+  talkTitle: "Comment parler à Junior.",
+  talkIntro: "Pas de formulaire : tu parles à Junior comme à un collègue. Quelques phrases qui marchent :",
+  says: [
+    ["« Voici ce que j'ai déjà. »", "Colle ton site, un deck, des notes de réunion. Junior s'en sert pour préparer un premier jet, et tu l'améliores."],
+    ["« Où j'en suis? »", "Junior te dit ce qui est fait, ce qui reste et par quoi continuer."],
+    ["« On sauvegarde. »", "Tout est enregistré, même à moitié fini. Ce qui n'est pas encore confirmé est noté ★☆, comme hypothèse."],
+    ["« Reprenons le canevas … »", "Pour revenir à un canevas précis."],
+  ],
+  cardTitle: "Ta progression, en un coup d'œil.",
+  cardIntro: "Dis « où j'en suis? » et Junior t'affiche ta carte de progression, ici même. Chaque barre est un canevas :",
+  cardRows: [
+    ["ready", "Prêt", "Le canevas est fait."],
+    ["revisit", "À revoir", "Un canevas dont il dépend a changé depuis. Junior te dit quoi regarder."],
+    ["locked", "S'ouvre plus tard", "Il attend un canevas d'avant."],
+    ["bars", "Les petites barres", "Le poids du canevas : à peu près combien de temps de réflexion il te demande."],
+    ["act", "Les mots en bleu", "Tes prochaines actions, au bas de la carte. Dis-les à Junior tels quels, il reprend là."],
+  ],
+  portal: "La même chose t'attend sur ton portail, avec ton coach :",
+  start: "Pour commencer, réponds à Junior juste en dessous.",
+};
+// Efforts estimés (minutes) des canevas, dans l'ordre des suites (content/canevas/*.yaml).
+const SP = [75,165,150,180,120,150,60,75,45,105,75,75,75,90,75,150,90,75,45,45,225];
+const CM = [270,120,75,90,150,90,195,90,180,150,225];
+
+// ===================== petits outils =====================
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, d) => clamp((t - a) / d);
+const ease = (x) => 1 - Math.pow(1 - x, 3);
+const easeIO = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const el = (tag, attrs, kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) k === "text" ? (n.textContent = v) : k === "html" ? (n.innerHTML = v) : n.setAttribute(k, v);
+  (kids || []).forEach((k) => n.append(k));
+  return n;
+};
+const duration = (m) => (m < 60 ? m + " min" : Math.floor(m / 60) + " h" + (m % 60 ? " " + String(m % 60).padStart(2, "0") : ""));
+const GEAR = '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.4"/><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2M3.6 3.6l1.4 1.4M11 11l1.4 1.4M3.6 12.4 5 11M11 5l1.4-1.4"/></svg>';
+const tool = (name, ok) => el("div", { class: "toolrow", html: GEAR + "<span>junior</span><b>" + name + "</b>" + (ok ? '<span class="ok">✓ ' + ok + "</span>" : "") + '<svg class="chev" viewBox="0 0 16 16"><path d="m6 4 4 4-4 4"/></svg>' });
+
+// ===================== le scénario =====================
+// Chaque bloc apparaît à `at` (secondes). Les textes tapés vivent dans TYPE.
+const TYPE = [
+  { from: 0.5, to: 1.6, send: 1.8, text: "Comment ça marche?" },
+  { from: 10.0, to: 11.5, send: 11.7, text: "Où est-ce qu'on s'en va? On commence!" },
+  { from: 14.0, to: 15.3, send: 15.5, text: "On soumet. Montre-moi le rapport." },
+  { from: 22.3, to: 23.0, send: 23.2, text: "Où j'en suis?" },
+];
+const GUIDE_STEPS = [2.5, 4.4, 6.3, 8.2];  // début de chaque écran du guide
+const CLICKS = [4.25, 6.15, 8.05];         // clic sur « Suivant »
+const CAPS = [
+  { at: 0,    k: "Étape 1", h: "Demandez « Comment ça marche? »", p: "Junior est déjà installé dans votre Claude. On lui parle comme à un collègue." },
+  { at: 2.5,  k: "Étape 2", h: "Junior se présente en quatre écrans.", p: "Les deux suites, un canevas de près, quoi lui dire, et votre progression." },
+  { at: 9.8,  k: "Étape 3", h: "Lancez votre premier canevas.", p: "Choisissez une porte d'entrée. Junior vous pose les questions, une à la fois." },
+  { at: 13.6, k: "Étape 4", h: "Répondez, puis soumettez.", p: "Junior prépare un premier jet avec ce que vous lui donnez. Vous bonifiez." },
+  { at: 15.9, k: "Étape 5", h: "Lisez votre rapport Junior.", p: "Ce qui est validé, ce qui reste une hypothèse. En Word ou en PDF." },
+  { at: 22.1, k: "Étape 6", h: "Demandez « Où j'en suis? »", p: "Votre progression s'affiche ici, dans la conversation. Et sur votre portail." },
+];
+const STEP_LABELS = ["Demander", "Découvrir", "Lancer", "Soumettre", "Lire le rapport", "Suivre"];
+const END = 30;
+
+// ---------- construction du DOM ----------
+const msgs = $("msgs");
+const timeline = [];  // { node, at }
+const add = (node, at) => { msgs.append(node); timeline.push({ node, at }); return node; };
+
+add(el("div", { class: "u-msg", text: TYPE[0].text }), TYPE[0].send);
+add(tool("show_guide"), 2.1);
+
+// Carte guide : quatre écrans, on bascule selon t.
+const guide = add(el("div", { class: "gd" }), GUIDE_STEPS[0]);
+function guideBody(i) {
+  const says = (rows) => el("ul", { class: "says" }, rows.map(([mk, q, a]) => el("li", {}, [
+    ...(mk ? [el("span", { class: "mark " + mk }, mk === "bars" ? [el("i"), el("i"), el("i")] : [])] : []),
+    el("div", {}, [el("span", { class: "q", text: q }), el("span", { text: a })]),
+  ])));
+  if (i === 0) return [G.suitesTitle, [
+    el("p", { text: G.suitesIntro }),
+    el("div", { class: "suites" }, G.suites.map(([n, c, w]) => el("div", { class: "suite" }, [el("h2", { text: n }), el("p", { class: "count", text: c + " canevas" }), el("p", { text: w })]))),
+    el("p", { text: G.suitesOutro }),
+  ]];
+  if (i === 1) return [G.canevasTitle, [
+    el("p", { text: G.canevasIntro }),
+    el("div", { class: "chat" }, G.chat.map(([who, text, tag]) => el("div", { class: "bubble " + who }, [
+      el("span", { class: "who", text: who === "you" ? "Toi" : "Junior" }), el("span", { text }),
+      ...(tag ? [el("div", {}, [el("span", { class: "stars", text: tag })])] : []),
+    ]))),
+    el("p", { text: G.canevasOutro }),
+  ]];
+  if (i === 2) return [G.talkTitle, [el("p", { text: G.talkIntro }), says(G.says.map(([q, a]) => [null, q, a]))]];
+  return [G.cardTitle, [
+    el("p", { text: G.cardIntro }),
+    says(G.cardRows),
+    el("div", { class: "portal" }, [el("p", { text: G.portal }), el("p", {}, [el("a", { text: "my.junior.coach/portal" })])]),
+    el("p", { class: "start", text: G.start }),
+  ]];
+}
+let guideShown = -1, guidePressed = false;
+function drawGuide(i, pressed) {
+  if (i === guideShown && pressed === guidePressed) return;
+  guideShown = i; guidePressed = pressed;
+  const [title, body] = guideBody(i);
+  guide.textContent = "";
+  guide.append(el("p", { class: "kicker", text: "Comment ça marche · " + (i + 1) + " sur 4" }), el("h1", { text: title }), ...body);
+  const btns = el("div", { class: "btns" });
+  if (i > 0) btns.append(el("span", { class: "g", text: "Précédent" }));
+  if (i < 3) btns.append(el("span", { class: "g primary" + (pressed ? " press" : ""), id: "gnext", text: "Suivant" }));
+  guide.append(el("nav", {}, [el("div", { class: "dots" }, [0, 1, 2, 3].map((k) => el("span", { class: "dot" + (k === i ? " on" : "") }))), btns]));
+}
+drawGuide(0, false);
+
+add(el("p", { class: "a-msg", html: "Allô! Moi c'est Junior, ton bras droit en stratégie et en commercialisation. Je fais en quelques secondes les liens entre ta stratégie et ta mise en marché." }), 8.9);
+add(el("p", { class: "a-msg", html: "Alors, on part par où? <q>Où est-ce qu'on s'en va?</q> ou <q>À qui je vends, et pourquoi ils achèteraient?</q>" }), 9.3);
+
+add(el("div", { class: "u-msg", text: TYPE[1].text }), TYPE[1].send);
+add(tool("describe_canevas"), 12.0);
+add(el("p", { class: "a-msg", html: "On part de l'<b>Outil 1/21 de la Suite Planification Stratégique</b> : ton Ambition Transformatrice &amp; Moteurs de Croissance. Montre-moi ce que tu as déjà, je prépare un premier jet. Première question : si tu réussis pleinement, qu'est-ce qui change pour ceux que tu sers?" }), 12.4);
+add(el("div", { class: "skip", text: "≈ 75 min de réflexion plus tard" }), 13.7);
+
+add(el("div", { class: "u-msg", text: TYPE[2].text }), TYPE[2].send);
+add(tool("populate_canevas", "canevas complet"), 15.8);
+add(tool("generate_deliverable"), 16.2);
+
+// Rapport : livrable fictif (Cornets Boréal), section par section.
+const rep = add(el("div", { class: "rep" }), 16.6);
+const repParts = [
+  [16.6, el("p", { class: "hdr", text: "📄 Livrable — Ambition Transformatrice & Moteurs de Croissance" })],
+  [16.9, el("h4", { text: "1. Énoncé de l'ambition" })],
+  [17.1, el("blockquote", { text: "Que chaque crèmerie d'ici serve un cornet aussi local que sa crème glacée." })],
+  [17.4, el("p", { html: 'Cornets Boréal inc. · <span class="lv v">★★ validé</span> par l\'équipe de direction' })],
+  [18.2, el("h4", { text: "2. Leviers de croissance retenus" })],
+  [18.4, el("table", { html: "<tr><th>Levier</th><th>Valeur attendue</th><th>Horizon</th><th>Niveau</th></tr>" +
+    "<tr><td>Communauté de crèmeries</td><td>+40 points de vente</td><td>6-18 mois</td><td><span class='lv h'>★☆ hypothèse</span></td></tr>" +
+    "<tr><td>Expérimentation (saveurs)</td><td>3 lancements / saison</td><td>0-6 mois</td><td><span class='lv v'>★★ validé</span></td></tr>" +
+    "<tr><td>Tableaux de bord</td><td>−10 h / mois de suivi</td><td>0-6 mois</td><td><span class='lv h'>★☆ hypothèse</span></td></tr>" })],
+  [19.4, el("h4", { text: "3. Cible de croissance phare" })],
+  [19.6, el("p", { html: "<b>120 crèmeries partenaires d'ici 2029.</b> À confirmer avec ton modèle d'affaires." })],
+  [20.3, el("div", { class: "files", html:
+    '<span class="file"><i style="background:#2B579A">DOCX</i><span>Rapport Junior<small>Word</small></span></span>' +
+    '<span class="file"><i style="background:#C42B1C">PDF</i><span>Rapport Junior<small>PDF</small></span></span>' })],
+];
+repParts.forEach(([at, n]) => rep.append(n));
+
+add(el("div", { class: "u-msg", text: TYPE[3].text }), TYPE[3].send);
+add(tool("show_progress"), 23.5);
+
+// Carte de progression : état réel après le premier canevas.
+const pc = add(el("div", { class: "pc" }), 23.8);
+const STATUS = { ready: "Prêt", todo: "À faire", locked: "S'ouvre plus tard" };
+const suites = [
+  { label: "Planification stratégique", canevas: SP.map((m, k) => ({ m, s: k === 0 ? "ready" : k === 1 ? "todo" : "locked" })) },
+  { label: "Commercialisation", canevas: CM.map((m, k) => ({ m, s: k === 0 ? "todo" : "locked" })) },
+];
+const total = SP.length + CM.length, done = 1;
+const minutesLeft = SP.concat(CM).reduce((a, b) => a + b, 0) - SP[0];
+const segEls = [];
+{
+  const strip = el("div", { class: "strip" });
+  suites.forEach((s) => {
+    const segs = el("div", { class: "segs" });
+    s.canevas.forEach((c) => { const g = el("span", { class: "seg " + c.s }); g.style.flex = c.m + " 1 0"; segs.append(g); segEls.push(g); });
+    const d = s.canevas.filter((c) => c.s === "ready").length;
+    const grp = el("div", { class: "strip-group" }, [segs, el("div", { class: "strip-label", text: s.label + " · " + d + "/" + s.canevas.length })]);
+    grp.style.flex = s.canevas.reduce((a, c) => a + c.m, 0) + " 1 0";
+    strip.append(grp);
+  });
+  const next = el("section", { class: "next" }, [
+    el("p", { class: "kicker", text: "Ta prochaine étape · Planification stratégique, canevas 2" }),
+    el("h2", { text: "Identité de Marque" }),
+    el("div", { class: "effort" }, [el("span", { class: "bars" }, [el("i", { class: "on" }), el("i", { class: "on" }), el("i", { class: "on" })]), el("span", { text: "Lourd · ≈ " + duration(SP[1]) })]),
+    el("p", { class: "why", text: "Il s'appuie sur Ambition Transformatrice & Moteurs de Croissance. Le terminer ouvre Modèle d'Affaires (BMC)." }),
+    el("p", { class: "actions", html: 'Tes prochaines actions : <span class="act">commencer Identité de Marque</span> ou <span class="act">avancer ICP + Proposition de Valeur</span>' }),
+  ]);
+  pc.append(
+    el("p", { class: "company", text: "Cornets Boréal inc." }),
+    el("h1", { text: done + " canevas terminé sur " + total }),
+    el("p", { class: "subline", text: (total - done) + " à faire, environ " + duration(minutesLeft) + " de réflexion." }),
+    strip,
+    el("ul", { class: "legend" }, Object.entries(STATUS).map(([k, v]) => el("li", {}, [el("span", { class: "seg " + k }), el("span", { text: v })]))),
+    next);
+}
+add(el("p", { class: "a-msg", text: "Premier canevas dans la poche. On attaque ton Identité de Marque?" }), 26.2);
+
+// Étapes à gauche
+const stepsOl = $("steps");
+STEP_LABELS.forEach((s, i) => stepsOl.append(el("li", {}, [el("span", { class: "n", text: String(i + 1).padStart(2, "0") }), el("span", { text: s }), el("span", { class: "tick" })])));
+
+// ---------- rendu à l'instant t ----------
+let scroll = 0, lastT = -1;
+function stagePoint(node, fx = .5, fy = .5) {
+  const r = node.getBoundingClientRect();
+  return { x: r.left + r.width * fx, y: r.top + r.height * fy };
+}
+function render(t) {
+  // apparition des blocs
+  for (const { node, at } of timeline) {
+    if (t < at) { node.style.display = "none"; continue; }
+    node.style.display = "";
+    const p = ease(prog(t, at, .35));
+    node.style.opacity = p;
+    node.style.transform = "translateY(" + ((1 - p) * 10).toFixed(2) + "px)";
+  }
+  for (const [at, n] of repParts) { const p = ease(prog(t, at, .4)); n.style.display = t < at ? "none" : ""; n.style.opacity = p; }
+  $("empty").style.opacity = 1 - prog(t, TYPE[0].send - .1, .3);
+  const named = t >= 2.4;
+  $("ttl").textContent = $("side-cur").textContent = named ? "Comment ça marche" : "Nouvelle conversation";
+
+  // guide : écran courant et bouton pressé
+  let gi = 0; GUIDE_STEPS.forEach((s, i) => { if (t >= s) gi = i; });
+  const pressed = CLICKS.some((c) => t >= c && t < c + .15);
+  drawGuide(gi, pressed);
+
+  // barres de progression qui poussent
+  segEls.forEach((g, i) => { const p = ease(prog(t, 24.0 + i * .025, .5)); g.style.transform = "scaleY(" + p.toFixed(3) + ")"; });
+
+  // composer : saisie
+  const ph = $("ph");
+  let typed = "", active = false;
+  for (const ty of TYPE) {
+    if (t >= ty.from && t < ty.send) { active = true; typed = ty.text.slice(0, Math.round(ty.text.length * prog(t, ty.from, ty.to - ty.from))); }
+  }
+  if (active) { ph.className = "ph typed"; ph.innerHTML = ""; ph.append(typed); if (Math.floor(t * 2.5) % 2 === 0 || typed.length < 1 || t < TYPE.find((x) => t >= x.from && t < x.send).to) ph.append(el("span", { class: "caret" })); }
+  else { ph.className = "ph"; ph.textContent = "Répondre…"; }
+  $("send").style.opacity = active && typed.length ? 1 : .3;
+
+  // défilement : toujours collé au bas, lissé
+  const vp = $("vp");
+  const target = Math.max(0, msgs.offsetHeight - vp.clientHeight);
+  if (lastT < 0 || t < lastT) scroll = target; else scroll += (target - scroll) * clamp((t - lastT) * 6);
+  lastT = t;
+  msgs.style.transform = "translateY(" + (-scroll).toFixed(1) + "px)";
+
+  // curseur (clics sur « Suivant »)
+  const cur = $("cursor"), rip = $("ripple");
+  let cv = 0, cx = 0, cy = 0;
+  if (t >= 3.4 && t < 9.0) {
+    const btn = document.getElementById("gnext");
+    const home = stagePoint($("vp"), .82, .9);
+    const tgt = btn ? stagePoint(btn, .5, .55) : home;
+    cv = Math.min(prog(t, 3.4, .3), 1 - prog(t, 8.5, .4));
+    // approche vers le bouton avant le premier clic, puis il reste dessus
+    const a = easeIO(prog(t, 3.5, .7));
+    cx = home.x + (tgt.x - home.x) * a; cy = home.y + (tgt.y - home.y) * a;
+    if (t > 8.2) { const b = easeIO(prog(t, 8.2, .5)); cx += 60 * b; cy += 70 * b; }
+  }
+  cur.style.opacity = cv;
+  const down = CLICKS.some((c) => t >= c && t < c + .12);
+  cur.style.transform = "translate(" + (cx - 4).toFixed(1) + "px," + (cy - 2).toFixed(1) + "px) scale(" + (down ? .86 : 1) + ")";
+  const lc = CLICKS.filter((c) => t >= c).pop();
+  if (lc != null && t - lc < .45) { const p = (t - lc) / .45; rip.style.opacity = (1 - p) * .9; rip.style.left = cx + "px"; rip.style.top = cy + "px"; rip.style.transform = "scale(" + (.4 + p * 1.1) + ")"; }
+  else rip.style.opacity = 0;
+
+  // carte d'instruction
+  let ci = 0; CAPS.forEach((c, i) => { if (t >= c.at) ci = i; });
+  const c = CAPS[ci], nextAt = ci + 1 < CAPS.length ? CAPS[ci + 1].at : END + 1;
+  $("capK").textContent = c.k; $("capN").textContent = (ci + 1) + " / " + CAPS.length;
+  $("capH").textContent = c.h; $("capP").textContent = c.p;
+  const pin = ease(prog(t, c.at, .45)), pout = ease(prog(t, nextAt - .25, .25));
+  const ci0 = ci === 0 ? ease(prog(t, 0, .6)) : 1;
+  $("capInner").style.opacity = Math.min(pin, 1 - pout) * ci0;
+  $("capInner").style.transform = "translateY(" + ((1 - pin) * 12 - pout * 8).toFixed(1) + "px)";
+  $("cap").style.opacity = ci0;
+  $("cap").style.transform = "translateY(" + ((1 - ci0) * 20).toFixed(1) + "px)";
+  $("capM").style.width = (prog(t, c.at, Math.min(nextAt, END) - c.at) * 100).toFixed(2) + "%";
+  [...stepsOl.children].forEach((li, i) => { li.className = i < ci ? "done" : i === ci ? "on" : ""; });
+}
+window.render = render;
+window.END = END;
+window.ready = document.fonts.ready.then(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {}))));
+
+if (location.search.includes("play")) {
+  window.ready.then(() => { const t0 = performance.now(); const loop = () => { const t = ((performance.now() - t0) / 1000) % END; render(t); requestAnimationFrame(loop); }; loop(); });
+} else render(0);
+</script>
+</body>
+</html>
