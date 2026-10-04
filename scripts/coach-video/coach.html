@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Junior Coach</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root {
+  --paper: #E4E8ED; --paper-raised: #F2F5F8; --paper-hover: #ECEFF3; --sheet: #FFFFFF;
+  --ink: #141A22; --ink-soft: #5C6673; --rule: #B9C2CC; --rule-soft: #C9D0D8; --rule-faint: #DDE3E9;
+  --action: #0D3557; --st-ready: #2E7A57; --st-revisit: #B97C12; --st-progress: #2D5BD0;
+  --st-progress-soft: #D6E0F7; --st-todo: #F7F9FB; --st-locked: #9AA4AE; --flash: #FFF4D6;
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-text: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --radius: 6px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1440px; height: 810px; overflow: hidden; background: #0b1420; }
+body { font-family: var(--font-text); color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+/* Browser frame */
+.frame { position: absolute; inset: 0; background: var(--paper); }
+.chrome { height: 38px; background: #1b2633; display: flex; align-items: center; padding: 0 14px; gap: 8px; }
+.chrome .d { width: 11px; height: 11px; border-radius: 50%; background: #3a4757; }
+.chrome .url { margin-left: 18px; flex: 0 0 520px; height: 24px; border-radius: 12px; background: #0f1823; color: #b9c4d0;
+  font-size: 12.5px; display: flex; align-items: center; padding: 0 14px; gap: 7px; letter-spacing: .01em; }
+.chrome .url svg { opacity: .7; }
+.viewport { position: absolute; top: 38px; left: 0; right: 0; bottom: 0; overflow: hidden; }
+
+/* Site header */
+.site-h { height: 60px; display: flex; align-items: center; padding: 0 34px; border-bottom: 1px solid var(--rule); background: var(--paper); }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand img { height: 24px; }
+.brand .word { font-family: var(--font-display); font-weight: 800; letter-spacing: .2em; font-size: 14px; }
+.brand .tag { border-left: 1px solid var(--rule); padding-left: 12px; margin-left: 4px; color: var(--ink-soft); font-size: 14px; }
+.who { margin-left: auto; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(140deg,#56606c,#20262e); color: #fff; font-size: 11px;
+  display: grid; place-items: center; font-weight: 600; letter-spacing: .04em; }
+
+/* Login */
+.login { position: absolute; inset: 0; background: var(--paper); display: grid; place-items: center; }
+.login-card { width: 380px; background: var(--sheet); border: 1px solid var(--rule); border-radius: var(--radius); padding: 34px 32px 30px; margin-top: -40px; }
+.login-mark { display: flex; align-items: center; gap: 9px; margin-bottom: 26px; }
+.login-mark img { height: 40px; }
+.login-mark .dot { width: 10px; height: 10px; border-radius: 50%; }
+.login h1 { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; font-size: 28px; margin: 0; }
+.login-rule { width: 34px; height: 3px; background: var(--action); margin: 18px 0 24px; }
+.login p { color: var(--ink-soft); font-size: 14px; margin: 0 0 22px; line-height: 1.5; }
+.gbtn { display: flex; align-items: center; gap: 12px; border: 1px solid #dadce0; border-radius: 4px; height: 42px; padding: 0 14px;
+  font-size: 14px; font-weight: 500; color: #3c4043; background: #fff; }
+.gbtn.pressed { background: #f1f3f4; }
+
+/* Dashboard */
+.dash { position: absolute; inset: 0; }
+.layout { position: absolute; top: 60px; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 280px minmax(0, 1fr); }
+.side { border-right: 1px solid var(--rule); background: var(--paper); overflow: hidden; }
+.side-home { padding: 18px 16px 16px; border-bottom: 1px solid var(--rule-soft); background: var(--paper-raised); }
+.side-home.sel { background: var(--paper-raised); }
+.side-home .t { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+.side-home .s { color: var(--ink-soft); font-size: 13px; margin-top: 4px; }
+.grp { display: flex; justify-content: space-between; padding: 22px 16px 6px; color: var(--ink-soft); font-size: 13px; font-weight: 500; }
+.ent { padding: 10px 16px 12px; position: relative; }
+.ent.sel { background: var(--sheet); box-shadow: inset 3px 0 0 var(--action); }
+.ent .top { display: flex; justify-content: space-between; align-items: baseline; }
+.ent .n { font-weight: 600; font-size: 15px; }
+.ent .c { color: var(--ink-soft); font-size: 13px; font-variant-numeric: tabular-nums; }
+.ind { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; margin-top: 5px; }
+.ind::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.sig-revisit { color: var(--st-revisit); }
+.sig-moving { color: var(--st-progress); }
+
+.pb { display: flex; gap: 5px; margin-top: 9px; }
+.pb .suite { display: flex; gap: 1px; }
+.pb .seg { height: 3px; background: var(--rule-soft); position: relative; overflow: hidden; }
+.pb .seg i { position: absolute; inset: 0 auto 0 0; background: #7D8792; }
+.pb.thick .seg { height: 4px; }
+.pb.thick { gap: 8px; }
+.pb.thick .suite { gap: 2px; }
+
+.panes { position: relative; overflow: hidden; background: var(--paper-raised); }
+.detail { position: absolute; inset: 0; overflow: hidden; padding: 40px 48px 120px; }
+.detail-inner { max-width: 760px; margin: 0 auto; }
+.company { color: var(--ink-soft); font-size: 14px; margin: 0 0 6px; }
+.big { font-family: var(--font-display); font-weight: 700; font-size: 44px; line-height: 1.06; letter-spacing: -0.03em; margin: 0; }
+.subline { color: var(--ink-soft); font-size: 16px; margin: 10px 0 0; }
+.ctx { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 6px; }
+.navb { display: flex; gap: 6px; }
+.navb span { width: 30px; height: 26px; border: 1px solid var(--rule); border-radius: 4px; display: grid; place-items: center; color: var(--ink-soft); font-size: 13px; background: var(--sheet); }
+
+.card { margin: 30px 0 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: var(--radius); padding: 22px; position: relative; }
+.card h3.k { margin: 0 0 10px; font-size: 13px; font-weight: 500; color: var(--ink-soft); }
+.q-top { display: flex; justify-content: space-between; align-items: baseline; }
+.q-name { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+.q-top .ind { margin: 0; }
+.q-why { margin: 6px 0 0; font-size: 14.5px; line-height: 1.5; }
+.actions { display: flex; gap: 10px 16px; margin: 16px 0 0; align-items: center; }
+.btn { border: 1px solid var(--rule); background: var(--sheet); border-radius: 4px; padding: 8px 14px; font-size: 14px; font-weight: 500; color: var(--ink); }
+.btn.primary { background: var(--action); border-color: var(--action); color: #fff; padding: 11px 17px; font-size: 15px; }
+.btn.pressed { filter: brightness(.82); }
+.help-h { font-family: var(--font-display); font-weight: 700; font-size: 26px; letter-spacing: -0.02em; margin: 2px 0 0; }
+.their { margin: 18px 0 0; padding: 14px 0 0; border-top: 1px solid var(--paper); font-size: 15px; color: var(--ink-soft); line-height: 1.5; }
+.their b { color: var(--ink); font-weight: 600; }
+
+.sec-h { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin: 44px 0 0; }
+.sec-h h3 { margin: 0; font-family: var(--font-display); font-size: 20px; letter-spacing: -0.015em; }
+.sec-h p { margin: 0; color: var(--ink-soft); font-size: 14px; }
+ul { list-style: none; margin: 0; padding: 0; }
+.feed li { display: grid; grid-template-columns: 72px 22px minmax(0, 1fr); gap: 0 10px; align-items: start; padding: 11px 4px; border-bottom: 1px solid var(--rule); font-size: 15px; }
+.feed .when { color: var(--ink-soft); font-size: 13px; padding-top: 1px; }
+.feed b { font-weight: 600; }
+.feed a, .lnk { color: var(--action); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+
+/* Strip */
+.strip { display: flex; gap: 22px; margin: 28px 0 0; }
+.strip .sg { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.strip .row { display: flex; gap: 3px; height: 58px; }
+.strip .b { border-radius: 2px; position: relative; overflow: hidden; min-width: 4px; }
+.b.ready { background: var(--st-ready); }
+.b.revisit { background: var(--st-revisit); }
+.b.todo { background: var(--st-todo); border: 1px solid var(--rule); }
+.b.locked { background: repeating-linear-gradient(-45deg, #fff 0 4px, #c3cad2 4px 5.4px); border: 1px solid var(--rule-soft); }
+.b.progress { background: var(--st-progress-soft); }
+.b.progress::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 32%; background: var(--st-progress); }
+.slabel { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); font-size: 14px; }
+.code { border: 1px solid var(--rule); border-radius: 999px; padding: 1px 8px; font-size: 11.5px; font-weight: 600; color: var(--ink); letter-spacing: .02em; background: var(--sheet); }
+.legend { display: flex; gap: 22px; margin: 16px 0 0; color: var(--ink-soft); font-size: 13.5px; }
+.legend span { display: flex; align-items: center; gap: 7px; }
+.legend i { width: 13px; height: 13px; border-radius: 2px; display: inline-block; }
+
+.fields { margin: 26px 0 0; display: grid; gap: 10px; color: var(--ink-soft); }
+.fields h4 { margin: 0 0 2px; font-size: 15px; font-weight: 500; }
+.frow { display: grid; grid-template-columns: 230px minmax(0,1fr) 44px 46px; gap: 14px; align-items: center; font-size: 14px; }
+.frow .nm { display: flex; gap: 8px; align-items: center; color: var(--ink); }
+.frow .pct { text-align: right; font-variant-numeric: tabular-nums; }
+.fbar { display: flex; gap: 2px; }
+.fbar .seg { height: 7px; background: var(--rule-soft); position: relative; overflow: hidden; }
+.fbar .seg i { position: absolute; inset: 0 auto 0 0; background: #7D8792; }
+.fkey { display: flex; gap: 22px; font-size: 13px; margin-top: 2px; }
+.fkey span { display: flex; gap: 7px; align-items: center; }
+.fkey i { width: 14px; height: 5px; display: inline-block; }
+
+.people li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 2px 12px; padding: 12px 4px; border-bottom: 1px solid var(--rule); font-size: 14px; }
+.people .pn { font-weight: 600; font-size: 15px; }
+.people .pm { color: var(--ink-soft); font-size: 13px; }
+.people .pb { grid-column: 1 / -1; }
+
+.ch { display: grid; grid-template-columns: 22px 24px minmax(0, 1fr) auto; gap: 0 10px; align-items: start; padding: 12px 6px; border-bottom: 1px solid var(--rule); border-radius: 2px; }
+.ch .num { color: var(--ink-soft); font-size: 14px; padding-top: 1px; }
+.ch .name { font-size: 15px; font-weight: 500; }
+.ch .sub { color: var(--ink-soft); font-size: 13px; margin-top: 3px; max-width: 52ch; }
+.ch .right { text-align: right; font-size: 13px; color: var(--ink-soft); white-space: nowrap; padding-top: 1px; }
+.ch .right b { display: block; font-size: 13px; color: var(--ink-soft); }
+.ch.is-locked .name { color: var(--ink-soft); }
+.ch.is-ready .right b { color: var(--st-ready); }
+.ch.is-revisit .right b { color: var(--st-revisit); }
+.ch.is-progress .right b { color: var(--st-progress); }
+.ic { width: 21px; height: 21px; display: block; margin-top: 0; }
+
+/* Copied popover */
+.copied { position: absolute; width: 430px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px;
+  box-shadow: 0 18px 40px -12px rgba(13,30,50,.35); font-size: 14px; }
+.copied .ok { display: flex; gap: 8px; align-items: center; color: var(--st-ready); font-weight: 600; font-size: 13.5px; }
+.copied blockquote { margin: 10px 0 0; padding: 10px 12px; background: var(--paper-raised); border-left: 3px solid var(--action); border-radius: 3px; line-height: 1.5; color: var(--ink); }
+
+/* Overlay layer */
+.spot { position: absolute; border-radius: 9px; border: 2.5px solid #4C7BF0; pointer-events: none; }
+.cursor { position: absolute; width: 26px; height: 26px; pointer-events: none; z-index: 30; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); transform-origin: 3px 3px; }
+.ripple { position: absolute; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; border: 2.5px solid #4C7BF0; pointer-events: none; z-index: 29; }
+
+.cap { position: absolute; left: 50%; bottom: 34px; z-index: 40; width: 820px; margin-left: -410px; background: rgba(9, 26, 46, .94);
+  color: #fff; border-radius: 14px; padding: 18px 24px 20px; display: flex; gap: 18px; align-items: flex-start;
+  box-shadow: 0 24px 60px -18px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.08); }
+.cap .n { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #F2B33D; color: #0b1a2c; display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 800; font-size: 17px; margin-top: 2px; }
+.cap .eb { font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #9fc0ff; margin-bottom: 5px; }
+.cap .tx { font-family: var(--font-display); font-weight: 600; font-size: 24px; line-height: 1.25; letter-spacing: -0.01em; }
+.cap .tx em { font-style: normal; color: #F2B33D; }
+
+.endcard { position: absolute; inset: 0; z-index: 60; background: var(--action); color: #fff; display: grid; place-items: center; text-align: center; }
+.endcard .m { display: flex; align-items: center; gap: 14px; justify-content: center; }
+.endcard img { height: 54px; filter: invert(1); }
+.endcard .w { font-family: var(--font-display); font-weight: 800; letter-spacing: .22em; font-size: 30px; }
+.endcard .tg { border-left: 1px solid rgba(255,255,255,.35); padding-left: 16px; font-size: 26px; color: #c9d6e6; }
+.endcard p { font-family: var(--font-display); font-weight: 600; font-size: 34px; letter-spacing: -0.02em; margin: 30px 0 0; }
+.endcard small { display: block; margin-top: 14px; color: #9fb6d1; font-size: 16px; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="chrome"><span class="d"></span><span class="d"></span><span class="d"></span>
+    <div class="url"><svg width="11" height="12" viewBox="0 0 11 12"><rect x="1" y="5" width="9" height="7" rx="1.5" fill="#b9c4d0"/><path d="M3 5V3.6a2.5 2.5 0 015 0V5" stroke="#b9c4d0" stroke-width="1.4" fill="none"/></svg>my.junior.coach/coach</div>
+  </div>
+  <div class="viewport" id="vp">
+    <div class="dash" id="dash">
+      <header class="site-h">
+        <div class="brand"><img src="logo-mark.png" alt=""><span class="word">JUNIOR</span><span class="tag">Coach</span></div>
+        <div class="who"><span class="avatar">VB</span>Vincent Bernard <svg width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="#141A22" stroke-width="1.5" fill="none"/></svg></div>
+      </header>
+      <div class="layout">
+        <aside class="side" id="side"></aside>
+        <section class="panes">
+          <div class="detail" id="home"><div class="detail-inner" id="homeInner"></div></div>
+          <div class="detail" id="comp"><div class="detail-inner" id="compInner"></div></div>
+        </section>
+      </div>
+    </div>
+    <div class="login" id="login">
+      <div class="login-card">
+        <div class="login-mark"><img src="logo-mark.png" alt=""><span class="dot" style="background:var(--ink)"></span><span class="dot" style="background:var(--action)"></span></div>
+        <h1>Espace coach</h1>
+        <div class="login-rule"></div>
+        <p>Connecte-toi pour voir où en sont tes entreprises.</p>
+        <div class="gbtn" id="gbtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.6 5.4 2.6 13.3l7.8 6C12.3 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 7l7.4 5.7c4.3-4 6.9-9.9 6.9-17.2z"/><path fill="#FBBC05" d="M10.4 28.7A14.5 14.5 0 019.5 24c0-1.6.3-3.2.9-4.7l-7.8-6A24 24 0 000 24c0 3.9.9 7.5 2.6 10.7l7.8-6z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.3-8.5 2.3-6.3 0-11.7-4.1-13.6-9.8l-7.8 6C6.6 42.6 14.6 48 24 48z"/></svg>Se connecter avec Google<span style="margin-left:auto;color:#5f6368;font-size:12.5px">vincent@…</span></div>
+      </div>
+    </div>
+    <div class="spot" id="spot"></div>
+    <div class="ripple" id="ripple"></div>
+    <svg class="cursor" id="cursor" viewBox="0 0 26 26"><path d="M3 2.5l0 18.2 4.6-4.4 3.2 7.3 3.1-1.4-3.2-7.1 6.4-.2z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    <div class="cap" id="cap"><div class="n" id="capN">1</div><div><div class="eb" id="capE"></div><div class="tx" id="capT"></div></div></div>
+    <div class="endcard" id="end"><div>
+      <div class="m"><img src="logo-mark.png" alt=""><span class="w">JUNIOR</span><span class="tg">Coach</span></div>
+      <p>Tes entreprises, leur progression, ton prochain geste.</p>
+      <small>Une page, chaque semaine.</small>
+    </div></div>
+  </div>
+</div>
+
+<script>
+const CANEVAS = __CANEVAS__;
+const PS = CANEVAS.filter(c => c.suite === 'strategic-planning');
+const COM = CANEVAS.filter(c => c.suite === 'commercialization');
+const $ = (id) => document.getElementById(id);
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+// Zolt Energy state, as on the real coach page.
+const comState = ['ready', 'ready', 'ready', 'revisit', 'ready', 'todo', 'todo', 'todo', 'locked', 'locked', 'locked'];
+const psState = PS.map((c, i) => i === 0 ? 'progress' : 'locked');
+const comFill = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0];
+const psFill = PS.map((c, i) => i === 0 ? 0.2 : 0);
+const done = new Set(COM.filter((c, i) => comState[i] === 'ready' || comState[i] === 'revisit').map(c => c.label));
+
+function bar(cls, suites) {
+  return '<div class="pb ' + cls + '">' + suites.map(([list, fills, grow]) =>
+    '<div class="suite" style="flex:' + grow + '">' + list.map((c, i) =>
+      '<div class="seg" style="flex:' + c.min + '"><i style="width:' + (fills[i] * 100) + '%"></i></div>').join('') + '</div>').join('') + '</div>';
+}
+const psMin = PS.reduce((a, c) => a + c.min, 0), comMin = COM.reduce((a, c) => a + c.min, 0);
+const zero = (l) => l.map(() => 0);
+
+// Sidebar
+$('side').innerHTML =
+  '<div class="side-home" id="sideHome"><div class="t">Cette semaine</div><div class="s">1 a besoin de toi · 15 captures en 7 j</div></div>' +
+  '<div class="grp"><span>Ont besoin de toi</span><span>1</span></div>' +
+  '<div class="ent" id="entZolt"><div class="top"><span class="n">Zolt Energy</span><span class="c">5/32</span></div><div class="ind sig-revisit">1 à revoir</div>' +
+  bar('', [[PS, psFill.map(f => f ? 0.6 : 0), psMin], [COM, comFill, comMin]]) + '</div>' +
+  '<div class="grp"><span>Avancent seuls</span><span>2</span></div>' +
+  '<div class="ent"><div class="top"><span class="n">char.ca</span><span class="c">7/32</span></div><div class="ind sig-moving">A avancé aujourd\'hui</div>' +
+  bar('', [[PS, PS.map((c, i) => i < 1 ? 1 : 0), psMin], [COM, [1, 1, 1, 1, 0.5, 0, 0, 0, 0, 0, 0], comMin]]) + '</div>' +
+  '<div class="ent"><div class="top"><span class="n">Pixel Perfect</span><span class="c">0/32</span></div><div class="ind sig-moving">A avancé aujourd\'hui</div>' +
+  bar('', [[PS, zero(PS), psMin], [COM, [0.3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], comMin]]) + '</div>';
+
+const ICON = {
+  ready: '<svg class="ic" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10.5" fill="#2E7A57"/><path d="M6.4 11.3l3.1 3.1 6.1-6.3" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  revisit: '<svg class="ic" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10.5" fill="#B97C12"/><path d="M11 5.6v7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="11" cy="16.1" r="1.4" fill="#fff"/></svg>',
+  progress: '<svg class="ic" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9.6" fill="#fff" stroke="#2D5BD0" stroke-width="1.8"/><path d="M11 1.4a9.6 9.6 0 000 19.2z" fill="#2D5BD0"/></svg>',
+  todo: '<svg class="ic" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9.6" fill="none" stroke="#5C6673" stroke-width="1.6"/></svg>',
+  locked: '<svg class="ic" viewBox="0 0 22 22"><rect x="4.5" y="9.5" width="13" height="10" rx="2" fill="#9AA4AE"/><path d="M7.5 9.5V7.2a3.5 3.5 0 017 0v2.3" stroke="#9AA4AE" stroke-width="2.2" fill="none"/></svg>',
+};
+
+// Home
+const feed = [
+  ['ready', 'Maxime Bane', ' a terminé ', 'Stratégie GTM', 'Zolt Energy'],
+  ['progress', 'Maxime Bane', ' a avancé sur ', 'Ambition Transformatrice &amp; Moteurs de Croissance', 'Zolt Energy'],
+  ['ready', 'Maxime Bane', ' a terminé ', 'Fixation des Prix', 'Zolt Energy'],
+  ['ready', 'Maxime Bane', ' a terminé ', 'Customer Journey', 'Zolt Energy'],
+  ['ready', 'Maxime Bane', ' a terminé ', 'Audit Marketing Concurrentiel', 'Zolt Energy'],
+  ['progress', 'Peter', ' a avancé sur ', 'ICP + Proposition de Valeur', 'Pixel Perfect'],
+  ['progress', 'Jessy', ' a avancé sur ', 'Signaux &amp; Activation', 'char.ca'],
+  ['ready', 'Jessy', ' a terminé ', 'ICP + Proposition de Valeur', 'char.ca'],
+];
+$('homeInner').innerHTML =
+  '<p class="company">Vincent Bernard · 3 entreprises, 5 employés</p>' +
+  '<h2 class="big">1 entreprise a besoin<br>de toi cette semaine.</h2>' +
+  '<p class="subline">3 sur 3 ont avancé ces deux dernières semaines.</p>' +
+  '<div class="card" id="startCard"><h3 class="k">Par où commencer</h3>' +
+  '<div class="q-top"><span class="q-name">Zolt Energy</span><span class="ind sig-revisit">1 à revoir</span></div>' +
+  '<p class="q-why">1 canevas terminé mérite un second regard. Stratégie GTM a changé depuis.</p>' +
+  '<div class="actions"><span class="btn">Copier un message</span><span class="btn" id="openZolt">Ouvrir Zolt Energy</span></div></div>' +
+  '<div class="sec-h" id="feedH"><h3>Ce qui a bougé</h3><p>7 derniers jours</p></div>' +
+  '<ul class="feed" id="feed">' + feed.map(f => '<li><span class="when">Aujourd\'hui</span>' + ICON[f[0]] +
+    '<span>' + f[1] + f[2] + '<b>' + f[3] + '</b> · <a>' + f[4] + '</a></span></li>').join('') + '</ul>';
+
+// Company page
+function stripGroup(list, states, code, label, grow) {
+  return '<div class="sg" style="flex:' + grow + '"><div class="row">' +
+    list.map((c, i) => '<div class="b ' + states[i] + '" style="flex:' + c.min + '"></div>').join('') +
+    '</div><div class="slabel"><span class="code">' + code + '</span>' + label + '</div></div>';
+}
+const nice = (l) => l.replace(/^C17[a-e] — /, '');
+function opensAfter(c) {
+  const left = c.pre.filter(p => !done.has(p)).map(nice);
+  if (!left.length) return '';
+  return "S'ouvre après " + (left.length === 1 ? left[0] : left.slice(0, -1).join(', ') + ' et ' + left[left.length - 1]);
+}
+function chRow(c, i, st) {
+  const lab = { ready: 'Prêt', revisit: 'À revoir', progress: 'En cours · 1/5 champs', todo: 'À faire', locked: '' }[st];
+  const who = (st === 'ready' || st === 'revisit' || st === 'progress') ? 'Maxime Bane · 3 oct.' : '';
+  const sub = st === 'locked' ? opensAfter(c) : st === 'revisit' ? 'Stratégie GTM a changé depuis.' : '';
+  return '<li class="ch is-' + st + '"' + (c.k === 'pricing' ? ' id="rowPricing"' : '') + '>' + ICON[st] + '<span class="num">' + (i + 1) + '</span>' +
+    '<div><div class="name">' + esc(nice(c.label)) + '</div>' + (sub ? '<div class="sub">' + esc(sub) + '</div>' : '') + '</div>' +
+    '<div class="right">' + (lab ? '<b>' + lab + '</b>' : '') + who + '</div></li>';
+}
+function fieldBar(list, fills) {
+  return '<div class="fbar">' + list.map((c, i) => '<div class="seg" style="flex:' + c.min + '"><i style="width:' + fills[i] * 100 + '%"></i></div>').join('') + '</div>';
+}
+$('compInner').innerHTML =
+  '<div class="ctx"><p class="company">Zolt Energy · 1 employé</p><div class="navb"><span>‹</span><span>›</span></div></div>' +
+  '<h2 class="big">5 canevas sur 32 terminés.</h2>' +
+  '<p class="subline">Il en reste 27 en Planification stratégique et Commercialisation.</p>' +
+  '<div class="strip" id="strip">' + stripGroup(PS, psState, 'PS', 'Planification stratégique', psMin) + stripGroup(COM, comState, 'COM', 'Commercialisation', comMin) + '</div>' +
+  '<div class="legend"><span><i style="background:var(--st-ready)"></i>Prêt</span><span><i style="background:var(--st-revisit)"></i>À revoir</span>' +
+  '<span><i style="background:var(--st-progress)"></i>En cours</span><span><i style="background:#fff;border:1px solid var(--rule)"></i>À faire</span>' +
+  '<span><i class="b locked" style="width:13px;height:13px"></i>S\'ouvre plus tard</span></div>' +
+  '<div class="fields" id="fields"><h4>Réponses : 19 % des champs remplis, confirmés ★ 0 %</h4>' +
+  '<div class="frow"><span class="nm"><span class="code">PS</span>Planification stratégique</span>' + fieldBar(PS, psFill.map(f => f * 0.3)) + '<span class="pct">1 %</span><span class="pct">★ 0 %</span></div>' +
+  '<div class="frow"><span class="nm"><span class="code">COM</span>Commercialisation</span>' + fieldBar(COM, [0.9, 0.85, 0.8, 0.8, 0.6, 0, 0, 0, 0, 0, 0]) + '<span class="pct">39 %</span><span class="pct">★ 0 %</span></div>' +
+  '<div class="fkey"><span><i style="background:var(--ink)"></i>confirmé ★ = vérifié sur 3 cas réels</span><span><i style="background:#7D8792"></i>hypothèse</span><span><i style="background:var(--rule-soft)"></i>à remplir</span></div></div>' +
+  '<div class="card" id="helpCard"><h3 class="k">Où tu peux aider</h3><div class="help-h">1 canevas terminé mérite un second regard.</div>' +
+  '<p class="q-why" style="font-size:16px;margin-top:10px">Stratégie GTM a changé depuis.</p>' +
+  '<div class="actions"><span class="btn primary" id="copyBtn">Copier un message</span></div>' +
+  '<p class="their">Leur prochaine étape sur le portail : <b>Ambition Transformatrice &amp; Moteurs de Croissance</b>, Planification stratégique 1. Ensuite : Identité de Marque.</p>' +
+  '<div class="copied" id="copied"><div class="ok"><svg width="15" height="15" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10.5" fill="#2E7A57"/><path d="M6.4 11.3l3.1 3.1 6.1-6.3" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>Copié. Colle-le dans ton message.</div>' +
+  '<blockquote>Bonjour, Stratégie GTM a bougé depuis que tu as terminé certains canevas. On regarde ensemble lesquels méritent une mise à jour?</blockquote></div></div>' +
+  '<div class="sec-h" id="peopleH"><h3>Employés</h3></div>' +
+  '<ul class="people" id="people"><li><span class="pn">Maxime Bane</span><span class="pm">Dans Claude aujourd\'hui · 6 canevas · 19 % remplis</span>' +
+  bar('thick', [[PS, psFill.map(f => f * 0.3), psMin], [COM, [0.9, 0.85, 0.8, 0.8, 0.6, 0, 0, 0, 0, 0, 0], comMin]]) + '</li></ul>' +
+  '<div class="sec-h"><h3>Planification stratégique</h3><p>0 sur 21 terminé · encore ≈ 35 h 30</p></div>' +
+  '<ul>' + PS.map((c, i) => chRow(c, i, psState[i])).join('') + '</ul>' +
+  '<div class="sec-h" id="comH"><h3>Commercialisation</h3><p>5 sur 11 terminés · encore ≈ 15 h 30</p></div>' +
+  '<ul>' + COM.map((c, i) => chRow(c, i, comState[i])).join('') + '</ul>';
+
+// Place the "copied" popover to the right of the button.
+const copied = $('copied');
+copied.style.left = '228px'; copied.style.top = '78px';
+
+/* ---------------- timeline ---------------- */
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const lerp = (a, b, u) => a + (b - a) * u;
+const ramp = (t, a, b) => ease((t - a) / (b - a));
+const win = (t, a, b, f = .35) => clamp(Math.min((t - a) / f, (b - t) / f)); // fade in/out window
+
+const VP = $('vp');
+function rectOf(el, pad = 8) {
+  const r = el.getBoundingClientRect(), v = VP.getBoundingClientRect();
+  return { x: r.left - v.left - pad, y: r.top - v.top - pad, w: r.width + pad * 2, h: r.height + pad * 2 };
+}
+const ctr = (el, dx = 0, dy = 0) => { const r = rectOf(el, 0); return { x: r.x + r.w / 2 + dx, y: r.y + r.h / 2 + dy }; };
+
+// Scroll stops (computed once, from layout).
+const off = (el, root) => { let y = 0; while (el && el !== root) { y += el.offsetTop; el = el.offsetParent; } return y; };
+let S = {};
+function measure() {
+  const home = $('home'), comp = $('comp');
+  S.homeFeed = off($('feedH'), home) - 120;
+  S.compFields = off($('fields'), comp) - 28;
+  S.compCom = off($('comH'), comp) - 24;
+}
+
+const CAPS = [
+  [0.25, 2.95, 1, 'Connexion', 'Le coach se connecte à son espace avec Google.'],
+  [3.35, 8.7, 2, "L'action de la semaine", "Dès l'arrivée : l'entreprise qui <em>a besoin de toi</em>, et pourquoi."],
+  [8.95, 12.55, 3, 'Ce qui a bougé', 'Tout ce que tes clients ont fait ces 7 derniers jours.'],
+  [12.95, 17.15, 4, 'Progression', '<em>5 canevas sur 32</em> terminés. Un bloc par canevas, en vert ceux qui sont prêts.'],
+  [17.45, 21.45, 5, 'Contribution', 'Qui y travaille, et combien de réponses sont déjà remplies.'],
+  [21.75, 25.0, 6, 'Où tu peux aider', 'Un canevas à revoir, et <em>un message prêt à envoyer</em> en un clic.'],
+  [25.3, 28.45, 7, 'Quoi regarder', 'Fixation des Prix est <em>à revoir</em> : Stratégie GTM a changé depuis.'],
+];
+
+// Spotlight segments: [from, to, element getter, pad]
+const SPOTS = [
+  [4.0, 8.75, () => $('startCard'), 8],
+  [9.6, 11.6, () => $('feed'), 6],
+  [13.6, 17.1, () => $('strip'), 10],
+  [18.3, 19.9, () => $('fields'), 10],
+  [19.9, 21.5, () => $('people'), 8],
+  [21.8, 25.0, () => $('helpCard'), 6],
+  [26.25, 28.5, () => $('rowPricing'), 4],
+];
+
+const CLICKS = [2.25, 12.3, 23.35];
+
+function cursorAt(t) {
+  const g = $('gbtn');
+  const K = [
+    [0.0, { x: 980, y: 640 }],
+    [1.9, ctr(g, -40, 2)],
+    [2.9, ctr(g, -40, 2)],
+    [4.4, { x: 1010, y: 520 }],
+    [8.0, ctr($('openZolt'), 10, 4)],
+    [9.0, ctr($('openZolt'), 10, 4)],
+    [11.2, { x: 900, y: 600 }],
+    [12.15, ctr($('entZolt'), -40, -8)],
+    [13.2, ctr($('entZolt'), -40, -8)],
+    [15.0, { x: 1180, y: 300 }],
+    [22.2, { x: 1150, y: 360 }],
+    [23.2, ctr($('copyBtn'), 20, 6)],
+    [25.0, ctr($('copyBtn'), 20, 6)],
+    [26.6, { x: 1250, y: 420 }],
+    [99, { x: 1250, y: 420 }],
+  ];
+  for (let i = 0; i < K.length - 1; i++) {
+    const [ta, a] = K[i], [tb, b] = K[i + 1];
+    if (t <= tb) { const u = ease((t - ta) / (tb - ta)); return { x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u) }; }
+  }
+  return K[K.length - 1][1];
+}
+
+window.seek = function (t) {
+  // Scenes
+  const loginOp = 1 - ramp(t, 2.75, 3.2);
+  $('login').style.opacity = loginOp;
+  $('login').style.display = loginOp <= 0 ? 'none' : 'grid';
+  $('gbtn').classList.toggle('pressed', t > 2.2 && t < 2.6);
+
+  const compOp = ramp(t, 12.62, 12.9);
+  $('home').style.opacity = 1 - ramp(t, 12.35, 12.6);
+  $('comp').style.opacity = compOp;
+  $('home').style.visibility = compOp >= 1 ? 'hidden' : 'visible';
+  $('comp').style.visibility = compOp <= 0 ? 'hidden' : 'visible';
+  $('sideHome').style.background = t < 12.3 ? 'var(--sheet)' : 'var(--paper-raised)';
+  $('sideHome').style.boxShadow = t < 12.3 ? 'inset 3px 0 0 var(--action)' : 'none';
+  $('entZolt').classList.toggle('sel', t >= 12.3);
+
+  // Scroll
+  $('home').scrollTop = lerp(0, S.homeFeed, ramp(t, 8.8, 9.7));
+  let cs = lerp(0, S.compFields, ramp(t, 17.25, 18.2));
+  cs = lerp(cs, S.compCom, ramp(t, 25.1, 26.2));
+  $('comp').scrollTop = cs;
+
+  // Strip builds in
+  const bs = document.querySelectorAll('#strip .b');
+  bs.forEach((b, i) => { const u = ramp(t, 13.0 + i * 0.03, 13.35 + i * 0.03); b.style.opacity = u; b.style.transform = 'translateY(' + (1 - u) * 10 + 'px)'; });
+
+  // Copy
+  $('copyBtn').classList.toggle('pressed', t > 23.3 && t < 23.6);
+  const co = ramp(t, 23.45, 23.75) * (1 - ramp(t, 25.0, 25.3));
+  copied.style.opacity = co; copied.style.transform = 'translateY(' + (1 - co) * 8 + 'px)';
+
+  // Pricing row flash
+  const pr = $('rowPricing'); const fl = win(t, 26.3, 28.6, .4);
+  pr.style.background = 'rgba(255,244,214,' + fl + ')';
+
+  // Spotlight
+  const spot = $('spot'); let shown = false;
+  for (let i = 0; i < SPOTS.length; i++) {
+    const [a, b, get, pad] = SPOTS[i];
+    if (t < a - 0.01 || t > b) continue;
+    const prev = SPOTS[i - 1], next = SPOTS[i + 1];
+    const joinedIn = prev && Math.abs(prev[1] - a) < .01, joinedOut = next && Math.abs(next[0] - b) < .01;
+    let r = rectOf(get(), pad);
+    if (joinedIn && t < a + .45) { const r0 = rectOf(prev[2](), prev[3]); const u = ease((t - a) / .45); r = { x: lerp(r0.x, r.x, u), y: lerp(r0.y, r.y, u), w: lerp(r0.w, r.w, u), h: lerp(r0.h, r.h, u) }; }
+    const op = Math.min(joinedIn ? 1 : clamp((t - a) / .35), joinedOut ? 1 : clamp((b - t) / .35));
+    spot.style.left = r.x + 'px'; spot.style.top = r.y + 'px'; spot.style.width = r.w + 'px'; spot.style.height = r.h + 'px';
+    spot.style.opacity = 1;
+    spot.style.borderColor = 'rgba(76,123,240,' + op + ')';
+    spot.style.boxShadow = '0 0 0 9999px rgba(12,22,36,' + 0.30 * op + '), 0 0 0 6px rgba(76,123,240,' + 0.18 * op + ')';
+    shown = true; break;
+  }
+  if (!shown) spot.style.opacity = 0;
+
+  // Cursor + click
+  const c = cursorAt(t), cur = $('cursor');
+  let press = 0; let rip = null;
+  for (const k of CLICKS) { if (t >= k - .08 && t < k + .12) press = 1; if (t >= k && t < k + .5) rip = (t - k) / .5; }
+  cur.style.left = (c.x - 3) + 'px'; cur.style.top = (c.y - 3) + 'px';
+  cur.style.transform = 'scale(' + (press ? .86 : 1) + ')';
+  cur.style.opacity = 1 - ramp(t, 28.4, 28.7);
+  const rp = $('ripple');
+  if (rip !== null) { rp.style.left = c.x + 'px'; rp.style.top = c.y + 'px'; rp.style.opacity = 1 - rip; rp.style.transform = 'scale(' + (0.4 + rip * 0.9) + ')'; }
+  else rp.style.opacity = 0;
+
+  // Caption
+  const cap = $('cap'); let cOn = false;
+  for (const [a, b, n, eb, tx] of CAPS) {
+    if (t < a || t > b) continue;
+    const o = win(t, a, b, .3);
+    $('capN').textContent = n; $('capE').textContent = 'Étape ' + n + ' · ' + eb; $('capT').innerHTML = tx;
+    cap.style.opacity = o; cap.style.transform = 'translateY(' + (1 - ease(o)) * 16 + 'px)'; cOn = true; break;
+  }
+  if (!cOn) cap.style.opacity = 0;
+
+  // End card
+  const e = ramp(t, 28.55, 29.0);
+  $('end').style.opacity = e; $('end').style.display = e <= 0 ? 'none' : 'grid';
+  const inner = $('end').firstElementChild; inner.style.transform = 'translateY(' + (1 - e) * 14 + 'px)';
+};
+
+window.ready = document.fonts.ready.then(() => { measure(); window.seek(0); return true; });
+</script>
+</body>
+</html>
