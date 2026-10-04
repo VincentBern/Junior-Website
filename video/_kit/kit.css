@@ -1,0 +1,110 @@
+/* Junior video kit — shared tokens, timeline primitives and drafting-sheet furniture.
+   Every animation runs on an absolute timeline: --t is the start time in seconds.
+   kit.js pauses all animations and seeks them, so renders are frame-exact. */
+:root{
+  --paper:#E4E8ED; --sheet:#F2F5F8; --ink:#141A22; --graphite:#5C6673;
+  --blueprint:#0D3557; --line:#B9C2CC; --revision:#C42B1C;
+  --ok:#2E7A57; --revisit:#B97C12; --prog:#2D5BD0; --prog-soft:#D6E0F7; --locked:#9AA4AE;
+  --ease:cubic-bezier(.6,.05,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--paper)}
+body{font-family:"IBM Plex Sans",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;position:relative}
+
+/* ---------- scenes: outer fades in at --in, inner .so fades out at --out ---------- */
+.scene{position:absolute;inset:0;animation:sIn .4s ease var(--in) both}
+.scene>.so{position:absolute;inset:0;animation:sOut .35s ease var(--out) both}
+@keyframes sIn{from{opacity:0}to{opacity:1}}
+@keyframes sOut{from{opacity:1}to{opacity:0}}
+.scene.wipe{animation:wipe .55s var(--ease) var(--in) both}
+@keyframes wipe{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+.scene.blue>.so{background:var(--blueprint);color:#DEE9F2}
+.scene.dark>.so{background:var(--ink);color:var(--sheet)}
+
+/* ---------- element primitives ---------- */
+.fu{animation:fu .55s var(--ease) var(--t) both}
+@keyframes fu{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.fi{animation:fi .45s ease var(--t) both}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.fo{animation:fo .45s ease var(--t) both}            /* fade OUT at --t */
+@keyframes fo{from{opacity:1}to{opacity:0}}
+.sl{animation:sl .6s var(--ease) var(--t) both}       /* slide in from the right */
+@keyframes sl{from{opacity:0;transform:translateX(140px)}to{opacity:1;transform:none}}
+.sr{animation:sr .6s var(--ease) var(--t) both}       /* slide in from the left */
+@keyframes sr{from{opacity:0;transform:translateX(-140px)}to{opacity:1;transform:none}}
+.pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1) var(--t) both;transform-box:fill-box;transform-origin:center}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+.stamp{animation:stamp .4s cubic-bezier(.2,1.4,.4,1) var(--t) both}
+@keyframes stamp{from{opacity:0;transform:rotate(-5deg) scale(1.9)}to{opacity:1;transform:rotate(-5deg) scale(1)}}
+/* SVG line drawing: add pathLength="1" to the element */
+.dr{stroke-dasharray:1;stroke-dashoffset:1;animation:dr var(--d,.8s) var(--ease) var(--t) both}
+@keyframes dr{to{stroke-dashoffset:0}}
+/* grow a (dashed) line from the left: SVG or HTML */
+.grow{transform-box:fill-box;transform-origin:left center;animation:grow var(--d,.9s) var(--ease) var(--t) both}
+@keyframes grow{from{transform:scaleX(0)}to{transform:none}}
+/* red-pen strike-through across an inline span */
+.strike{background-image:linear-gradient(var(--revision),var(--revision));background-repeat:no-repeat;background-position:0 55%;background-size:0% .09em;animation:strike .45s var(--ease) var(--t) forwards}
+@keyframes strike{to{background-size:100% .09em}}
+/* red-pen underline across an inline span */
+.ul{background-image:linear-gradient(var(--revision),var(--revision));background-repeat:no-repeat;background-position:0 94%;background-size:0% .075em;animation:ul .5s var(--ease) var(--t) forwards}
+@keyframes ul{to{background-size:100% .075em}}
+/* colour change at --t (e.g. a status flipping): set --from and --to */
+.recolor{animation:recolor .35s ease var(--t) both}
+@keyframes recolor{from{background-color:var(--from)}to{background-color:var(--to)}}
+
+/* ---------- type ---------- */
+.h{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;letter-spacing:-.02em;line-height:1.02}
+.h .ln{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.h .ln>span{display:inline-block;animation:rise .65s var(--ease) var(--t) both}
+@keyframes rise{from{transform:translateY(110%)}to{transform:none}}
+.h .red{color:var(--revision)}
+.mono{font-family:"IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow{position:absolute;left:80px;top:200px;font-size:24px;color:var(--graphite);display:flex;align-items:center;gap:22px}
+.eyebrow::after{content:"";width:200px;height:1.5px;background:var(--line)}
+.blue .eyebrow{color:#93B4CE}
+.blue .eyebrow::after{background:rgba(255,255,255,.25)}
+.blue .h{color:#fff}
+
+/* ---------- drafting-sheet furniture ---------- */
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(20,26,34,.045) 1.5px,transparent 1.5px),linear-gradient(90deg,rgba(20,26,34,.045) 1.5px,transparent 1.5px);background-size:60px 60px}
+.blue .grid,.grid.light{background-image:linear-gradient(rgba(255,255,255,.05) 1.5px,transparent 1.5px),linear-gradient(90deg,rgba(255,255,255,.05) 1.5px,transparent 1.5px)}
+.cart{position:absolute;left:80px;right:80px;top:1748px;height:72px;border:2px solid var(--ink);display:grid;grid-template-columns:1.25fr 1fr .8fr;font-size:18px;background:var(--sheet)}
+.cart>div{display:flex;flex-direction:column;justify-content:center;padding:0 22px;border-right:1.5px solid var(--line);gap:4px}
+.cart>div:last-child{border-right:0}
+.cart small{font-size:14px;color:var(--graphite);letter-spacing:.16em}
+.blue .cart{border-color:rgba(255,255,255,.4);background:transparent;color:#DEE9F2}
+.blue .cart>div{border-color:rgba(255,255,255,.2)}
+.blue .cart small{color:#93B4CE}
+.sheetframe{position:absolute;inset:0;pointer-events:none;z-index:50}
+.watermark{position:absolute;left:-330px;bottom:-60px;height:1500px;opacity:0;animation:wm .8s ease .1s both}
+@keyframes wm{to{opacity:.05}}
+
+/* SVG drafting classes (sizes tuned for a 920-unit-wide viewBox at 1:1) */
+.bx{fill:var(--sheet);stroke:var(--ink);stroke-width:2.6}
+.thin{fill:none;stroke:var(--graphite);stroke-width:2.4}
+.lbl{fill:var(--ink);font-family:"IBM Plex Sans",sans-serif;font-size:36px;font-weight:500}
+.sm{fill:var(--graphite);font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.12em;text-transform:uppercase}
+.smr{fill:var(--revision);font-family:"IBM Plex Mono",monospace;font-size:20px;letter-spacing:.1em;text-transform:uppercase}
+.flag{fill:none;stroke:var(--revision);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+/* blueprint graph nodes */
+.n-box{fill:rgba(13,53,87,.6);stroke:#7FB2D8;stroke-width:2.4}
+.n-label{fill:#EAF3FA;font-family:"IBM Plex Sans",sans-serif;font-size:33px;font-weight:500}
+.n-id{fill:#7FA6C4;font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.12em}
+.edge{fill:none;stroke:#4E86B4;stroke-width:2.6}
+
+/* callout tags */
+.note{position:absolute;background:var(--revision);color:#fff;font-size:20px;padding:10px 16px;letter-spacing:.1em}
+.note.ink{background:var(--ink)}
+
+/* ---------- closer (end card), identical across the series ---------- */
+.closer .cmark{position:absolute;left:0;right:0;top:470px;display:flex;justify-content:center;align-items:center;gap:16px}
+.closer .cmark img{height:96px;filter:brightness(0) invert(1)}
+.closer .cmark i{width:18px;height:18px;border-radius:50%;background:var(--graphite);display:block}
+.closer .cmark i.r{background:var(--revision)}
+.closer .h{position:absolute;left:60px;right:60px;top:640px;font-size:118px;color:#fff;text-align:center}
+.closer .sub{position:absolute;left:0;right:0;top:1060px;font-size:22px;color:#9AA4AE;line-height:1.9;text-align:center}
+.closer .btn-wrap{position:absolute;inset:0}
+.closer .btn{position:absolute;left:50%;top:1230px;transform:translateX(-50%);background:var(--sheet);color:var(--ink);font-size:30px;padding:30px 46px;white-space:nowrap}
+.closer .url{position:absolute;left:0;right:0;top:1400px;text-align:center;font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 88;font-weight:700;font-size:64px;color:#fff;letter-spacing:-.01em}
+.closer .url em{font-style:normal;color:var(--revision)}
+.closer .fine{position:absolute;left:0;right:0;top:1500px;text-align:center;font-size:19px;color:#7D8792}
