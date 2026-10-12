@@ -805,7 +805,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
             <aside class="sidebar" aria-hidden="true">
               <div class="newchat"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg>New chat</div>
               <p class="side-lbl">Recents</p>
-              <ul><li class="on">Pricing — SMB tier</li><li>Spring launch</li><li>Email to distributors</li><li>Competitor review</li><li>Bank meeting notes</li></ul>
+              <ul><li class="on">Pricing (SMB tier)</li><li>Spring launch</li><li>Email to Solo customers</li><li>Competitor review</li><li>Bank meeting notes</li></ul>
             </aside>
             <div class="main">
               <div class="msgs">
@@ -1068,7 +1068,7 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
   // Fig. 04: the in-chat progress card
   const card = document.getElementById("card");
   card.append(
-    el("p", { class: "company", text: "Cornets Boréal inc." }),
+    el("p", { class: "company", text: "Chantio inc." }),
     el("h1", { text: done + " of " + total + " canevas done" }),
     el("p", { class: "subline", text: (total - done) + " to go, about 35 h 30 min of thinking." }),
     strip((c) => (c && c.status === "revisit" ? "1 2" : "1")), legend());
@@ -1104,7 +1104,7 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
     ["locked", 5, "Activation", "Opens after Prix", "Locked"],
   ];
   portal.append(
-    el("p", { class: "company", "data-z": "1", text: "Cornets Boréal inc." }),
+    el("p", { class: "company", "data-z": "1", text: "Chantio inc." }),
     el("h1", { "data-z": "1", text: done + " of " + total + " canevas done" }),
     el("p", { class: "subline", "data-z": "1", text: (total - done) + " to go, about 35 h 30 min of thinking." }),
     strip(() => "1 4"), legend(),

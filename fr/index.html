@@ -805,7 +805,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
             <aside class="sidebar" aria-hidden="true">
               <div class="newchat"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg>Nouvelle conversation</div>
               <p class="side-lbl">Récents</p>
-              <ul><li class="on">Prix — palier PME</li><li>Lancement printemps</li><li>Courriel aux distributeurs</li><li>Audit concurrentiel</li><li>Notes rencontre banque</li></ul>
+              <ul><li class="on">Prix (palier PME)</li><li>Lancement printemps</li><li>Courriel aux clients Solo</li><li>Audit concurrentiel</li><li>Notes rencontre banque</li></ul>
             </aside>
             <div class="main">
               <div class="msgs">
@@ -1069,7 +1069,7 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
   // Fig. 04: the in-chat progress card
   const card = document.getElementById("card");
   card.append(
-    el("p", { class: "company", text: "Cornets Boréal inc." }),
+    el("p", { class: "company", text: "Chantio inc." }),
     el("h1", { text: done + " canevas terminés sur " + total }),
     el("p", { class: "subline", text: (total - done) + " à faire, environ 35 h 30 de réflexion." }),
     strip((c) => (c && c.status === "revisit" ? "1 2" : "1")), legend());
@@ -1105,7 +1105,7 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
     ["locked", 5, "Activation", "S'ouvre après Prix", "Verrouillé"],
   ];
   portal.append(
-    el("p", { class: "company", "data-z": "1", text: "Cornets Boréal inc." }),
+    el("p", { class: "company", "data-z": "1", text: "Chantio inc." }),
     el("h1", { "data-z": "1", text: done + " canevas terminés sur " + total }),
     el("p", { class: "subline", "data-z": "1", text: (total - done) + " à faire, environ 35 h 30 de réflexion." }),
     strip(() => "1 4"), legend(),

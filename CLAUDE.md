@@ -44,7 +44,7 @@ Principe de marque : « Les canevas sont publics. Leurs liens et leur boucle d'a
 - Ne jamais publier sur le site le contenu des cadres, les règles de complétion, le graphe complet ni les noms des canevas qui ne sont pas déjà publics. La maquette de progression ne nomme que les canevas déjà visibles sur la page d'accueil; les autres restent sans nom.
 - Le script de synchronisation n'importe jamais `reportInstructions` ni `ctaText` : ils restent côté serveur. Ne pas contourner.
 - Le code d'accès testeurs n'est **jamais** écrit dans le code source; il est saisi par l'utilisateur et envoyé en en-tête `x-diagnostic-access-code`.
-- Les démos utilisent l'entreprise fictive **Cornets Boréal inc.** (fabricant de cornets de crème glacée, la même que le guide d'accueil). Aucune donnée de client réel.
+- Les démos utilisent l'entreprise fictive **Chantio inc.** (logiciel de soumission et de planification de chantier pour entrepreneurs en rénovation résidentielle). Sa fiche complète est dans le repo Junior, `docs/demo/chantio.md` : chiffres, personnes, ton. Elle remplace Cornets Boréal inc. (décision du 2026-10-12, §80 du repo Junior); le guide d'accueil passe aussi à Chantio. Aucune donnée de client réel.
 
 ### 4. Positionnement et vocabulaire
 Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans tout texte :
