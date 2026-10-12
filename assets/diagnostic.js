@@ -579,6 +579,7 @@
 
     var scores = $("#report-scores");
     scores.innerHTML = "";
+    var weakest = null;
     res.parts.forEach(function(partRes, i){
       var part = offer.parts[i] || offer.parts[0];
       var local = CONTENT[part];
@@ -600,6 +601,7 @@
         var dimId = String(d.id).replace(/^[SC]-/, "");
         var localDim = local.dimensions.filter(function(x){ return x.id === dimId; })[0];
         var pct = Math.max(0, Math.min(100, Number(d.pct) || 0));
+        if (!weakest || pct < weakest.pct) weakest = { title: localDim ? localDim.title : d.title, pct: pct };
         bars.appendChild(el("div", { class: "dim-bar c-" + d.color }, [
           el("div", { class: "top" }, [
             el("span", { text: localDim ? localDim.title : d.title }),
@@ -634,7 +636,20 @@
     if (res.emailed === true) emailed.textContent = T.report.emailed(report.participant.email || "");
     else if (res.emailed === false) emailed.textContent = T.report.emailFailed;
     emailed.hidden = typeof res.emailed !== "boolean";
+
+    // The closing block names where to start: the report's weakest dimension.
+    // Without dimensions it keeps its generic text from the page.
+    var foot = $(".report-foot p");
+    if (weakest && foot) {
+      foot.innerHTML = "";
+      foot.appendChild(el("strong", { text: T.report.startHere(weakest.title, weakest.pct) }));
+      foot.appendChild(document.createTextNode(" " + T.report.startHereText));
+    }
   }
+
+  $(".report-foot a").addEventListener("click", function(){
+    track("diagnostic_next_step", { offer: report && report.offer });
+  });
 
   $("#print-btn").addEventListener("click", function(){ window.print(); });
   $("#restart-btn").addEventListener("click", function(){

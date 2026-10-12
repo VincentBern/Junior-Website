@@ -130,7 +130,7 @@
         <label for="p-email">Your email</label>
         <input type="email" id="p-email" autocomplete="email" inputmode="email" required>
         <div class="err">Enter a valid email: that's where your report is sent.</div>
-        <p class="help">Your report is sent to this address. A copy goes to Luc Goudreault, Junior's founder, who can discuss it with you. No newsletter.</p>
+        <p class="help">Your report is sent to this address. A copy goes to the Junior team. No newsletter.</p>
       </div>
 
       <div class="btn-row">
@@ -230,11 +230,6 @@
 
     <article class="presentation" id="report-presentation" lang="fr"></article>
 
-    <div class="report-next">
-      <p><strong>Next step:</strong> talk this report through with Luc Goudreault, Junior's founder. Write to him and he answers in person.</p>
-      <a class="btn btn-secondary" id="talk-link" href="mailto:info@lucgoudreault.com?subject=My%20Junior%20diagnostic%20report">Write to Luc →</a>
-    </div>
-
     <div class="report-foot">
       <p><strong>A diagnostic tells you where you stand.</strong> Junior helps you build what's missing, one framework at a time — right inside your Claude or ChatGPT.</p>
       <a class="btn btn-primary" href="index.html">Discover the Junior mandate →</a>
@@ -305,6 +300,8 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     elapsed: function(s){ var m = Math.floor(s / 60), r = s % 60; return "Elapsed: " + (m ? m + " min " : "") + r + " s"; }
   },
   report: {
+    startHere: function(dim, pct){ return "Your starting point: " + dim + " (" + pct + "%)."; },
+    startHereText: "It's the weakest dimension in your diagnostic. Junior starts there, then builds what's missing with you, one canevas at a time, right inside your Claude or ChatGPT.",
     emailed: function(email){ return "Your report was sent to " + email + ". Keep that email: it's your copy."; },
     emailFailed: "Sending by email didn't work. Keep a copy with \u201cPrint / PDF\u201d before you leave this page.",
     participant: "Respondent",
