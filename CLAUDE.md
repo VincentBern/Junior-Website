@@ -1,6 +1,6 @@
 # CLAUDE.md — site web Junior (www.junior.coach)
 
-Site vitrine de **Junior**, un mandat de conseil en stratégie et en commercialisation qui fonctionne dans le Claude ou le ChatGPT du client. Le site a deux rôles : convaincre (pages d'accueil) et faire passer le **diagnostic** (questionnaire → rapport généré par `api.junior.coach`). Le français est la langue de référence; l'anglais en est une traduction fidèle.
+Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui fonctionne dans le Claude ou le ChatGPT du client, payé au mois. Le site a deux rôles : convaincre (pages d'accueil) et faire passer le **diagnostic** (questionnaire → rapport généré par `api.junior.coach`). Le français est la langue de référence; l'anglais en est une traduction fidèle.
 
 ## Stack et commandes
 
