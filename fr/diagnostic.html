@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnostic — Junior</title>
+<title>Diagnostic · Junior</title>
 <meta name="description" content="Diagnostic Junior : évaluez la maturité stratégique et commerciale de votre organisation et recevez un rapport structuré.">
 <link rel="icon" type="image/png" href="../assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +35,7 @@
   <section data-view="access" hidden>
     <p class="eyebrow">Accès testeurs</p>
     <h1 class="page-title">Le diagnostic est en phase de test.</h1>
-    <p class="page-sub">Pour l'instant, il est réservé à nos testeurs. Entrez le code d'accès qu'on vous a transmis — vous n'aurez à le faire qu'une fois sur cet appareil.</p>
+    <p class="page-sub">Pour l'instant, il est réservé à nos testeurs. Entrez le code d'accès qu'on vous a transmis. Vous n'aurez à le faire qu'une fois sur cet appareil.</p>
 
     <form id="access-form" class="form-narrow" novalidate>
       <div class="field">
@@ -54,7 +54,7 @@
   <section data-view="choose" hidden>
     <p class="eyebrow">Étape 1 · Le diagnostic</p>
     <h1 class="page-title">Où en est votre organisation, vraiment?</h1>
-    <p class="page-sub">Choisissez le diagnostic qui correspond à votre question. Vous répondez seul, à votre rythme — vos réponses sont sauvegardées sur cet appareil au fur et à mesure — et vous recevez un rapport structuré dès la dernière réponse.</p>
+    <p class="page-sub">Choisissez le diagnostic qui correspond à votre question. Vous répondez seul, à votre rythme, et vous recevez un rapport structuré dès la dernière réponse. Vos réponses sont sauvegardées sur cet appareil au fur et à mesure.</p>
 
     <div class="offer-grid">
       <button type="button" class="offer-card" data-offer="strategique">
@@ -146,13 +146,13 @@
     <nav class="dim-steps" id="dim-steps" aria-label="Dimensions"></nav>
 
     <details class="scale-legend">
-      <summary>Échelle de cotation — 1 à 10</summary>
+      <summary>Échelle de cotation : 1 à 10</summary>
       <ul>
-        <li><b>1 – 2</b><span>Inexistant ou absent — aucun élément en place</span></li>
-        <li><b>3 – 4</b><span>Faible — quelques éléments épars, non structurés</span></li>
-        <li><b>5 – 6</b><span>En développement — présent mais incomplet ou incohérent</span></li>
-        <li><b>7 – 8</b><span>Solide — en place, fonctionnel, utilisé activement</span></li>
-        <li><b>9 – 10</b><span>Exemplaire — intégré, mesuré, source d'avantage</span></li>
+        <li><b>1 – 2</b><span>Inexistant ou absent : aucun élément en place</span></li>
+        <li><b>3 – 4</b><span>Faible : quelques éléments épars, non structurés</span></li>
+        <li><b>5 – 6</b><span>En développement : présent mais incomplet ou incohérent</span></li>
+        <li><b>7 – 8</b><span>Solide : en place, fonctionnel, utilisé activement</span></li>
+        <li><b>9 – 10</b><span>Exemplaire : intégré, mesuré, source d'avantage</span></li>
       </ul>
     </details>
 
@@ -170,7 +170,7 @@
   <section data-view="review" hidden>
     <p class="eyebrow">Dernière étape · Vérification</p>
     <h1 class="page-title">Prêt à générer votre rapport?</h1>
-    <p class="page-sub">Vérifiez vos informations. Une fois envoyé, le rapport est rédigé à partir de vos réponses — comptez environ une à deux minutes.</p>
+    <p class="page-sub">Vérifiez vos informations. Une fois envoyé, le rapport est rédigé à partir de vos réponses. Comptez environ une à deux minutes.</p>
 
     <dl class="summary-dl" id="review-summary"></dl>
     <div class="review-list" id="review-list"></div>
@@ -223,8 +223,8 @@
     <article class="presentation" id="report-presentation"></article>
 
     <div class="report-foot">
-      <p><strong>Un diagnostic dit où vous en êtes.</strong> Junior vous accompagne pour construire, canevas par canevas, ce qui manque — directement dans votre Claude ou votre ChatGPT.</p>
-      <a class="btn btn-primary" href="index.html">Découvrir le mandat Junior →</a>
+      <p><strong>Un diagnostic dit où vous en êtes.</strong> Junior vous accompagne pour construire, canevas par canevas, ce qui manque, directement dans votre Claude ou votre ChatGPT.</p>
+      <a class="btn btn-primary" href="index.html">Découvrir Junior →</a>
     </div>
   </section>
 
@@ -236,7 +236,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     empty: "Entrez votre code d'accès.",
     invalid: "Ce code n'est pas valide.",
     network: "Impossible de joindre le serveur pour vérifier le code. Vérifiez votre connexion.",
-    expired: "Votre code d'accès n'est plus valide. Entrez le nouveau code — vos réponses sont conservées."
+    expired: "Votre code d'accès n'est plus valide. Entrez le nouveau code. Vos réponses sont conservées."
   },
   offerTitle: {
     strategique: "Diagnostic Stratégique",
@@ -250,7 +250,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
   },
   partLabel: { strategique: "Volet stratégique", commercialisation: "Volet commercialisation" },
   dimensionOf: function(n, total){ return "Dimension " + n + " sur " + total; },
-  goToDimension: function(title, done, total){ return title + " — " + done + " sur " + total + " répondues"; },
+  goToDimension: function(title, done, total){ return title + " · " + done + " sur " + total + " répondues"; },
   scale: [
     { label: "Inexistant ou absent" },
     { label: "Faible" },
@@ -259,7 +259,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     { label: "Exemplaire" }
   ],
   scaleEnds: "1 = inexistant · 10 = exemplaire",
-  picked: function(v, label){ return v + "/10 — " + label; },
+  picked: function(v, label){ return v + "/10 · " + label; },
   why: "Pourquoi cette question",
   addNote: "+ Ajouter une note",
   hideNote: "− Masquer la note",
@@ -298,7 +298,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     points: function(raw, max){ return raw + " / " + max + " points"; },
     legend: [["red", "< 40 %"], ["amber", "40–59 %"], ["orange", "60–74 %"], ["green", "75–89 %"], ["dark-green", "≥ 90 %"]]
   },
-  confirmRestart: "Commencer un nouveau diagnostic? Le rapport affiché sera effacé de cet appareil — imprimez-le ou enregistrez-le en PDF d'abord si vous voulez le garder."
+  confirmRestart: "Commencer un nouveau diagnostic? Le rapport affiché sera effacé de cet appareil. Imprimez-le ou enregistrez-le en PDF d'abord si vous voulez le garder."
 };
 </script>
 <script src="../diagnostic-questions/fr.js"></script>

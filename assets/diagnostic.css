@@ -1,4 +1,4 @@
-/* Diagnostic flow — shared by fr/diagnostic.html and en/diagnostic.html.
+/* Diagnostic flow, shared by fr/diagnostic.html and en/diagnostic.html.
    Same blueprint/drafting tokens as the homepage. */
 :root{
   --paper:#E4E8ED;
@@ -10,7 +10,7 @@
   --line:#B9C2CC;
   --revision:#C42B1C;
 
-  /* score colour scale — guide-diagnostics-junior.md §2 */
+  /* score colour scale (guide-diagnostics-junior.md §2) */
   --score-red:#C42B1C;
   --score-amber:#C4661C;
   --score-orange:#B98A12;

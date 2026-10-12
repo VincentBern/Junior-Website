@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnostic — Junior</title>
+<title>Diagnostic · Junior</title>
 <meta name="description" content="Junior diagnostic: assess your organization's strategic and go-to-market maturity and get a structured report.">
 <link rel="icon" type="image/png" href="../assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +35,7 @@
   <section data-view="access" hidden>
     <p class="eyebrow">Tester access</p>
     <h1 class="page-title">The diagnostic is in testing.</h1>
-    <p class="page-sub">For now it's reserved for our testers. Enter the access code you were given — you'll only need to do this once on this device.</p>
+    <p class="page-sub">For now it's reserved for our testers. Enter the access code you were given. You'll only need to do this once on this device.</p>
 
     <form id="access-form" class="form-narrow" novalidate>
       <div class="field">
@@ -54,7 +54,7 @@
   <section data-view="choose" hidden>
     <p class="eyebrow">Step 1 · The diagnostic</p>
     <h1 class="page-title">Where does your organization really stand?</h1>
-    <p class="page-sub">Pick the diagnostic that matches your question. You answer on your own, at your own pace — your answers are saved on this device as you go — and you get a structured report as soon as you're done.</p>
+    <p class="page-sub">Pick the diagnostic that matches your question. You answer on your own, at your own pace, and you get a structured report as soon as you're done. Your answers are saved on this device as you go.</p>
 
     <div class="offer-grid">
       <button type="button" class="offer-card" data-offer="strategique">
@@ -146,13 +146,13 @@
     <nav class="dim-steps" id="dim-steps" aria-label="Dimensions"></nav>
 
     <details class="scale-legend">
-      <summary>Rating scale — 1 to 10</summary>
+      <summary>Rating scale: 1 to 10</summary>
       <ul>
-        <li><b>1 – 2</b><span>Non-existent — nothing in place</span></li>
-        <li><b>3 – 4</b><span>Weak — a few scattered, unstructured elements</span></li>
-        <li><b>5 – 6</b><span>Developing — present but incomplete or inconsistent</span></li>
-        <li><b>7 – 8</b><span>Solid — in place, working, actively used</span></li>
-        <li><b>9 – 10</b><span>Exemplary — integrated, measured, a source of advantage</span></li>
+        <li><b>1 – 2</b><span>Non-existent: nothing in place</span></li>
+        <li><b>3 – 4</b><span>Weak: a few scattered, unstructured elements</span></li>
+        <li><b>5 – 6</b><span>Developing: present but incomplete or inconsistent</span></li>
+        <li><b>7 – 8</b><span>Solid: in place, working, actively used</span></li>
+        <li><b>9 – 10</b><span>Exemplary: integrated, measured, a source of advantage</span></li>
       </ul>
     </details>
 
@@ -170,7 +170,7 @@
   <section data-view="review" hidden>
     <p class="eyebrow">Last step · Review</p>
     <h1 class="page-title">Ready to generate your report?</h1>
-    <p class="page-sub">Check your details. Once submitted, the report is written from your answers — allow about one to two minutes.</p>
+    <p class="page-sub">Check your details. Once submitted, the report is written from your answers. Allow about one to two minutes.</p>
 
     <dl class="summary-dl" id="review-summary"></dl>
     <div class="review-list" id="review-list"></div>
@@ -224,8 +224,8 @@
     <article class="presentation" id="report-presentation" lang="fr"></article>
 
     <div class="report-foot">
-      <p><strong>A diagnostic tells you where you stand.</strong> Junior helps you build what's missing, one framework at a time — right inside your Claude or ChatGPT.</p>
-      <a class="btn btn-primary" href="index.html">Discover the Junior mandate →</a>
+      <p><strong>A diagnostic tells you where you stand.</strong> Junior helps you build what's missing, one framework at a time, right inside your Claude or ChatGPT.</p>
+      <a class="btn btn-primary" href="index.html">Discover Junior →</a>
     </div>
   </section>
 
@@ -237,7 +237,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     empty: "Enter your access code.",
     invalid: "That code isn't valid.",
     network: "Couldn't reach the server to check the code. Check your connection.",
-    expired: "Your access code is no longer valid. Enter the new code — your answers are saved."
+    expired: "Your access code is no longer valid. Enter the new code. Your answers are saved."
   },
   offerTitle: {
     strategique: "Strategic Diagnostic",
@@ -251,7 +251,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
   },
   partLabel: { strategique: "Strategy", commercialisation: "Go-to-market" },
   dimensionOf: function(n, total){ return "Dimension " + n + " of " + total; },
-  goToDimension: function(title, done, total){ return title + " — " + done + " of " + total + " answered"; },
+  goToDimension: function(title, done, total){ return title + " · " + done + " of " + total + " answered"; },
   scale: [
     { label: "Non-existent" },
     { label: "Weak" },
@@ -260,7 +260,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     { label: "Exemplary" }
   ],
   scaleEnds: "1 = non-existent · 10 = exemplary",
-  picked: function(v, label){ return v + "/10 — " + label; },
+  picked: function(v, label){ return v + "/10 · " + label; },
   why: "Why this question",
   addNote: "+ Add a note",
   hideNote: "− Hide note",
@@ -282,11 +282,11 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     incomplete: function(n){ return n === 1 ? "One question is still unanswered." : n + " questions are still unanswered."; }
   },
   errors: {
-    rate_limited: "Too many reports were requested from your connection in the last hour. Your answers are saved — try again a bit later.",
+    rate_limited: "Too many reports were requested from your connection in the last hour. Your answers are saved. Try again a bit later.",
     invalid_request: "Some answers couldn't be validated. Check that every question has a rating from 1 to 10, then try again.",
-    timeout: "Generating the report took too long. Your answers are saved — please try again.",
+    timeout: "Generating the report took too long. Your answers are saved. Please try again.",
     network: "Couldn't reach the server. Check your connection; your answers are saved.",
-    server: "Generating the report failed. Your answers are saved — try again in a moment."
+    server: "Generating the report failed. Your answers are saved. Try again in a moment."
   },
   gen: {
     elapsed: function(s){ var m = Math.floor(s / 60), r = s % 60; return "Elapsed: " + (m ? m + " min " : "") + r + " s"; }
@@ -299,7 +299,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     points: function(raw, max){ return raw + " / " + max + " points"; },
     legend: [["red", "< 40%"], ["amber", "40–59%"], ["orange", "60–74%"], ["green", "75–89%"], ["dark-green", "≥ 90%"]]
   },
-  confirmRestart: "Start a new diagnostic? The report shown will be erased from this device — print it or save it as a PDF first if you want to keep it."
+  confirmRestart: "Start a new diagnostic? The report shown will be erased from this device. Print it or save it as a PDF first if you want to keep it."
 };
 </script>
 <script src="../diagnostic-questions/en.js"></script>

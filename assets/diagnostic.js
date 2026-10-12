@@ -1,11 +1,11 @@
-/* Diagnostic flow — shared by fr/diagnostic.html and en/diagnostic.html.
+/* Diagnostic flow, shared by fr/diagnostic.html and en/diagnostic.html.
  *
  * choose → info → questions (one dimension per page) → review → generating → report
  *
  * Questions come from diagnostic-questions/{fr,en}.js (generated from the
  * Junior repo, see scripts/sync-diagnostic-content.py). Submission goes to
  * server-remote's public POST /diagnostics/report, which scores the answers
- * deterministically and writes the narrative report. Single respondent only —
+ * deterministically and writes the narrative report. Single respondent only:
  * that's all the endpoint supports. No payment gate yet (roadmap §16).
  *
  * Page strings live in window.JUNIOR_DIAGNOSTIC_I18N, defined by each page.
@@ -32,7 +32,7 @@
 
   // Closed testing: server-remote rejects any request without the tester
   // access code (DIAGNOSTIC_ACCESS_CODE). Testers type it once; it's kept on
-  // this device and sent as a header — never written into the page source.
+  // this device and sent as a header, never written into the page source.
   var ACCESS_HEADER = "x-diagnostic-access-code";
   var ACCESS_KEY = "junior_diagnostic_access_v1";
 
@@ -258,7 +258,7 @@
     var scale = el("div", { class: "scale", role: "radiogroup", "aria-labelledby": labelId });
     for (var i = 1; i <= 10; i++) {
       (function(v){
-        var input = el("input", { type: "radio", name: inputName, value: String(v), "aria-label": v + " — " + scaleBucket(v).label });
+        var input = el("input", { type: "radio", name: inputName, value: String(v), "aria-label": v + ", " + scaleBucket(v).label });
         if (value === v) input.checked = true;
         input.addEventListener("change", function(){
           draft.answers[key] = v;
@@ -367,7 +367,7 @@
     dl.innerHTML = "";
     [
       [T.review.offer, T.offerTitle[draft.offer]],
-      [T.review.participant, draft.participant.name + " — " + draft.participant.title],
+      [T.review.participant, draft.participant.name + ", " + draft.participant.title],
       [T.review.company, draft.participant.company],
       [T.review.notes, T.review.notesCount(Object.keys(draft.notes).filter(function(k){
         return OFFERS[draft.offer].parts.indexOf(k.split(":")[0]) !== -1;
@@ -547,7 +547,7 @@
     var meta = $("#report-meta");
     meta.innerHTML = "";
     [
-      [T.report.participant, report.participant.name + " — " + report.participant.title],
+      [T.report.participant, report.participant.name + ", " + report.participant.title],
       [T.report.company, report.participant.company],
       [T.report.date, new Date(report.createdAt).toLocaleDateString(LANG === "en" ? "en-CA" : "fr-CA", { year: "numeric", month: "long", day: "numeric" })]
     ].forEach(function(row){
