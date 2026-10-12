@@ -23,6 +23,12 @@ JUNIOR = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else ROOT.parent / "junio
 OUT_DIR = ROOT / "diagnostic-questions"
 GLOBAL = "JUNIOR_DIAGNOSTIC_CONTENT"
 
+# On a case-insensitive disk, ../junior can resolve to an unrelated folder
+# (e.g. ~/Junior), so check it really is the Junior repo before reading it.
+if not (JUNIOR / "content/diagnostics").is_dir() or not (JUNIOR / "content/prose/diagnostics").is_dir():
+    sys.exit(f"{JUNIOR} is not the Junior repo (no content/diagnostics or content/prose/diagnostics).\n"
+             "Pass its path: python3 scripts/sync-diagnostic-content.py path/to/junior")
+
 
 def build(key, prose_file):
     template = yaml.safe_load((JUNIOR / "content/diagnostics" / f"{key}.yaml").read_text("utf8"))
