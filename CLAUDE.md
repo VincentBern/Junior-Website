@@ -40,7 +40,7 @@ Ces valeurs apparaissent en dur à plusieurs endroits. Si l'une change, on les m
 - Durées affichées (20–30, 25–35, 45–60 min) : identiques en FR et EN.
 
 ### 3. Confidentialité de la méthode
-Principe de marque : « Les cadres sont publics. Le câblage ne l'est pas. »
+Principe de marque : « Les canevas sont publics. Leurs liens et leur boucle d'apprentissage, non. » (remplace « Les cadres sont publics. Le câblage ne l'est pas. » le 2026-10-12)
 - Ne jamais publier sur le site le contenu des cadres, les règles de complétion, le graphe complet ni les noms des canevas qui ne sont pas déjà publics. La maquette de progression ne nomme que les canevas déjà visibles sur la page d'accueil; les autres restent sans nom.
 - Le script de synchronisation n'importe jamais `reportInstructions` ni `ctaText` : ils restent côté serveur. Ne pas contourner.
 - Le code d'accès testeurs n'est **jamais** écrit dans le code source; il est saisi par l'utilisateur et envoyé en en-tête `x-diagnostic-access-code`.
