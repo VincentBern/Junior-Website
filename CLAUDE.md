@@ -1,4 +1,4 @@
-# CLAUDE.md — site web Junior (www.junior.coach)
+# CLAUDE.md : site web Junior (www.junior.coach)
 
 Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui fonctionne dans le Claude ou le ChatGPT du client, payé au mois. Le site a deux rôles : convaincre (pages d'accueil) et faire passer le **diagnostic** (questionnaire → rapport généré par `api.junior.coach`). Le français est la langue de référence; l'anglais en est une traduction fidèle.
 
@@ -6,7 +6,7 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 
 - HTML/CSS/JS statique, **aucun build, aucune dépendance npm**. Servi tel quel (GitHub Pages, domaine dans `CNAME`). Ne pas introduire de framework, de bundler ni de `package.json` pour le site.
 - Aperçu local : `python3 -m http.server 8000` à la racine, puis `http://localhost:8000/fr/`.
-  - Attention : sur `localhost`, `assets/diagnostic.js` appelle l'API sur `http://localhost:8787` (server-remote local). Sans ce serveur, le diagnostic échoue à l'étape du code d'accès — c'est normal.
+  - Attention : sur `localhost`, `assets/diagnostic.js` appelle l'API sur `http://localhost:8787` (server-remote local). Sans ce serveur, le diagnostic échoue à l'étape du code d'accès. C'est normal.
 - Resynchroniser les questions du diagnostic : `python3 scripts/sync-diagnostic-content.py <chemin/vers/le/repo/junior>` (requiert PyYAML). Ce chemin est celui du repo source Junior (qui contient `content/diagnostics/`), **pas** celui du site; chez Luc : `~/projects/junior`. Toujours le passer explicitement : le défaut `../junior` peut tomber sur un autre dossier sur un disque macOS insensible à la casse (le script refuse alors de s'exécuter).
 - Vidéo : `cd video/junior-101 && node render.js` (Playwright + ffmpeg), ou `node render.js stills 3,12` pour des images fixes.
 
@@ -35,8 +35,8 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 
 ### 2. Les chiffres doivent concorder partout
 Ces valeurs apparaissent en dur à plusieurs endroits. Si l'une change, on les met toutes à jour ensemble :
-- **32 outils = 21 (fondations stratégiques) + 11 (machine commerciale)** — `fr|en/index.html` (piliers, livrables), maquette de progression (tableaux `W` à 21 entrées et `cm` à 11 entrées), `video/junior-101/junior101.html`.
-- **Diagnostic : 25 questions / 5 dimensions (stratégique), 30 / 8 (commercialisation), 55 / 13 (double)**, et « 25 à 55 questions » — cartes et `offerMeta` dans `fr|en/diagnostic.html`, pied de page des accueils, vidéo. Ces chiffres doivent correspondre au contenu de `diagnostic-questions/*.js`.
+- **32 outils = 21 (fondations stratégiques) + 11 (machine commerciale)** : `fr|en/index.html` (piliers, livrables), maquette de progression (tableaux `W` à 21 entrées et `cm` à 11 entrées), `video/junior-101/junior101.html`.
+- **Diagnostic : 25 questions / 5 dimensions (stratégique), 30 / 8 (commercialisation), 55 / 13 (double)**, et « 25 à 55 questions » : cartes et `offerMeta` dans `fr|en/diagnostic.html`, pied de page des accueils, vidéo. Ces chiffres doivent correspondre au contenu de `diagnostic-questions/*.js`.
 - Durées affichées (20–30, 25–35, 45–60 min) : identiques en FR et EN.
 
 ### 3. Confidentialité de la méthode
@@ -48,18 +48,19 @@ Principe de marque : « Les canevas sont publics. Leurs liens et leur boucle d'a
 
 ### 4. Positionnement et vocabulaire
 Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans tout texte :
-- Junior, c'est **un mois d'aviseur, pour le prix d'une heure de consultation**. Il se paie au mois, sans engagement : ne jamais laisser croire le contraire (l'ancienne formule « un mandat, pas un abonnement » a été retirée le 2026-10-12 pour cette raison). Éviter « plateforme », « app », « essai gratuit », « utilisateurs ».
+- Junior, c'est **un mois d'aviseur, pour le prix d'une heure de consultation**. Il se paie au mois, sans engagement : ne jamais laisser croire le contraire (l'ancienne formule « un mandat, pas un abonnement » a été retirée le 2026-10-12 pour cette raison). Éviter « plateforme », « app », « essai gratuit », « utilisateurs ». Dire **aviseur**, jamais « conseiller ». Junior est au masculin.
 - Junior fonctionne **dans le Claude ou le ChatGPT que le client utilise déjà**. « Vous travaillez avec Junior. Vous ne travaillez jamais dans Junior. »
 - Les données du client restent chez lui; seule la question part, seul le livrable revient. Formulations **neutres sur l'environnement** : pas de « votre machine », « votre disque », « votre ordinateur ».
 - Le client possède 100 % des livrables; tout s'ouvre encore s'il arrête. Métaphore de l'architecte et des plans.
 - Glossaire FR → EN : aviseur → advisor · mandat → mandate · canevas → *canevas* (conservé tel quel en anglais) · outils → tools · livrable → deliverable · moteur de cohérence → coherence engine · graphe de dépendances → dependency graph · aller-marché → go-to-market · proposition de valeur → value proposition · À revoir → Revisit · Prêt / En cours / À faire / Verrouillé → Ready / In progress / To do / Locked · Planification stratégique / Commercialisation (noms des suites, conservés en français dans la maquette).
-- Le site **vouvoie** le visiteur. Dans les maquettes du produit (carte de progression, portail, messages de Junior dans la conversation), Junior **tutoie** — c'est voulu.
-- Typographie française (usage québécois) : guillemets « » avec espaces insécables, espace avant le deux-points, **pas** d'espace avant `?`, `!` et `;`, « 23 h 47 », « 60 % », tiret cadratin —.
+- Le site **vouvoie** le visiteur. Dans les maquettes du produit (carte de progression, portail, messages de Junior dans la conversation), Junior **tutoie**. C'est voulu.
+- Typographie française (usage québécois) : guillemets « » avec espaces insécables, espace avant le deux-points, **pas** d'espace avant `?`, `!` et `;`, « 23 h 47 », « 60 % ».
+- **Jamais de tiret cadratin**, nulle part (texte, `aria-label`, chaînes JS, commentaires), en FR comme en EN. On reformule avec un point, une virgule, un deux-points ou des parenthèses. Dans les légendes et les intitulés, le séparateur est le point médian « · ».
 
 ### 5. Système visuel « blueprint / dessin technique »
 - Polices : Archivo (titres), IBM Plex Sans (texte), IBM Plex Mono (étiquettes, sur-titres), via Google Fonts.
 - Palette (jetons CSS) : `--paper #E4E8ED`, `--sheet #F2F5F8`, `--ink #141A22`, `--graphite #5C6673`, `--blueprint #0D3557`, `--blueprint-deep #092740`, `--line #B9C2CC`, `--revision #C42B1C` (rouge de révision : accent unique, réservé aux signalements et au focus). Ces jetons sont **dupliqués** dans `fr/index.html`, `en/index.html`, `assets/diagnostic.css` et `video/junior-101/junior101.html` : un changement de jeton s'applique aux quatre. Ne pas ajouter de nouvelle couleur sans raison.
-- Vernaculaire du dessin technique : cartouche, cotes, « Fig. 0X — titre » en légende, traits fins, coins droits (pas d'arrondis hors maquettes d'interface).
+- Vernaculaire du dessin technique : cartouche, cotes, « Fig. 0X · titre » en légende, traits fins, coins droits (pas d'arrondis hors maquettes d'interface).
 - Chaque figure SVG a une version large (`only-wide`) et une version téléphone redessinée à ~400 unités (`big only-narrow`) pour rester lisible sur mobile. Modifier l'une implique de modifier l'autre, dans les deux langues. Les `aria-label` décrivent la figure et sont traduits.
 - Animations : toujours une solution de repli dans `@media (prefers-reduced-motion: reduce)`. Pas de défilement horizontal sur mobile.
 
