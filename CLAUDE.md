@@ -78,6 +78,7 @@ Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans
 
 - Une branche par changement, PR vers `main`; ne pas pousser directement sur `main`.
 - Messages de commit **en anglais**, à l'impératif, décrivant le changement visible (ex. : `Rename « Le poids » to « L'estimé de temps » on the French homepage`). Le texte FR cité garde ses guillemets « ».
+- Descriptions de PR : lisibles par un humain, résumées de façon concise. Pas de dentelle, juste du concret direct : ce qui change et, au besoin, quand fusionner.
 - Code, commentaires et noms de variables en anglais; contenu affiché en FR/EN.
 - Ne pas committer de fichiers temporaires (images fixes `still_*.png`, exports, `.DS_Store` supplémentaires).
 - Ne pas reformater ni « nettoyer » les grands fichiers HTML hors de la portée demandée : les diffs doivent rester lisibles.
