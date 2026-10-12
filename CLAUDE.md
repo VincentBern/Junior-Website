@@ -48,7 +48,7 @@ Principe de marque : « Les cadres sont publics. Le câblage ne l'est pas. »
 
 ### 4. Positionnement et vocabulaire
 Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans tout texte :
-- Junior est **un aviseur stratégique en tout temps, pour le prix d'une heure de consultation par mois**. Il se paie au mois, sans engagement : ne jamais laisser croire le contraire (l'ancienne formule « un mandat, pas un abonnement » a été retirée le 2026-10-12 pour cette raison). Éviter « plateforme », « app », « essai gratuit », « utilisateurs ».
+- Junior, c'est **un mois d'aviseur, pour le prix d'une heure de consultation**. Il se paie au mois, sans engagement : ne jamais laisser croire le contraire (l'ancienne formule « un mandat, pas un abonnement » a été retirée le 2026-10-12 pour cette raison). Éviter « plateforme », « app », « essai gratuit », « utilisateurs ».
 - Junior fonctionne **dans le Claude ou le ChatGPT que le client utilise déjà**. « Vous travaillez avec Junior. Vous ne travaillez jamais dans Junior. »
 - Les données du client restent chez lui; seule la question part, seul le livrable revient. Formulations **neutres sur l'environnement** : pas de « votre machine », « votre disque », « votre ordinateur ».
 - Le client possède 100 % des livrables; tout s'ouvre encore s'il arrête. Métaphore de l'architecte et des plans.
