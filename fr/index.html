@@ -1008,7 +1008,7 @@ const figIo = new IntersectionObserver((entries)=>{
 document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
 
 (() => {
-  // Staged demo state for a fictional ice-cream-cone maker (the same one the welcome guide uses).
+  // Staged demo state for Chantio inc., the fictional company the welcome guide uses.
   // Only canevas names already public on the homepage are named; the rest stay unnamed.
   const W = [90,60,150,120,45,90,180,120,60,90,150,60,240,120,90,60,120,180,90,60,120];
   const sp = W.map((m, k) => ({ minutes: m, status: k < 8 ? "ready" : k === 8 ? "revisit" : k < 10 ? "ready" : k < 15 ? "todo" : "locked" }));
