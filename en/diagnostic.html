@@ -99,7 +99,7 @@
   <section data-view="info" hidden>
     <p class="eyebrow">Step 2 · You</p>
     <h1 class="page-title">Who's answering?</h1>
-    <p class="page-sub">We use this to personalize your report.</p>
+    <p class="page-sub">We use this to personalize your report and send it to you.</p>
 
     <div class="chosen form-narrow">
       <div>
@@ -125,6 +125,12 @@
         <label for="p-company">Company</label>
         <input type="text" id="p-company" autocomplete="organization" required>
         <div class="err">Company is required.</div>
+      </div>
+      <div class="field">
+        <label for="p-email">Your email</label>
+        <input type="email" id="p-email" autocomplete="email" inputmode="email" required>
+        <div class="err">Enter a valid email: that's where your report is sent.</div>
+        <p class="help">Your report is sent to this address. A copy goes to the Junior team. No newsletter.</p>
       </div>
 
       <div class="btn-row">
@@ -219,6 +225,7 @@
     <div id="report-scores"></div>
 
     <p class="notice" id="report-truncated" hidden>The report was cut off before the end. The scores above are complete; only the end of the text is missing.</p>
+    <p class="notice" id="report-emailed" hidden></p>
     <p class="notice">The written analysis below is currently delivered in French.</p>
 
     <article class="presentation" id="report-presentation" lang="fr"></article>
@@ -276,6 +283,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     offer: "Diagnostic",
     participant: "Respondent",
     company: "Company",
+    email: "Email",
     notes: "Notes",
     notesCount: function(n){ return n === 0 ? "No notes" : n === 1 ? "1 note" : n + " notes"; },
     edit: "Edit",
@@ -292,6 +300,10 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     elapsed: function(s){ var m = Math.floor(s / 60), r = s % 60; return "Elapsed: " + (m ? m + " min " : "") + r + " s"; }
   },
   report: {
+    startHere: function(dim, pct){ return "Your starting point: " + dim + " (" + pct + "%)."; },
+    startHereText: "It's the weakest dimension in your diagnostic. Junior starts there, then builds what's missing with you, one canevas at a time, right inside your Claude or ChatGPT.",
+    emailed: function(email){ return "Your report was sent to " + email + ". Keep that email: it's your copy."; },
+    emailFailed: "Sending by email didn't work. Keep a copy with \u201cPrint / PDF\u201d before you leave this page.",
     participant: "Respondent",
     company: "Company",
     date: "Date",

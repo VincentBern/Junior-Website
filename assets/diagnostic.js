@@ -54,7 +54,7 @@
   LEGACY_KEYS.forEach(function(k){ store(k, null); });
 
   function emptyDraft(){
-    return { offer: null, participant: { name: "", title: "", company: "" }, answers: {}, notes: {}, view: "choose", page: 0 };
+    return { offer: null, participant: { name: "", title: "", company: "", email: "" }, answers: {}, notes: {}, view: "choose", page: 0 };
   }
   var draft = Object.assign(emptyDraft(), load(DRAFT_KEY) || {});
   if (draft.offer && !OFFERS[draft.offer]) draft = emptyDraft();
@@ -166,7 +166,15 @@
   }
 
   // ---------- info ----------
-  var FIELDS = ["name", "title", "company"];
+  // The email is required (§79 in the Junior repo): the report is sent there.
+  // A draft saved before the field existed simply has no email yet; the
+  // review step sends the respondent back here to add it.
+  var FIELDS = ["name", "title", "company", "email"];
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function fieldOk(f){
+    var v = (draft.participant[f] || "").trim();
+    return f === "email" ? EMAIL_RE.test(v) : v.length > 0;
+  }
   FIELDS.forEach(function(f){
     var input = $("#p-" + f);
     input.addEventListener("input", function(){
@@ -187,12 +195,15 @@
     var firstInvalid = null;
     FIELDS.forEach(function(f){
       var input = $("#p-" + f);
-      var ok = (draft.participant[f] || "").trim().length > 0;
+      var ok = fieldOk(f);
       input.closest(".field").classList.toggle("invalid", !ok);
       if (!ok && !firstInvalid) firstInvalid = input;
     });
     if (firstInvalid) { firstInvalid.focus(); return; }
     track("diagnostic_start", { offer: draft.offer });
+    // Every answer already in (back here from the review to fix the email):
+    // straight back to the review rather than to the first question.
+    if (answeredTotal() === questionCount(draft.offer)) { renderReview(); show("review"); return; }
     renderQuestions();
     show("questions");
   });
@@ -369,6 +380,7 @@
       [T.review.offer, T.offerTitle[draft.offer]],
       [T.review.participant, draft.participant.name + ", " + draft.participant.title],
       [T.review.company, draft.participant.company],
+      [T.review.email, draft.participant.email || ""],
       [T.review.notes, T.review.notesCount(Object.keys(draft.notes).filter(function(k){
         return OFFERS[draft.offer].parts.indexOf(k.split(":")[0]) !== -1;
       }).length)]
@@ -429,7 +441,8 @@
       participant: {
         name: draft.participant.name.trim(),
         title: draft.participant.title.trim(),
-        company: draft.participant.company.trim()
+        company: draft.participant.company.trim(),
+        email: (draft.participant.email || "").trim()
       },
       answers: answers,
       notes: notes
@@ -459,6 +472,15 @@
   function warnBeforeLeave(e){ e.preventDefault(); e.returnValue = ""; return ""; }
 
   $("#submit-btn").addEventListener("click", function(){
+    // A draft from before the email field: ask for it, then come back here.
+    if (!fieldOk("email")) {
+      renderInfo();
+      show("info");
+      var emailField = $("#p-email");
+      emailField.closest(".field").classList.add("invalid");
+      emailField.focus();
+      return;
+    }
     var body = buildRequest();
     var err = $("#submit-error");
     err.classList.remove("show");
@@ -557,6 +579,7 @@
 
     var scores = $("#report-scores");
     scores.innerHTML = "";
+    var weakest = null;
     res.parts.forEach(function(partRes, i){
       var part = offer.parts[i] || offer.parts[0];
       var local = CONTENT[part];
@@ -578,6 +601,7 @@
         var dimId = String(d.id).replace(/^[SC]-/, "");
         var localDim = local.dimensions.filter(function(x){ return x.id === dimId; })[0];
         var pct = Math.max(0, Math.min(100, Number(d.pct) || 0));
+        if (!weakest || pct < weakest.pct) weakest = { title: localDim ? localDim.title : d.title, pct: pct };
         bars.appendChild(el("div", { class: "dim-bar c-" + d.color }, [
           el("div", { class: "top" }, [
             el("span", { text: localDim ? localDim.title : d.title }),
@@ -608,7 +632,24 @@
       pres.appendChild(el("div", { style: "white-space:pre-wrap", text: res.presentation }));
     }
     $("#report-truncated").hidden = !res.truncated;
+    var emailed = $("#report-emailed");
+    if (res.emailed === true) emailed.textContent = T.report.emailed(report.participant.email || "");
+    else if (res.emailed === false) emailed.textContent = T.report.emailFailed;
+    emailed.hidden = typeof res.emailed !== "boolean";
+
+    // The closing block names where to start: the report's weakest dimension.
+    // Without dimensions it keeps its generic text from the page.
+    var foot = $(".report-foot p");
+    if (weakest && foot) {
+      foot.innerHTML = "";
+      foot.appendChild(el("strong", { text: T.report.startHere(weakest.title, weakest.pct) }));
+      foot.appendChild(document.createTextNode(" " + T.report.startHereText));
+    }
   }
+
+  $(".report-foot a").addEventListener("click", function(){
+    track("diagnostic_next_step", { offer: report && report.offer });
+  });
 
   $("#print-btn").addEventListener("click", function(){ window.print(); });
   $("#restart-btn").addEventListener("click", function(){
