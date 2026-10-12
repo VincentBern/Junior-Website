@@ -27,7 +27,7 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 ## Règles non négociables
 
 ### 1. Parité FR / EN
-- Toute modification de `fr/X.html` se reflète dans `en/X.html` **dans le même commit** (et inversement). Les deux fichiers doivent rester identiques en structure : seuls le texte, les `aria-label`, `lang`, `title`, `meta description` et le lien de langue diffèrent.
+- Toute modification de `fr/X.html` se reflète dans `en/X.html` **dans le même commit** (et inversement). Les deux fichiers doivent rester identiques en structure : seuls le texte, les `aria-label`, `lang`, `title`, `meta description` et le lien de langue diffèrent. Seule exception : la note sur le masculin en pied de page de `fr/index.html` (« L'emploi du masculin pour désigner des personnes n'a d'autres fins que celle d'alléger le texte. »), sans équivalent en anglais.
 - Vérification rapide de la parité structurelle (les seules différences attendues sont des attributs traduits) :
   `diff <(sed 's/>[^<]*</></g' fr/index.html) <(sed 's/>[^<]*</></g' en/index.html)`
 - Le français est la source. On écrit d'abord en FR, puis on traduit en EN avec le même sens, le même ton et la même longueur approximative.
