@@ -99,7 +99,7 @@
   <section data-view="info" hidden>
     <p class="eyebrow">Étape 2 · Vous</p>
     <h1 class="page-title">Qui répond?</h1>
-    <p class="page-sub">Ces informations servent à personnaliser votre rapport.</p>
+    <p class="page-sub">Ces informations servent à personnaliser votre rapport et à vous l'envoyer.</p>
 
     <div class="chosen form-narrow">
       <div>
@@ -125,6 +125,12 @@
         <label for="p-company">Entreprise</label>
         <input type="text" id="p-company" autocomplete="organization" required>
         <div class="err">L'entreprise est requise.</div>
+      </div>
+      <div class="field">
+        <label for="p-email">Votre courriel</label>
+        <input type="email" id="p-email" autocomplete="email" inputmode="email" required>
+        <div class="err">Entrez un courriel valide : c'est là que votre rapport vous est envoyé.</div>
+        <p class="help">Votre rapport vous est envoyé à cette adresse. Une copie va à Luc Goudreault, fondateur de Junior, qui peut en discuter avec vous. Aucune infolettre.</p>
       </div>
 
       <div class="btn-row">
@@ -219,8 +225,14 @@
     <div id="report-scores"></div>
 
     <p class="notice" id="report-truncated" hidden>Le rapport a été coupé avant la fin. Les scores ci-dessus sont complets; seule la fin du texte manque.</p>
+    <p class="notice" id="report-emailed" hidden></p>
 
     <article class="presentation" id="report-presentation"></article>
+
+    <div class="report-next">
+      <p><strong>Prochaine étape :</strong> parlez de ce rapport avec Luc Goudreault, fondateur de Junior. Écrivez-lui, il vous répond en personne.</p>
+      <a class="btn btn-secondary" id="talk-link" href="mailto:info@lucgoudreault.com?subject=Mon%20rapport%20de%20diagnostic%20Junior">Écrire à Luc →</a>
+    </div>
 
     <div class="report-foot">
       <p><strong>Un diagnostic dit où vous en êtes.</strong> Junior vous accompagne pour construire, canevas par canevas, ce qui manque — directement dans votre Claude ou votre ChatGPT.</p>
@@ -275,6 +287,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     offer: "Diagnostic",
     participant: "Répondant",
     company: "Entreprise",
+    email: "Courriel",
     notes: "Notes",
     notesCount: function(n){ return n === 0 ? "Aucune note" : n === 1 ? "1 note" : n + " notes"; },
     edit: "Modifier",
@@ -291,6 +304,8 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     elapsed: function(s){ var m = Math.floor(s / 60), r = s % 60; return "Temps écoulé : " + (m ? m + " min " : "") + r + " s"; }
   },
   report: {
+    emailed: function(email){ return "Votre rapport a été envoyé à " + email + ". Gardez ce courriel : c'est votre copie."; },
+    emailFailed: "L'envoi par courriel n'a pas fonctionné. Gardez une copie avec « Imprimer / PDF » avant de quitter cette page.",
     participant: "Répondant",
     company: "Entreprise",
     date: "Date",
