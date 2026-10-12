@@ -48,11 +48,11 @@ Principe de marque : « Les cadres sont publics. Le câblage ne l'est pas. »
 
 ### 4. Positionnement et vocabulaire
 Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans tout texte :
-- Junior est **un mandat, pas un abonnement**. Éviter « plateforme », « app », « abonnement », « essai gratuit », « utilisateurs ».
+- Junior est **un aviseur stratégique en tout temps, pour le prix d'une heure de consultation par mois**. Il se paie au mois, sans engagement : ne jamais laisser croire le contraire (l'ancienne formule « un mandat, pas un abonnement » a été retirée le 2026-10-12 pour cette raison). Éviter « plateforme », « app », « essai gratuit », « utilisateurs ».
 - Junior fonctionne **dans le Claude ou le ChatGPT que le client utilise déjà**. « Vous travaillez avec Junior. Vous ne travaillez jamais dans Junior. »
 - Les données du client restent chez lui; seule la question part, seul le livrable revient. Formulations **neutres sur l'environnement** : pas de « votre machine », « votre disque », « votre ordinateur ».
 - Le client possède 100 % des livrables; tout s'ouvre encore s'il arrête. Métaphore de l'architecte et des plans.
-- Glossaire FR → EN : mandat → mandate · canevas → *canevas* (conservé tel quel en anglais) · outils → tools · livrable → deliverable · moteur de cohérence → coherence engine · graphe de dépendances → dependency graph · aller-marché → go-to-market · proposition de valeur → value proposition · À revoir → Revisit · Prêt / En cours / À faire / Verrouillé → Ready / In progress / To do / Locked · Planification stratégique / Commercialisation (noms des suites, conservés en français dans la maquette).
+- Glossaire FR → EN : aviseur → advisor · mandat → mandate · canevas → *canevas* (conservé tel quel en anglais) · outils → tools · livrable → deliverable · moteur de cohérence → coherence engine · graphe de dépendances → dependency graph · aller-marché → go-to-market · proposition de valeur → value proposition · À revoir → Revisit · Prêt / En cours / À faire / Verrouillé → Ready / In progress / To do / Locked · Planification stratégique / Commercialisation (noms des suites, conservés en français dans la maquette).
 - Le site **vouvoie** le visiteur. Dans les maquettes du produit (carte de progression, portail, messages de Junior dans la conversation), Junior **tutoie** — c'est voulu.
 - Typographie française (usage québécois) : guillemets « » avec espaces insécables, espace avant le deux-points, **pas** d'espace avant `?`, `!` et `;`, « 23 h 47 », « 60 % », tiret cadratin —.
 
