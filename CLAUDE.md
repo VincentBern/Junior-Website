@@ -49,10 +49,11 @@ Principe de marque : « Les canevas sont publics. Leurs liens et leur boucle d'a
 ### 4. Positionnement et vocabulaire
 Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans tout texte :
 - Junior, c'est **un mois d'aviseur, pour le prix d'une heure de consultation**. Il se paie au mois, sans engagement : ne jamais laisser croire le contraire (l'ancienne formule « un mandat, pas un abonnement » a été retirée le 2026-10-12 pour cette raison). Éviter « plateforme », « app », « essai gratuit », « utilisateurs ». Dire **aviseur**, jamais « conseiller ». Junior est au masculin.
+- Dire **stratégie go-to-market**, jamais « aller-marché » (décision de Luc, 2026-10-13). Le terme anglais reste tel quel dans le texte français, comme ICP.
 - Junior fonctionne **dans le Claude ou le ChatGPT que le client utilise déjà**. « Vous travaillez avec Junior. Vous ne travaillez jamais dans Junior. »
 - Les données du client restent chez lui; seule la question part, seul le livrable revient. Formulations **neutres sur l'environnement** : pas de « votre machine », « votre disque », « votre ordinateur ».
 - Le client possède 100 % des livrables; tout s'ouvre encore s'il arrête. Métaphore de l'architecte et des plans.
-- Glossaire FR → EN : aviseur → advisor · mandat → mandate · canevas → *canevas* (conservé tel quel en anglais) · outils → tools · livrable → deliverable · moteur de cohérence → coherence engine · graphe de dépendances → dependency graph · aller-marché → go-to-market · proposition de valeur → value proposition · À revoir → Revisit · Prêt / En cours / À faire / Verrouillé → Ready / In progress / To do / Locked · Planification stratégique / Commercialisation (noms des suites, conservés en français dans la maquette).
+- Glossaire FR → EN : aviseur → advisor · mandat → mandate · canevas → *canevas* (conservé tel quel en anglais) · outils → tools · livrable → deliverable · moteur de cohérence → coherence engine · graphe de dépendances → dependency graph · stratégie go-to-market → go-to-market · proposition de valeur → value proposition · À revoir → Revisit · Prêt / En cours / À faire / Verrouillé → Ready / In progress / To do / Locked · Planification stratégique / Commercialisation (noms des suites, conservés en français dans la maquette).
 - Le site **vouvoie** le visiteur. Dans les maquettes du produit (carte de progression, portail, messages de Junior dans la conversation), Junior **tutoie**. C'est voulu.
 - Typographie française (usage québécois) : guillemets « » avec espaces insécables, espace avant le deux-points, **pas** d'espace avant `?`, `!` et `;`, « 23 h 47 », « 60 % ».
 - **Jamais de tiret cadratin**, nulle part (texte, `aria-label`, chaînes JS, commentaires), en FR comme en EN. On reformule avec un point, une virgule, un deux-points ou des parenthèses. Dans les légendes et les intitulés, le séparateur est le point médian « · ».
@@ -78,6 +79,7 @@ Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans
 ## Façon de travailler
 
 - Une branche par changement, PR vers `main`; ne pas pousser directement sur `main`.
+- Chaque PR demande la relecture de Vince (`VincentBern`) dès son ouverture (reviewer). Règle de Luc du 2026-10-13, aussi valable dans le repo `junior`.
 - Messages de commit **en anglais**, à l'impératif, décrivant le changement visible (ex. : `Rename « Le poids » to « L'estimé de temps » on the French homepage`). Le texte FR cité garde ses guillemets « ».
 - Descriptions de PR : lisibles par un humain, résumées de façon concise. Pas de dentelle, juste du concret direct : ce qui change et, au besoin, quand fusionner.
 - Code, commentaires et noms de variables en anglais; contenu affiché en FR/EN.
