@@ -79,6 +79,7 @@ Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans
 ## Façon de travailler
 
 - Une branche par changement, PR vers `main`; ne pas pousser directement sur `main`.
+- Chaque PR demande la relecture de Vince (`VincentBern`) dès son ouverture (reviewer). Règle de Luc du 2026-10-13, aussi valable dans le repo `junior`.
 - Messages de commit **en anglais**, à l'impératif, décrivant le changement visible (ex. : `Rename « Le poids » to « L'estimé de temps » on the French homepage`). Le texte FR cité garde ses guillemets « ».
 - Descriptions de PR : lisibles par un humain, résumées de façon concise. Pas de dentelle, juste du concret direct : ce qui change et, au besoin, quand fusionner.
 - Code, commentaires et noms de variables en anglais; contenu affiché en FR/EN.
