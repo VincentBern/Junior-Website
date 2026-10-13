@@ -86,6 +86,22 @@ Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans
 - Ne pas committer de fichiers temporaires (images fixes `still_*.png`, exports, `.DS_Store` supplémentaires).
 - Ne pas reformater ni « nettoyer » les grands fichiers HTML hors de la portée demandée : les diffs doivent rester lisibles.
 
+### Branches et PR sans collision
+
+Ajouté le 2026-10-13 après le ménage des branches (§84 du repo `junior`), d'après le texte de Vince « Ouvrir une PR sans collision ». Chaque règle corrige un dérapage réel de la semaine. Les appliquer d'office, sans attendre qu'on les demande.
+
+GraphQL de GitHub n'est pas joignable depuis les sessions infonuagiques de Claude Code, donc `gh pr list`, `gh pr view` et `gh pr diff` y échouent. Les commandes ci-dessous passent par l'API REST (`gh api`), qui fonctionne partout.
+
+- **Chaque nouveau sujet repart de `main` à jour**, même si on vient de finir un autre sujet dans la même session : `git checkout main && git pull`, puis `git checkout -b <sujet-court>`. Sans le `git pull`, la branche photographie un `main` périmé.
+- **Une PR = une idée = une branche neuve.** Jamais deux sujets dans la même branche, jamais une branche recyclée d'une PR précédente.
+- **Avant d'ouvrir la PR, vérifier ce que touchent les autres PR ouvertes**, ici et dans `junior` : `gh api "repos/VincentBern/Junior-Website/pulls?state=open" --jq '.[] | "#\(.number) \(.head.ref)"'`, puis `gh api repos/VincentBern/Junior-Website/pulls/<n>/files --jq '.[].filename'`. Si un fichier se recoupe, le dire à Luc avant d'ouvrir.
+- **Une branche fusionnée est morte.** Avant chaque `git push`, vérifier que sa PR n'est pas déjà fusionnée : `gh api "repos/VincentBern/Junior-Website/pulls?state=all&head=VincentBern:<branche>" --jq '.[] | "#\(.number) fusionnée=\(.merged_at != null)"'`. Si elle l'est, ne pas pousser : repartir de `main` à jour dans une branche neuve, même pour un seul mot (c'est ainsi que le correctif `edf5118` est resté orphelin). Avant de supprimer une branche, vérifier que rien n'y a été poussé après la fusion de sa PR.
+- **PR ouverte depuis plus d'une journée** : avant la fusion, `git fetch origin && git merge origin/main` dans la branche, et régler les conflits là.
+- **Branche de plus de quelques jours** : ne pas se fier au diff de branche, il peut sembler annuler ce qui a été fusionné depuis. Tester la fusion : `git checkout -b essai origin/main`, `git merge origin/<vieille-branche>`, puis `git diff origin/main` montre l'effet net.
+- **Dépendances entre les deux repos** : les questions du diagnostic se modifient dans `content/diagnostics/*.yaml` du repo `junior`, puis on régénère `fr.js` (voir « Stack et commandes »). Quand deux PR dépendent l'une de l'autre, même d'un repo à l'autre, écrire l'ordre de fusion dans les deux descriptions (ex. « fusionner junior#10 en même temps »).
+- **Fusionner, c'est publier.** GitHub Pages sert `main` directement : pas de CI, pas d'étape de déploiement. Le rappeler à Luc dans la PR.
+- **Après la fusion, on ne retouche plus à la branche.** Un oubli repart de `main` à jour, dans une branche neuve.
+
 ## Liste de vérification avant de terminer
 
 1. La modification est faite en FR **et** en EN, et le `diff` de structure ne montre que des différences de texte attendues.
@@ -94,3 +110,4 @@ Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans
 4. Les figures modifiées existent en version large et étroite, avec `aria-label` traduits.
 5. Vérifié dans un navigateur à ~375 px et sur grand écran, sans défilement horizontal.
 6. Si le contenu du diagnostic a changé : script de synchronisation relancé, `en.js` à jour, sortie « en.js matches fr.js structure ».
+7. Branche partie de `main` à jour, un seul sujet, aucune autre PR ouverte ne touche les mêmes fichiers (ou c'est signalé), et toute dépendance à une autre PR est écrite dans la description.
