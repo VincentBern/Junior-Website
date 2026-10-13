@@ -490,6 +490,69 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
   .st-dot.on{background:var(--ink)}
   .split-fig:not(.split-fig--flip){margin-top:2rem}
 }
+/* ---------- figures 03–04 on phones: drop the sheet, let the window breathe ---------- */
+@media (max-width:560px){
+  .split-fig,.split-fig:not(.split-fig--flip){margin-top:2.2rem}
+  .fig.wfig{padding:0;border:0;background:none}
+  .fig.wfig figcaption{margin-top:.8rem;padding-top:.7rem}
+  .fig.wfig figcaption span:last-child{display:none}
+  .mac{border-radius:10px;box-shadow:0 0 0 .5px rgba(0,0,0,.28),0 14px 30px -14px rgba(20,26,34,.38)}
+  .titlebar{height:30px;padding:0 10px}
+  .lights{gap:6px}.lights i{width:10px;height:10px}
+  .ttl{font-size:12px}
+  .tb-safari{height:36px}
+  .addr{height:24px;font-size:12px;flex:0 1 62%}
+  /* both suites stacked: full-width bars, labels no longer cut off */
+  .strip,.portal .strip{flex-direction:column;gap:10px}
+  .strip-group{flex:none!important}
+  .segs{height:26px}.portal .segs{height:30px}
+  .legend,.portal .legend{font-size:11.5px;gap:4px 12px}
+  /* chat */
+  .msgs{padding:14px 10px 4px;gap:10px}
+  .u-msg{font-size:13.5px;padding:7px 12px}
+  .toolrow{font-size:11.5px;padding:4px 8px}
+  .toolrow b{font-size:11px}
+  .a-msg{font-size:13.5px}
+  .composer2{display:flex;align-items:center;gap:8px;margin:6px 10px 10px;padding:5px 5px 5px 14px;border-radius:16px}
+  .ph{flex:1;padding:0;font-size:13.5px}
+  .cbtn{display:none}
+  .send{width:26px;height:26px;border-radius:8px}
+  .pc{padding:14px 14px 12px}
+  .pc .company{font-size:12px}
+  .pc h1{font-size:21px}
+  .pc .subline{font-size:13px}
+  .pc .strip{margin-top:14px}
+  .next{margin-top:14px;padding:12px}
+  .next .kicker{font-size:12px}
+  .next h2{font-size:18px}
+  .effort{font-size:12px}
+  .why,.actions{font-size:13px}
+  /* portal */
+  .portal{padding:16px 14px 18px}
+  .portal .company{font-size:12.5px}
+  .portal h1{font-size:24px}
+  .portal .subline{font-size:14px;margin-top:6px}
+  .portal .strip{margin-top:16px}
+  .next-card{margin-top:18px;padding:14px}
+  .next-card h3{font-size:19px}
+  .next-card .meta{font-size:13px}
+  .next-actions{margin-top:12px}
+  .p-btn{font-size:13px;padding:10px 14px}
+  .then{font-size:13px}
+  .suite-head{margin-top:22px!important}
+  .suite-head h3{font-size:18px}
+  .suite-head p{font-size:12.5px}
+  .ch{grid-template-columns:16px 14px minmax(0,1fr);gap:0 8px;padding:9px 2px;font-size:13.5px}
+  .ch .st{display:none}
+  .ch .sub{font-size:12px}
+  .ico{width:15px;height:15px}
+  /* the reading: softer fade so the screenshot still reads as a whole */
+  .pc .dim,.portal .dim{opacity:.32}
+  .stepper{margin-top:.9rem;padding:.8rem .9rem .7rem}
+  .st-txt{font-size:.9rem;min-height:5.4em}
+  .st-nav{margin-top:.5rem}
+  .st-btn{width:2.2rem;height:2.2rem}
+}
 </style>
 </head>
 <body>
