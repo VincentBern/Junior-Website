@@ -166,7 +166,7 @@
   }
 
   // ---------- info ----------
-  // The email is required (§79 in the Junior repo): the report is sent there.
+  // The email is required (§80 in the Junior repo): the report is sent there.
   // A draft saved before the field existed simply has no email yet; the
   // review step sends the respondent back here to add it.
   var FIELDS = ["name", "title", "company", "email"];
