@@ -19,6 +19,9 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 | `fr/index.html`, `en/index.html` | Pages d'accueil. CSS et JS **inline**, fichiers autonomes (~1160 lignes). |
 | `fr/diagnostic.html`, `en/diagnostic.html` | Gabarit du diagnostic + chaînes d'interface (`window.JUNIOR_DIAGNOSTIC_I18N`). |
 | `assets/diagnostic.js`, `assets/diagnostic.css` | Logique et style du diagnostic, **partagés** par les deux langues. |
+| `fr/confidentialite.html`, `en/privacy.html` | Politique de confidentialité. Le nom de fichier diffère par langue; le contenu reste en parité. |
+| `fr/conditions.html`, `en/terms.html` | Conditions d'utilisation. Même règle de parité. |
+| `assets/legal.css` | Style des quatre pages légales, **partagé** par les deux langues. |
 | `diagnostic-questions/fr.js` | **Généré** depuis le repo Junior. Ne jamais modifier à la main. |
 | `diagnostic-questions/en.js` | Traduction anglaise maintenue à la main; même structure exacte que `fr.js`. |
 | `scripts/sync-diagnostic-content.py` | Régénère `fr.js` et vérifie que `en.js` a les mêmes dimensions/questions/niveaux. |
@@ -27,7 +30,7 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 ## Règles non négociables
 
 ### 1. Parité FR / EN
-- Toute modification de `fr/X.html` se reflète dans `en/X.html` **dans le même commit** (et inversement). Les deux fichiers doivent rester identiques en structure : seuls le texte, les `aria-label`, `lang`, `title`, `meta description` et le lien de langue diffèrent. Seule exception : la note sur le masculin en pied de page de `fr/index.html` (« L'emploi du masculin pour désigner des personnes n'a d'autres fins que celle d'alléger le texte. »), sans équivalent en anglais.
+- Toute modification de `fr/X.html` se reflète dans `en/X.html` **dans le même commit** (et inversement). Les pages légales sont la seule paire dont les noms de fichier diffèrent (`confidentialite.html` ↔ `privacy.html`, `conditions.html` ↔ `terms.html`) : la règle de parité s'y applique pareillement. Les deux fichiers doivent rester identiques en structure : seuls le texte, les `aria-label`, `lang`, `title`, `meta description` et le lien de langue diffèrent. Seule exception : la note sur le masculin en pied de page de `fr/index.html` (« L'emploi du masculin pour désigner des personnes n'a d'autres fins que celle d'alléger le texte. »), sans équivalent en anglais.
 - Vérification rapide de la parité structurelle (les seules différences attendues sont des attributs traduits) :
   `diff <(sed 's/>[^<]*</></g' fr/index.html) <(sed 's/>[^<]*</></g' en/index.html)`
 - Le français est la source. On écrit d'abord en FR, puis on traduit en EN avec le même sens, le même ton et la même longueur approximative.
@@ -60,7 +63,7 @@ Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans
 
 ### 5. Système visuel « blueprint / dessin technique »
 - Polices : Archivo (titres), IBM Plex Sans (texte), IBM Plex Mono (étiquettes, sur-titres), via Google Fonts.
-- Palette (jetons CSS) : `--paper #E4E8ED`, `--sheet #F2F5F8`, `--ink #141A22`, `--graphite #5C6673`, `--blueprint #0D3557`, `--blueprint-deep #092740`, `--line #B9C2CC`, `--revision #C42B1C` (rouge de révision : accent unique, réservé aux signalements et au focus). Ces jetons sont **dupliqués** dans `fr/index.html`, `en/index.html`, `assets/diagnostic.css` et `video/junior-101/junior101.html` : un changement de jeton s'applique aux quatre. Ne pas ajouter de nouvelle couleur sans raison.
+- Palette (jetons CSS) : `--paper #E4E8ED`, `--sheet #F2F5F8`, `--ink #141A22`, `--graphite #5C6673`, `--blueprint #0D3557`, `--blueprint-deep #092740`, `--line #B9C2CC`, `--revision #C42B1C` (rouge de révision : accent unique, réservé aux signalements et au focus). Ces jetons sont **dupliqués** dans `fr/index.html`, `en/index.html`, `assets/diagnostic.css`, `assets/legal.css` et `video/junior-101/junior101.html` : un changement de jeton s'applique aux cinq. Ne pas ajouter de nouvelle couleur sans raison.
 - Vernaculaire du dessin technique : cartouche, cotes, « Fig. 0X · titre » en légende, traits fins, coins droits (pas d'arrondis hors maquettes d'interface).
 - Chaque figure SVG a une version large (`only-wide`) et une version téléphone redessinée à ~400 unités (`big only-narrow`) pour rester lisible sur mobile. Modifier l'une implique de modifier l'autre, dans les deux langues. Les `aria-label` décrivent la figure et sont traduits.
 - Animations : toujours une solution de repli dans `@media (prefers-reduced-motion: reduce)`. Pas de défilement horizontal sur mobile.
