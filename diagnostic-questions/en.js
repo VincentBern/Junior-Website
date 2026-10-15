@@ -203,7 +203,7 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           },
           {
             "id": "Q22",
-            "title": "Knowledge of the competitive landscape",
+            "title": "Positioning against competitors",
             "text": "How well do you know your positioning against your competitors: their strengths, their weaknesses and the strategic spaces where you have a real or potential advantage?",
             "rationale": "An organization that doesn't know its competitive landscape well often invests in initiatives that don't create a differentiated advantage."
           },
@@ -498,7 +498,7 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           },
           {
             "id": "Q29",
-            "title": "Structured prospect scoring and qualification",
+            "title": "Prospect scoring",
             "text": "To what extent does your organization use a structured system to qualify and prioritize its prospects, based on company profile (fit) and observable behavioural signals (intent)?",
             "rationale": "A scoring system turns qualification from an individual art into an organizational process. Without it, organizations spend as much time on a poorly qualified prospect as on an ideal account."
           },
