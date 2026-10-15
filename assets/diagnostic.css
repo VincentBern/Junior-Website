@@ -278,7 +278,8 @@ p.page-sub{ color:var(--graphite); font-size:.95rem; line-height:1.7; margin:0 0
 .presentation ul, .presentation ol{ padding-left:1.3rem; margin:0 0 1rem; }
 .presentation li{ margin-bottom:.35rem; }
 .presentation strong{ font-weight:600; }
-.presentation blockquote{ margin:1.2rem 0; padding:.9rem 1.2rem; border-left:3px solid var(--revision); background:var(--paper); }
+.presentation blockquote{ margin:1.2rem 0; padding:.9rem 1.2rem; border-left:3px solid var(--blueprint); background:var(--paper); }
+.presentation .report-cta{ margin:.4rem 0; text-decoration:none; }
 .presentation blockquote p:last-child{ margin-bottom:0; }
 .presentation hr{ border:0; border-top:1px dashed var(--line); margin:2rem 0; }
 .presentation table{ border-collapse:collapse; width:100%; margin:1rem 0 1.4rem; font-size:.86rem; display:block; overflow-x:auto; }
@@ -312,8 +313,13 @@ p.page-sub{ color:var(--graphite); font-size:.95rem; line-height:1.7; margin:0 0
   body{ background:#fff; }
   .masthead, .progress-rail, .report-actions, .report-foot, #report-emailed, .no-print{ display:none !important; }
   main.wrap{ padding:0; width:100%; }
-  .score-card, .presentation{ background:#fff; break-inside:avoid-page; }
+  /* The score card may break between bars: kept whole, it left the first page empty. */
+  .score-card, .presentation{ background:#fff; }
+  .score-card, .dim-bars{ display:block; }
+  .dim-bar + .dim-bar{ margin-top:.95rem; }
+  .score-total, .dim-bar, .presentation blockquote, .presentation li{ break-inside:avoid; }
   .presentation{ border:0; padding:0; }
-  .presentation h2{ break-after:avoid; }
+  .presentation h2, .presentation h3{ break-after:avoid; }
+  .presentation .report-cta{ border:1px solid var(--ink); background:#fff; color:var(--ink); }
   .dim-bar .fill{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 }
