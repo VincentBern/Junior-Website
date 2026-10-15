@@ -132,6 +132,10 @@
         <div class="err">Entrez un courriel valide : c'est là que votre rapport vous est envoyé.</div>
         <p class="help">Votre rapport vous est envoyé à cette adresse. Une copie va à l'équipe Junior. Aucune infolettre. Voir notre <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
       </div>
+      <div class="field field-check">
+        <input type="checkbox" id="p-followup">
+        <label for="p-followup">J'accepte que Junior m'écrive au sujet de mon rapport (quelques courriels, désabonnement en tout temps). Facultatif.</label>
+      </div>
 
       <div class="btn-row">
         <button type="button" class="btn btn-secondary" id="info-back">Retour</button>
@@ -289,6 +293,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     incomplete: function(n){ return n === 1 ? "Il reste une question sans réponse." : "Il reste " + n + " questions sans réponse."; }
   },
   errors: {
+    daily_cap: "Le diagnostic a atteint son maximum de rapports pour aujourd'hui. Vos réponses sont conservées : revenez demain.",
     rate_limited: "Trop de rapports ont été demandés depuis votre connexion au cours de la dernière heure. Vos réponses sont conservées : réessayez un peu plus tard.",
     invalid_request: "Certaines réponses n'ont pas pu être validées. Vérifiez que chaque question a une note de 1 à 10, puis réessayez.",
     timeout: "La génération a pris trop de temps. Vos réponses sont conservées : réessayez.",
@@ -316,6 +321,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
 <script src="../diagnostic-questions/fr.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.12/marked.min.js" integrity="sha384-948ahk4ZmxYVYOc+rxN1H2gM1EJ2Duhp7uHtZ4WSLkV4Vtx5MUqnV+l7u9B+jFv+" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js" integrity="sha384-JEyTNhjM6R1ElGoJns4U2Ln4ofPcqzSsynQkmEc/KGy6336qAZl70tDLufbkla+3" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="../assets/experiments.js"></script>
 <script src="../assets/diagnostic.js"></script>
 
 </body>

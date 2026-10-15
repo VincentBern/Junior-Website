@@ -122,6 +122,10 @@ p.page-sub{ color:var(--graphite); font-size:.95rem; line-height:1.7; margin:0 0
 .field.invalid .err{ display:block; }
 .field.invalid input{ border-color:var(--revision); }
 .field .help{ font-size:.8rem; color:var(--graphite); margin:.45rem 0 0; max-width:52ch; line-height:1.5; }
+/* The follow-up consent (Junior repo §94): a plain sentence beside its box, not a field label. */
+.field-check{ display:flex; gap:.6rem; align-items:flex-start; }
+.field-check input{ width:auto; flex:none; margin:.2rem 0 0; accent-color:var(--blueprint); }
+.field-check label{ font-family:inherit; font-size:.85rem; letter-spacing:0; text-transform:none; color:var(--ink); margin:0; line-height:1.5; cursor:pointer; }
 
 .chosen{
   display:flex; align-items:center; gap:1rem; flex-wrap:wrap; justify-content:space-between;
