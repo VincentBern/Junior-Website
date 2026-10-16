@@ -46,37 +46,37 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q1",
             "title": "La raison d'être",
-            "text": "Dans quelle mesure la formulation actuelle de votre raison d'être est-elle centrée sur une transformation significative de votre marché, de vos clients ou de la société ?",
+            "text": "Dans quelle mesure la formulation actuelle de votre raison d'être est-elle centrée sur une transformation significative de votre marché, de vos clients ou de la société?",
             "rationale": "Une organisation dont les leaders sont centrés sur des objectifs internes plutôt que sur une transformation externe risque la stagnation et la perte de pertinence face à l'évolution rapide des attentes clients."
           },
           {
             "id": "Q2",
             "title": "Le positionnement et la proposition de valeur",
-            "text": "Comment évaluez-vous la clarté de votre proposition de valeur, au point que vos leaders l'articulent tous de la même façon et que vos clients la reconnaissent immédiatement comme différente de vos concurrents ?",
+            "text": "Comment évaluez-vous la clarté de votre proposition de valeur, au point que vos leaders l'articulent tous de la même façon et que vos clients la reconnaissent immédiatement comme différente de vos concurrents?",
             "rationale": "Si chaque leader « vend » l'organisation différemment, le positionnement n'est pas ancré. C'est un travail fondamental avant tout effort de croissance ou d'expansion."
           },
           {
             "id": "Q3",
             "title": "Le modèle d'affaires",
-            "text": "Jusqu'à quel point votre modèle d'affaires est-il documenté et compris par votre équipe de direction, c'est-à-dire que tout le monde sait comment vous créez, livrez et capturez de la valeur ?",
+            "text": "Jusqu'à quel point votre modèle d'affaires est-il documenté et compris par votre équipe de direction, c'est-à-dire que tout le monde sait comment vous créez, livrez et capturez de la valeur?",
             "rationale": "Un modèle d'affaires non documenté crée des angles morts dans les décisions stratégiques. On ne peut pas optimiser ce qu'on n'a pas formalisé."
           },
           {
             "id": "Q4",
             "title": "L'analyse stratégique",
-            "text": "À quel point votre organisation a-t-elle une lecture claire et partagée de ses forces, faiblesses, opportunités et menaces, qui influence activement vos décisions stratégiques ?",
+            "text": "À quel point votre organisation a-t-elle une lecture claire et partagée de ses forces, faiblesses, opportunités et menaces, qui influence activement vos décisions stratégiques?",
             "rationale": "Une analyse stratégique qui n'est pas partagée et régulièrement mise à jour est un exercice académique. On cherche à savoir si l'analyse stratégique est vivante ou dormante dans l'organisation."
           },
           {
             "id": "Q5",
             "title": "La stratégie par perspective",
-            "text": "Avec quelle cohérence votre stratégie est-elle déclinée dans chacune des grandes perspectives de votre organisation (financière, cliente, processus internes, équipes et apprentissage) ?",
+            "text": "Avec quelle cohérence votre stratégie est-elle déclinée dans chacune des grandes perspectives de votre organisation (financière, cliente, processus internes, équipes et apprentissage)?",
             "rationale": "Une stratégie qui n'est pas cascadée par perspective reste une intention. Cette question révèle si la direction peut traduire la vision en priorités concrètes pour chaque fonction."
           },
           {
             "id": "Q6",
             "title": "Les objectifs et leur logique causale",
-            "text": "Quel est le niveau de clarté de la logique entre vos objectifs stratégiques : définis par perspective, avec des liens de cause à effet documentés, de sorte que tout le monde comprend pourquoi atteindre l'objectif A mène à l'objectif B ?",
+            "text": "Quel est le niveau de clarté de la logique entre vos objectifs stratégiques : définis par perspective, avec des liens de cause à effet documentés, de sorte que tout le monde comprend pourquoi atteindre l'objectif A mène à l'objectif B?",
             "rationale": "Des objectifs sans liens causaux génèrent des efforts en silo. Quand une équipe ne comprend pas comment son objectif contribue à celui des autres, l'alignement est impossible."
           }
         ]
@@ -90,31 +90,31 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q7",
             "title": "La qualité des indicateurs",
-            "text": "Dans quelle mesure vos indicateurs de performance incluent-ils à la fois des indicateurs de résultat (ce qu'on a accompli), des indicateurs prédictifs (ce qui annonce les résultats à venir) et des garde-fous de qualité (ce qu'on ne doit pas sacrifier en visant les résultats) ?",
+            "text": "Dans quelle mesure vos indicateurs de performance incluent-ils à la fois des indicateurs de résultat (ce qu'on a accompli), des indicateurs prédictifs (ce qui annonce les résultats à venir) et des garde-fous de qualité (ce qu'on ne doit pas sacrifier en visant les résultats)?",
             "rationale": "Des organisations qui mesurent uniquement les résultats passés découvrent les problèmes trop tard pour réagir. Les indicateurs prédictifs et les garde-fous permettent d'intervenir avant que les résultats ne se dégradent."
           },
           {
             "id": "Q8",
             "title": "La rigueur SMART des objectifs",
-            "text": "Avec quelle précision vos objectifs stratégiques sont-ils formulés (une cible chiffrée, un horizon temporel défini, un responsable nommé), pour qu'on puisse évaluer sans ambiguïté s'ils sont atteints ?",
+            "text": "Avec quelle précision vos objectifs stratégiques sont-ils formulés (une cible chiffrée, un horizon temporel défini, un responsable nommé), pour qu'on puisse évaluer sans ambiguïté s'ils sont atteints?",
             "rationale": "Un objectif vague est un souhait. Un objectif SMART est un engagement. La distinction change radicalement la dynamique de responsabilisation dans l'équipe."
           },
           {
             "id": "Q9",
             "title": "L'alignement des indicateurs avec la stratégie",
-            "text": "Quelle proportion de vos objectifs stratégiques est mesurée par au moins un indicateur clé de performance directement lié ?",
+            "text": "Quelle proportion de vos objectifs stratégiques est mesurée par au moins un indicateur clé de performance directement lié?",
             "rationale": "Un objectif sans indicateur est une déclaration d'intention. L'alignement entre objectifs et indicateurs est ce qui transforme la stratégie en système de gestion de la performance."
           },
           {
             "id": "Q10",
             "title": "La cohérence de la trajectoire dans le temps",
-            "text": "À quel point votre organisation a-t-elle documenté une trajectoire cohérente entre son état actuel et ses objectifs à long terme, avec des jalons intermédiaires validés arithmétiquement (les résultats à court terme s'additionnent logiquement pour atteindre la vision à long terme) ?",
+            "text": "À quel point votre organisation a-t-elle documenté une trajectoire cohérente entre son état actuel et ses objectifs à long terme, avec des jalons intermédiaires validés arithmétiquement (les résultats à court terme s'additionnent logiquement pour atteindre la vision à long terme)?",
             "rationale": "Beaucoup d'organisations ont une vision ambitieuse et un plan annuel, mais l'écart entre les deux n'est pas structuré. Cette cohérence de trajectoire est ce qui distingue un plan crédible d'un exercice de planification."
           },
           {
             "id": "Q11",
             "title": "La North Star et le cap partagé",
-            "text": "Jusqu'à quel point votre organisation a-t-elle une métrique ou un indicateur principal (une North Star) qui cristallise l'essentiel de votre ambition et que tous les membres de l'équipe de direction peuvent citer spontanément ?",
+            "text": "Jusqu'à quel point votre organisation a-t-elle une métrique ou un indicateur principal (une North Star) qui cristallise l'essentiel de votre ambition et que tous les membres de l'équipe de direction peuvent citer spontanément?",
             "rationale": "Quand tout le monde pilote vers la même étoile, les décisions quotidiennes s'alignent naturellement. Sans North Star partagée, chaque département optimise pour ses propres métriques au détriment de la cohérence globale."
           }
         ]
@@ -128,31 +128,31 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q12",
             "title": "Les OKRs ou équivalents trimestriels",
-            "text": "Comment évaluez-vous l'usage, dans votre organisation, d'engagements trimestriels structurés (objectifs qualitatifs inspirants et résultats chiffrés mesurables) pour traduire la stratégie annuelle en priorités d'exécution à court terme ?",
+            "text": "Comment évaluez-vous l'usage, dans votre organisation, d'engagements trimestriels structurés (objectifs qualitatifs inspirants et résultats chiffrés mesurables) pour traduire la stratégie annuelle en priorités d'exécution à court terme?",
             "rationale": "Sans mécanisme trimestriel, la stratégie annuelle reste abstraite et l'urgence du quotidien prend le dessus. Les OKRs créent la cadence qui maintient le cap entre les révisions stratégiques."
           },
           {
             "id": "Q13",
             "title": "L'alignement des équipes à la stratégie",
-            "text": "Avec quelle clarté chaque département ou équipe peut-il expliquer comment ses priorités du trimestre contribuent aux objectifs stratégiques de l'organisation (un alignement documenté et vérifié régulièrement) ?",
+            "text": "Avec quelle clarté chaque département ou équipe peut-il expliquer comment ses priorités du trimestre contribuent aux objectifs stratégiques de l'organisation (un alignement documenté et vérifié régulièrement)?",
             "rationale": "L'alignement déclaré et l'alignement réel sont souvent différents. Sans vérification structurée, les équipes optimisent pour leurs propres priorités locales plutôt que pour les objectifs collectifs."
           },
           {
             "id": "Q14",
             "title": "Les attentes de performance claires",
-            "text": "Dans quelle mesure les attentes de performance pour chaque rôle clé sont-elles documentées, connues des titulaires et utilisées activement dans les conversations de développement et d'évaluation ?",
+            "text": "Dans quelle mesure les attentes de performance pour chaque rôle clé sont-elles documentées, connues des titulaires et utilisées activement dans les conversations de développement et d'évaluation?",
             "rationale": "Des attentes floues engendrent des évaluations subjectives, des frustrations et une rétention faible. La clarté des attentes est l'un des déterminants les plus importants de l'engagement et de la performance."
           },
           {
             "id": "Q15",
             "title": "Les tableaux de bord et la visibilité de la performance",
-            "text": "À quel point vos leaders disposent-ils d'un tableau de bord qui leur donne une vue claire et en temps quasi réel de la santé stratégique de l'organisation (statut des objectifs, indicateurs clés, signaux d'alerte), pour prendre des décisions informées rapidement ?",
+            "text": "À quel point vos leaders disposent-ils d'un tableau de bord qui leur donne une vue claire et en temps quasi réel de la santé stratégique de l'organisation (statut des objectifs, indicateurs clés, signaux d'alerte), pour prendre des décisions informées rapidement?",
             "rationale": "Un tableau de bord exécutif bien conçu réduit le temps de détection des problèmes et accélère les décisions correctives. Sans visibilité partagée, les équipes naviguent à l'intuition."
           },
           {
             "id": "Q16",
             "title": "La cadence de pilotage (réunions structurées)",
-            "text": "Avec quelle discipline votre organisation tient-elle des cadences de pilotage structurées à chaque niveau (revue hebdomadaire d'équipe, revue mensuelle de gestion, revue trimestrielle stratégique), où les décisions sont prises à partir des données, pas des opinions ?",
+            "text": "Avec quelle discipline votre organisation tient-elle des cadences de pilotage structurées à chaque niveau (revue hebdomadaire d'équipe, revue mensuelle de gestion, revue trimestrielle stratégique), où les décisions sont prises à partir des données, pas des opinions?",
             "rationale": "La cadence de pilotage est le système circulatoire de la stratégie. Sans elle, les problèmes s'accumulent, les décisions tardent et les équipes se désynchronisent. La discipline de la cadence est ce qui rend l'amélioration continue possible."
           }
         ]
@@ -166,25 +166,25 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q17",
             "title": "La maturité des processus",
-            "text": "Avec quelle rigueur vos processus opérationnels clés sont-ils documentés, standardisés et suivis ?",
+            "text": "Avec quelle rigueur vos processus opérationnels clés sont-ils documentés, standardisés et suivis?",
             "rationale": "Des processus non documentés créent une dépendance aux individus. Quand une personne clé part, le savoir-faire part avec elle. La standardisation des processus est la base de la scalabilité."
           },
           {
             "id": "Q18",
             "title": "La maturité des données et de la prise de décision",
-            "text": "Quelle part de vos décisions importantes est prise à partir de données fiables et structurées ?",
+            "text": "Quelle part de vos décisions importantes est prise à partir de données fiables et structurées?",
             "rationale": "Les organisations pilotées par les données prennent de meilleures décisions plus rapidement. La maturité des données n'est pas une question de technologie. C'est une question de discipline et de culture."
           },
           {
             "id": "Q19",
             "title": "La maturité de l'infrastructure technologique",
-            "text": "Jusqu'à quel point votre infrastructure technologique (outils, systèmes, plateformes) soutient-elle activement vos objectifs stratégiques ?",
+            "text": "Jusqu'à quel point votre infrastructure technologique (outils, systèmes, plateformes) soutient-elle activement vos objectifs stratégiques?",
             "rationale": "La technologie doit servir la stratégie, pas l'inverse. Une infrastructure inadaptée ralentit l'exécution, crée des silos de données et limite la capacité à scaler."
           },
           {
             "id": "Q20",
             "title": "La capacité au changement",
-            "text": "Comment évaluez-vous la capacité de votre organisation à implanter des changements importants avec succès, jusqu'à l'atteinte de leurs objectifs ?",
+            "text": "Comment évaluez-vous la capacité de votre organisation à implanter des changements importants avec succès, jusqu'à l'atteinte de leurs objectifs?",
             "rationale": "La capacité au changement est un actif organisationnel. Les mandats de transformation échouent rarement par manque de bonnes idées. Ils échouent par manque de capacité organisationnelle à les faire vivre."
           }
         ]
@@ -198,31 +198,31 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q21",
             "title": "La clarté de la vision comme ancre de priorisation",
-            "text": "Dans quelle mesure votre vision à court, moyen et long terme est-elle assez claire et partagée pour servir de critère de priorisation, par exemple pour trancher objectivement entre deux projets ?",
+            "text": "Dans quelle mesure votre vision à court, moyen et long terme est-elle assez claire et partagée pour servir de critère de priorisation, par exemple pour trancher objectivement entre deux projets?",
             "rationale": "Sans vision claire comme ancre, les décisions de priorisation deviennent politiques : on choisit les projets des personnes les plus influentes, pas les plus stratégiques."
           },
           {
             "id": "Q22",
-            "title": "La connaissance du paysage concurrentiel",
-            "text": "Quel niveau de connaissance avez-vous de votre positionnement face à vos concurrents : leurs forces, leurs faiblesses et les espaces stratégiques où vous avez un avantage réel ou potentiel ?",
+            "title": "Le positionnement face aux concurrents",
+            "text": "Quel niveau de connaissance avez-vous de votre positionnement face à vos concurrents : leurs forces, leurs faiblesses et les espaces stratégiques où vous avez un avantage réel ou potentiel?",
             "rationale": "Une organisation qui ne connaît pas bien son paysage concurrentiel investit souvent dans des initiatives qui ne créent pas d'avantage différencié."
           },
           {
             "id": "Q23",
             "title": "La voix du client dans les décisions",
-            "text": "Jusqu'à quel point les priorités de votre organisation sont-elles influencées par une écoute structurée de vos clients : ce qu'ils aiment, ce dont ils ont besoin, ce qui leur manque, ce qu'ils éviteraient si possible ?",
+            "text": "Jusqu'à quel point les priorités de votre organisation sont-elles influencées par une écoute structurée de vos clients : ce qu'ils aiment, ce dont ils ont besoin, ce qui leur manque, ce qu'ils éviteraient si possible?",
             "rationale": "Les organisations qui priorisent sans écoute structurée du client finissent par construire ce qu'elles pensent bon plutôt que ce que le marché veut vraiment."
           },
           {
             "id": "Q24",
             "title": "L'analyse des coûts et bénéfices des initiatives",
-            "text": "À quel point vos décisions d'investissement dans de nouvelles initiatives sont-elles basées sur une analyse rigoureuse de l'effort requis, de l'impact attendu, de la portée et du niveau de confiance dans les hypothèses ?",
+            "text": "À quel point vos décisions d'investissement dans de nouvelles initiatives sont-elles basées sur une analyse rigoureuse de l'effort requis, de l'impact attendu, de la portée et du niveau de confiance dans les hypothèses?",
             "rationale": "L'intuition est un point de départ, pas un mécanisme de priorisation. Comparer objectivement des initiatives très différentes sur une base commune est ce qui rend la roadmap défendable."
           },
           {
             "id": "Q25",
             "title": "La capacité et l'expertise disponibles",
-            "text": "Comment évaluez-vous le réalisme avec lequel votre organisation tient compte de ses capacités actuelles (ressources humaines, expertise disponible, bande passante des équipes) avant de s'engager dans de nouvelles initiatives stratégiques ?",
+            "text": "Comment évaluez-vous le réalisme avec lequel votre organisation tient compte de ses capacités actuelles (ressources humaines, expertise disponible, bande passante des équipes) avant de s'engager dans de nouvelles initiatives stratégiques?",
             "rationale": "Surestimer la capacité organisationnelle est l'une des causes les plus fréquentes d'échec des initiatives. Cette question force une évaluation honnête de ce que l'organisation peut réellement porter sans sacrifier l'exécution en cours."
           }
         ]
@@ -275,25 +275,25 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q1",
             "title": "La clarté du profil client idéal (ICP)",
-            "text": "Avec quelle précision votre organisation a-t-elle défini et documenté son profil de client idéal : le secteur, la taille, le rôle du décideur, les déclencheurs d'achat et les signaux d'alerte qui indiquent qu'un prospect n'est pas un bon fit ?",
+            "text": "Avec quelle précision votre organisation a-t-elle défini et documenté son profil de client idéal : le secteur, la taille, le rôle du décideur, les déclencheurs d'achat et les signaux d'alerte qui indiquent qu'un prospect n'est pas un bon fit?",
             "rationale": "Un ICP flou force les équipes commerciales à pitcher à tout le monde et à convaincre personne. C'est la première source de cycles de vente longs et de taux de conversion faibles."
           },
           {
             "id": "Q2",
             "title": "La proposition de valeur différenciée",
-            "text": "Comment évaluez-vous votre proposition de valeur : formulée en résultats concrets pour le client, et assez distinctive pour que vos clients comprennent immédiatement pourquoi vous et pas un compétiteur ?",
+            "text": "Comment évaluez-vous votre proposition de valeur : formulée en résultats concrets pour le client, et assez distinctive pour que vos clients comprennent immédiatement pourquoi vous et pas un compétiteur?",
             "rationale": "Une proposition de valeur générique force à compétitionner sur le prix. La clarté et la différenciation sont les deux leviers qui permettent de justifier une valeur supérieure et de raccourcir le cycle de vente."
           },
           {
             "id": "Q3",
             "title": "La connaissance du paysage concurrentiel",
-            "text": "Dans quelle mesure votre équipe a-t-elle une lecture claire et récente de vos compétiteurs directs et indirects (leurs forces, leurs faiblesses, leur positionnement), qui influence activement vos décisions commerciales ?",
+            "text": "Dans quelle mesure votre équipe a-t-elle une lecture claire et récente de vos compétiteurs directs et indirects (leurs forces, leurs faiblesses, leur positionnement), qui influence activement vos décisions commerciales?",
             "rationale": "Ignorer le paysage concurrentiel expose à se faire supplanter sans l'avoir vu venir. La connaissance concurrentielle est un avantage tactique direct dans chaque conversation de vente."
           },
           {
             "id": "Q4",
             "title": "La cohérence du message commercial",
-            "text": "À quel point tous les membres de votre équipe commerciale articulent-ils le même message (même problème adressé, même différenciation, même proposition de valeur) ?",
+            "text": "À quel point tous les membres de votre équipe commerciale articulent-ils le même message (même problème adressé, même différenciation, même proposition de valeur)?",
             "rationale": "Un message commercial incohérent crée de la confusion chez le prospect et dilue la crédibilité de l'organisation. L'alignement du message est un multiplicateur de performance commercial souvent sous-estimé."
           }
         ]
@@ -307,19 +307,19 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q5",
             "title": "La cartographie du parcours client",
-            "text": "Jusqu'à quel point votre organisation a-t-elle documenté le parcours de ses clients, étape par étape (de la prise de conscience jusqu'à l'achat et au-delà), pour guider ses décisions commerciales et marketing ?",
+            "text": "Jusqu'à quel point votre organisation a-t-elle documenté le parcours de ses clients, étape par étape (de la prise de conscience jusqu'à l'achat et au-delà), pour guider ses décisions commerciales et marketing?",
             "rationale": "Sans cartographie du parcours, les efforts commerciaux s'appliquent aux mauvaises étapes. Savoir où le client en est change radicalement le message à livrer et le canal à utiliser."
           },
           {
             "id": "Q6",
             "title": "Les points de friction identifiés",
-            "text": "Dans quelle mesure savez-vous où vos prospects décrochent dans le processus d'achat (à quelle étape les opportunités se perdent le plus souvent, et pourquoi), et agissez-vous concrètement pour réduire ces frictions ?",
+            "text": "Dans quelle mesure savez-vous où vos prospects décrochent dans le processus d'achat (à quelle étape les opportunités se perdent le plus souvent, et pourquoi), et agissez-vous concrètement pour réduire ces frictions?",
             "rationale": "La majorité des revenus perdus ne viennent pas d'un mauvais produit mais d'un parcours mal calibré. Identifier et éliminer les frictions est l'un des leviers les plus rapides pour améliorer les taux de conversion."
           },
           {
             "id": "Q7",
             "title": "La stratégie de différenciation par étape",
-            "text": "À quel point votre approche commerciale s'adapte-t-elle à l'étape où se trouve le prospect (contenu de sensibilisation pour ceux qui découvrent, arguments de comparaison pour ceux qui évaluent, preuves sociales pour ceux qui hésitent) ?",
+            "text": "À quel point votre approche commerciale s'adapte-t-elle à l'étape où se trouve le prospect (contenu de sensibilisation pour ceux qui découvrent, arguments de comparaison pour ceux qui évaluent, preuves sociales pour ceux qui hésitent)?",
             "rationale": "Un message adapté à l'étape du parcours convertit significativement mieux. La différenciation ne s'exprime pas seulement vs les compétiteurs. Elle s'exprime aussi selon le moment où se trouve le client dans sa réflexion."
           }
         ]
@@ -333,25 +333,25 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q8",
             "title": "La logique de fixation des prix",
-            "text": "Quelle place la valeur perçue et les résultats que vous créez pour vos clients occupent-ils dans la fixation de vos prix ?",
+            "text": "Quelle place la valeur perçue et les résultats que vous créez pour vos clients occupent-ils dans la fixation de vos prix?",
             "rationale": "La tarification basée sur la valeur est le levier le plus direct sur la rentabilité. Une organisation qui prix selon ses coûts laisse systématiquement de l'argent sur la table et se positionne comme une commodité plutôt qu'un partenaire stratégique."
           },
           {
             "id": "Q9",
             "title": "La stratégie GTM documentée",
-            "text": "Jusqu'à quel point votre stratégie de mise en marché est-elle documentée (canaux prioritaires, messages par segment, séquence d'activation, objectifs mesurables) ?",
+            "text": "Jusqu'à quel point votre stratégie de mise en marché est-elle documentée (canaux prioritaires, messages par segment, séquence d'activation, objectifs mesurables)?",
             "rationale": "Une stratégie GTM non documentée est fragile : elle dépend des individus, pas du système. La documenter permet de la tester, de l'améliorer et de la scaler sans tout recommencer à chaque changement d'équipe."
           },
           {
             "id": "Q10",
             "title": "La priorisation des canaux d'acquisition",
-            "text": "Avec quelle discipline concentrez-vous vos ressources (temps, budget, attention) sur 1 ou 2 canaux d'acquisition principaux, clairement identifiés ?",
+            "text": "Avec quelle discipline concentrez-vous vos ressources (temps, budget, attention) sur 1 ou 2 canaux d'acquisition principaux, clairement identifiés?",
             "rationale": "Vouloir être partout à la fois est la stratégie commerciale la plus courante et la moins efficace. La concentration sur les canaux qui fonctionnent le mieux pour votre ICP spécifique est ce qui crée une croissance prévisible."
           },
           {
             "id": "Q11",
             "title": "Le mouvement commercial (séquence d'activation)",
-            "text": "À quel point votre équipe suit-elle une séquence commerciale structurée et reproductible, de la première interaction jusqu'à la signature ?",
+            "text": "À quel point votre équipe suit-elle une séquence commerciale structurée et reproductible, de la première interaction jusqu'à la signature?",
             "rationale": "Un mouvement commercial reproductible est la différence entre une équipe de vente et un système de vente. La prévisibilité des revenus dépend directement de la discipline dans l'exécution de la séquence."
           }
         ]
@@ -365,19 +365,19 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q12",
             "title": "La structure du pipeline de vente",
-            "text": "Dans quelle mesure votre pipeline de vente est-il structuré, avec des stages clairement définis, des critères de progression explicites entre chaque étape et une probabilité de conversion associée à chaque stage ?",
+            "text": "Dans quelle mesure votre pipeline de vente est-il structuré, avec des stages clairement définis, des critères de progression explicites entre chaque étape et une probabilité de conversion associée à chaque stage?",
             "rationale": "Un pipeline sans structure ne peut pas être piloté. Sans critères de progression explicites, les deals avancent sur la base de l'optimisme plutôt que sur des signaux concrets d'acheteur, ce qui rend le forecast impossible."
           },
           {
             "id": "Q13",
             "title": "La mesure des taux de conversion par stage",
-            "text": "Avec quelle rigueur mesurez-vous vos taux de conversion à chaque étape du cycle de vente, du premier contact jusqu'à la signature, pour identifier où les opportunités se perdent et comment y remédier ?",
+            "text": "Avec quelle rigueur mesurez-vous vos taux de conversion à chaque étape du cycle de vente, du premier contact jusqu'à la signature, pour identifier où les opportunités se perdent et comment y remédier?",
             "rationale": "Les taux de conversion par stage sont le système de diagnostic de votre machine commerciale. Un taux anormalement bas à une étape précise pointe vers un problème spécifique et traitable : un ICP mal défini, un message qui ne convainc pas, ou une proposition sans ROI clair."
           },
           {
             "id": "Q14",
             "title": "La fiabilité du forecast et la prédictibilité des revenus",
-            "text": "Jusqu'où vos prévisions de revenus s'appuient-elles sur des données structurées de votre pipeline (probabilités pondérées, stades validés, historique de conversion) ?",
+            "text": "Jusqu'où vos prévisions de revenus s'appuient-elles sur des données structurées de votre pipeline (probabilités pondérées, stades validés, historique de conversion)?",
             "rationale": "Un forecast fiable change la nature des décisions commerciales : on peut investir avec confiance, embaucher au bon moment, et éviter les crises de liquidité. Sans forecast, l'organisation navigue à l'aveugle et prend des décisions réactives plutôt que proactives."
           }
         ]
@@ -391,25 +391,25 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q15",
             "title": "Le suivi des métriques commerciales",
-            "text": "Avec quelle régularité votre organisation mesure-t-elle ses métriques commerciales clés (leads générés, taux de conversion, durée du cycle de vente, coût d'acquisition, valeur des transactions) ?",
+            "text": "Avec quelle régularité votre organisation mesure-t-elle ses métriques commerciales clés (leads générés, taux de conversion, durée du cycle de vente, coût d'acquisition, valeur des transactions)?",
             "rationale": "Ce qu'on ne mesure pas, on ne peut pas améliorer. Les organisations qui pilotent avec des données prennent de meilleures décisions plus vite et évitent de perpétuer des approches qui ne fonctionnent pas."
           },
           {
             "id": "Q16",
             "title": "La discipline d'apprentissage terrain",
-            "text": "Jusqu'à quel point votre équipe documente-t-elle ce qui fonctionne et ce qui ne fonctionne pas dans vos actions commerciales, pour orienter les décisions de la semaine ou du mois suivant ?",
+            "text": "Jusqu'à quel point votre équipe documente-t-elle ce qui fonctionne et ce qui ne fonctionne pas dans vos actions commerciales, pour orienter les décisions de la semaine ou du mois suivant?",
             "rationale": "La plupart des équipes répètent les mêmes erreurs parce qu'elles n'ont pas de mécanisme pour capturer et utiliser leurs apprentissages. Un journal d'apprentissages terrain est ce qui transforme l'expérience en avantage compétitif durable."
           },
           {
             "id": "Q17",
             "title": "L'unité économique de base",
-            "text": "À quel point connaissez-vous précisément votre unité économique de base (valeur moyenne d'une transaction, coût d'acquisition d'un client, valeur vie client ou LTV), et vous en servez-vous pour guider vos décisions d'investissement en marketing et en ventes ?",
+            "text": "À quel point connaissez-vous précisément votre unité économique de base (valeur moyenne d'une transaction, coût d'acquisition d'un client, valeur vie client ou LTV), et vous en servez-vous pour guider vos décisions d'investissement en marketing et en ventes?",
             "rationale": "Sans connaître son unité économique, une organisation ne peut pas décider combien investir pour acquérir un client, ni évaluer si ses efforts commerciaux sont rentables. C'est le fondement de toute décision commerciale rationnelle."
           },
           {
             "id": "Q18",
             "title": "La cadence de revue commerciale",
-            "text": "Comment évaluez-vous votre cadence de revue commerciale : régulière et structurée (hebdomadaire pour les actions, mensuelle pour les métriques, trimestrielle pour les hypothèses), avec des décisions prises en fonction des données, pas des opinions ?",
+            "text": "Comment évaluez-vous votre cadence de revue commerciale : régulière et structurée (hebdomadaire pour les actions, mensuelle pour les métriques, trimestrielle pour les hypothèses), avec des décisions prises en fonction des données, pas des opinions?",
             "rationale": "Une revue commerciale sans cadence devient une réunion de statut sans impact. La cadence crée l'obligation de décider, et la décision basée sur des données crée l'amélioration continue."
           }
         ]
@@ -423,19 +423,19 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q19",
             "title": "La qualification des opportunités",
-            "text": "Avec quelle constance votre équipe applique-t-elle une grille de qualification structurée pour évaluer chaque opportunité commerciale (fit avec l'ICP, problème réel et urgent, budget disponible, décideur identifié) ?",
+            "text": "Avec quelle constance votre équipe applique-t-elle une grille de qualification structurée pour évaluer chaque opportunité commerciale (fit avec l'ICP, problème réel et urgent, budget disponible, décideur identifié)?",
             "rationale": "Poursuivre les mauvaises opportunités est l'une des principales sources de gaspillage de ressources commerciales. Une grille de qualification disciplinée protège le temps de l'équipe et concentre l'énergie sur les deals qui ont le plus de chances de se conclure."
           },
           {
             "id": "Q20",
             "title": "La qualité de l'expérience d'onboarding",
-            "text": "Dans quelle mesure votre processus d'onboarding client est-il documenté, cohérent et conçu pour créer de la valeur rapidement, en réduisant le temps entre la signature et le premier résultat concret perçu par le client ?",
+            "text": "Dans quelle mesure votre processus d'onboarding client est-il documenté, cohérent et conçu pour créer de la valeur rapidement, en réduisant le temps entre la signature et le premier résultat concret perçu par le client?",
             "rationale": "L'onboarding est le moment où le client décide inconsciemment s'il va devenir un ambassadeur ou un détracteur. Un onboarding structuré réduit le churn, accélère les référencements et augmente la valeur à vie du client."
           },
           {
             "id": "Q21",
             "title": "La transformation des clients en source de croissance",
-            "text": "Jusqu'à quel point vos clients actuels contribuent-ils activement à votre croissance (par des références, des témoignages, des renouvellements ou des expansions de mandats) ?",
+            "text": "Jusqu'à quel point vos clients actuels contribuent-ils activement à votre croissance (par des références, des témoignages, des renouvellements ou des expansions de mandats)?",
             "rationale": "Le client le plus facile à vendre est celui qui vous a déjà fait confiance. Les organisations qui systématisent la croissance par le client réduisent leur dépendance à l'acquisition constante de nouveaux prospects."
           }
         ]
@@ -449,37 +449,37 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q22",
             "title": "La présence numérique et le contenu des compétiteurs",
-            "text": "À quel point votre vue de la présence numérique de vos compétiteurs est-elle à jour (leur référencement organique, leur présence sur les réseaux sociaux, la fréquence et l'engagement de leur contenu) ?",
+            "text": "À quel point votre vue de la présence numérique de vos compétiteurs est-elle à jour (leur référencement organique, leur présence sur les réseaux sociaux, la fréquence et l'engagement de leur contenu)?",
             "rationale": "La présence numérique active d'un compétiteur est souvent le meilleur indicateur de ses intentions de croissance et des marchés qu'il cible activement. Ignorer cette dimension crée des angles morts stratégiques."
           },
           {
             "id": "Q23",
             "title": "Les tactiques d'acquisition payées des compétiteurs",
-            "text": "Quel niveau de connaissance avez-vous des publicités payantes (Google Ads, LinkedIn, Meta) que vos compétiteurs diffusent actuellement (les messages, les formats, les audiences ciblées) ?",
+            "text": "Quel niveau de connaissance avez-vous des publicités payantes (Google Ads, LinkedIn, Meta) que vos compétiteurs diffusent actuellement (les messages, les formats, les audiences ciblées)?",
             "rationale": "Les publicités payantes d'un compétiteur révèlent ses priorités de marché et ses arguments de vente actuels. Cette information est publique et accessible. Ne pas la connaître, c'est naviguer à l'aveugle sur ce qui influence activement vos prospects."
           },
           {
             "id": "Q24",
             "title": "Les séquences de nurturing des compétiteurs",
-            "text": "Dans quelle mesure avez-vous testé vous-mêmes les séquences de nurturing de vos compétiteurs (en vous inscrivant à leurs listes, en téléchargeant leur contenu ou en demandant une démo) pour comprendre comment ils cultivent leurs prospects ?",
+            "text": "Dans quelle mesure avez-vous testé vous-mêmes les séquences de nurturing de vos compétiteurs (en vous inscrivant à leurs listes, en téléchargeant leur contenu ou en demandant une démo) pour comprendre comment ils cultivent leurs prospects?",
             "rationale": "Les séquences email sont l'un des signaux les plus riches sur la sophistication marketing d'un compétiteur. Savoir ce qu'ils disent à vos prospects communs, et dans quel ordre, est un avantage tactique direct en vente."
           },
           {
             "id": "Q25",
             "title": "La présence événementielle et institutionnelle des compétiteurs",
-            "text": "Comment évaluez-vous votre connaissance de la présence de vos compétiteurs dans les événements, les associations et les conférences, et du rôle qu'ils y jouent (exposant, conférencier, commanditaire), notamment dans les marchés que vous ciblez ?",
+            "text": "Comment évaluez-vous votre connaissance de la présence de vos compétiteurs dans les événements, les associations et les conférences, et du rôle qu'ils y jouent (exposant, conférencier, commanditaire), notamment dans les marchés que vous ciblez?",
             "rationale": "La présence événementielle d'un compétiteur signale où il investit pour bâtir sa crédibilité et ses relations. Dans certains secteurs, la présence institutionnelle est aussi déterminante que la qualité du produit."
           },
           {
             "id": "Q26",
             "title": "Le stack technologique des compétiteurs",
-            "text": "Jusqu'à quel point connaissez-vous les outils (CRM, automatisation marketing, analytics) que vos principaux compétiteurs utilisent pour opérer leur système commercial et marketing, et ce que cela révèle sur leur niveau de sophistication et leurs investissements ?",
+            "text": "Jusqu'à quel point connaissez-vous les outils (CRM, automatisation marketing, analytics) que vos principaux compétiteurs utilisent pour opérer leur système commercial et marketing, et ce que cela révèle sur leur niveau de sophistication et leurs investissements?",
             "rationale": "Le stack technologique d'un compétiteur est un révélateur de maturité. Ces choix signalent les segments qu'ils adressent, les ressources qu'ils investissent et les processus qu'ils ont automatisés. C'est une information publique et facilement accessible."
           },
           {
             "id": "Q27",
             "title": "Le positionnement prix relatif des compétiteurs",
-            "text": "Avec quelle précision suivez-vous le positionnement prix de vos compétiteurs (premium, parité ou discount) pour en tenir compte dans votre stratégie de prix et vos arguments de vente ?",
+            "text": "Avec quelle précision suivez-vous le positionnement prix de vos compétiteurs (premium, parité ou discount) pour en tenir compte dans votre stratégie de prix et vos arguments de vente?",
             "rationale": "Ignorer le positionnement prix de la compétition expose à des surprises en fin de cycle de vente. Connaître où vous vous positionnez relativement permet d'adapter votre argumentaire et de préparer vos équipes aux objections."
           }
         ]
@@ -493,19 +493,19 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q28",
             "title": "Les deux moteurs de demande",
-            "text": "Avec quelle clarté votre organisation distingue-t-elle, dans son allocation de ressources, les actions visant à créer de la demande (contenu, notoriété, présence de marque) de celles visant à capter la demande existante (signaux, scoring, activation) ?",
+            "text": "Avec quelle clarté votre organisation distingue-t-elle, dans son allocation de ressources, les actions visant à créer de la demande (contenu, notoriété, présence de marque) de celles visant à capter la demande existante (signaux, scoring, activation)?",
             "rationale": "À tout moment, environ 5 % de vos cibles sont en marché. Les 95 % restants le seront un jour. Une organisation qui n'investit que dans la captation s'épuise à pêcher dans un étang limité. Créer de la demande, c'est bâtir un pipeline futur avec chaque contenu et chaque prise de parole."
           },
           {
             "id": "Q29",
-            "title": "Le scoring et la qualification structurée des prospects",
-            "text": "Dans quelle mesure votre organisation utilise-t-elle un système structuré pour qualifier et prioriser ses prospects, basé sur le profil de l'entreprise (fit) et les signaux comportementaux observables (intent) ?",
+            "title": "Le scoring des prospects",
+            "text": "Dans quelle mesure votre organisation utilise-t-elle un système structuré pour qualifier et prioriser ses prospects, basé sur le profil de l'entreprise (fit) et les signaux comportementaux observables (intent)?",
             "rationale": "Un système de scoring transforme la qualification d'un art individuel en processus organisationnel. Sans lui, les organisations investissent autant de temps sur un prospect mal qualifié que sur un compte idéal."
           },
           {
             "id": "Q30",
             "title": "Les règles de routing et les séquences d'activation",
-            "text": "À quel point vos règles de passage du signal à l'action sont-elles documentées : quelle action commerciale déclencher selon le score et le signal d'un prospect (qui contacte, par quel canal, dans quel délai) ?",
+            "text": "À quel point vos règles de passage du signal à l'action sont-elles documentées : quelle action commerciale déclencher selon le score et le signal d'un prospect (qui contacte, par quel canal, dans quel délai)?",
             "rationale": "La vitesse et la précision de la réponse à un signal commercial sont souvent ce qui sépare un deal gagné d'une occasion ratée. Une règle de routing déterministe transforme une intention en avantage compétitif systématique."
           }
         ]
