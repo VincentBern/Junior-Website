@@ -127,6 +127,27 @@
         <div class="err">L'entreprise est requise.</div>
       </div>
       <div class="field">
+        <label for="p-size">Taille de l'entreprise (facultatif)</label>
+        <select id="p-size">
+          <option value="">Choisir</option>
+          <option value="1">Seulement moi</option>
+          <option value="2-4">2 à 4 personnes</option>
+          <option value="5-19">5 à 19 personnes</option>
+          <option value="20-49">20 à 49 personnes</option>
+          <option value="50-99">50 à 99 personnes</option>
+          <option value="100+">100 personnes et plus</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="p-stage">Stade de l'entreprise (facultatif)</label>
+        <select id="p-stage">
+          <option value="">Choisir</option>
+          <option value="pre-revenue">Avant les premiers revenus</option>
+          <option value="revenue">Après les premiers revenus</option>
+        </select>
+        <p class="help">Ces deux réponses servent seulement à mieux connaître les entreprises qui font le diagnostic.</p>
+      </div>
+      <div class="field">
         <label for="p-email">Votre courriel</label>
         <input type="email" id="p-email" autocomplete="email" inputmode="email" required>
         <div class="err">Entrez un courriel valide : c'est là que votre rapport vous est envoyé.</div>

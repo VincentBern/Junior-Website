@@ -198,11 +198,25 @@
     draft.participant.followUpConsent = $("#p-followup").checked;
     saveDraft();
   });
+  // Optional company size and stage (Junior repo §94, approved 2026-10-16):
+  // coarse buckets that let the market sizing use real answers. Sent only
+  // when chosen; the server puts them in the team copy, nowhere else.
+  var COMPANY_SELECTS = { size: "companySize", stage: "companyStage" };
+  Object.keys(COMPANY_SELECTS).forEach(function(id){
+    var select = $("#p-" + id);
+    select.addEventListener("change", function(){
+      draft.participant[COMPANY_SELECTS[id]] = select.value;
+      saveDraft();
+    });
+  });
   function renderInfo(){
     $("#chosen-offer").textContent = T.offerTitle[draft.offer];
     $("#chosen-meta").textContent = T.offerMeta[draft.offer];
     FIELDS.forEach(function(f){ $("#p-" + f).value = draft.participant[f] || ""; });
     $("#p-followup").checked = draft.participant.followUpConsent === true;
+    Object.keys(COMPANY_SELECTS).forEach(function(id){
+      $("#p-" + id).value = draft.participant[COMPANY_SELECTS[id]] || "";
+    });
   }
   $("#change-offer").addEventListener("click", function(){ renderChoose(); show("choose"); });
   $("#info-back").addEventListener("click", function(){ renderChoose(); show("choose"); });
@@ -459,7 +473,10 @@
         title: draft.participant.title.trim(),
         company: draft.participant.company.trim(),
         email: (draft.participant.email || "").trim(),
-        followUpConsent: draft.participant.followUpConsent === true
+        followUpConsent: draft.participant.followUpConsent === true,
+        // Left out of the JSON when not chosen (undefined is dropped).
+        companySize: draft.participant.companySize || undefined,
+        companyStage: draft.participant.companyStage || undefined
       },
       answers: answers,
       notes: notes
