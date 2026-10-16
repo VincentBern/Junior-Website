@@ -38,6 +38,10 @@
 
   var DRAFT_KEY = "junior_diagnostic_draft_v2";
   var REPORT_KEY = "junior_diagnostic_report_v2";
+  // Set while a report is being generated: if the browser reloads the tab
+  // meanwhile (Chrome's memory saver does), the page can say what happened.
+  var PENDING_KEY = "junior_diagnostic_pending_v1";
+  var PENDING_MAX_AGE_MS = 15 * 60 * 1000;
   var LEGACY_KEYS = ["diagnostic_draft_offer", "diagnostic_draft_buyer", "diagnostic_draft_respondents"];
 
   // ---------- storage ----------
@@ -519,6 +523,7 @@
     var err = $("#submit-error");
     err.classList.remove("show");
     busy = true;
+    store(PENDING_KEY, { at: Date.now(), email: body.participant.email });
     window.addEventListener("beforeunload", warnBeforeLeave);
     show("generating");
     startGeneratingAnimation();
@@ -586,6 +591,7 @@
         clearTimeout(timeout);
         stopGeneratingAnimation();
         busy = false;
+        store(PENDING_KEY, null);
         window.removeEventListener("beforeunload", warnBeforeLeave);
       });
   });
@@ -675,10 +681,18 @@
     else if (res.emailed === false) emailed.textContent = T.report.emailFailed;
     emailed.hidden = typeof res.emailed !== "boolean";
 
-    // The closing block names where to start: the report's weakest dimension.
+    // A report with a recommendation ends on its own next step (priority,
+    // plan de match, « Commencer avec Junior »), printed with it: its link
+    // becomes the page's button, and the page's closing block stays hidden.
+    var cta = pres.querySelector("p:last-child a[href]");
+    var hasNextStep = !!(res.recommendation && cta);
+    if (cta) cta.classList.add("btn", "btn-primary", "report-cta");
+    $(".report-foot").hidden = hasNextStep;
+
+    // An older report: the closing block names its weakest dimension.
     // Without dimensions it keeps its generic text from the page.
     var foot = $(".report-foot p");
-    if (weakest && foot) {
+    if (!hasNextStep && weakest && foot) {
       foot.innerHTML = "";
       foot.appendChild(el("strong", { text: T.report.startHere(weakest.title, weakest.pct) }));
       foot.appendChild(document.createTextNode(" " + T.report.startHereText));
@@ -687,6 +701,10 @@
 
   $(".report-foot a").addEventListener("click", function(){
     track("diagnostic_next_step", { offer: report && report.offer });
+  });
+  $("#report-presentation").addEventListener("click", function(e){
+    var link = e.target && e.target.closest ? e.target.closest("a.report-cta") : null;
+    if (link) track("diagnostic_next_step", { offer: report && report.offer });
   });
 
   $("#print-btn").addEventListener("click", function(){ window.print(); });
@@ -786,10 +804,22 @@
       if (draft.view === "questions") renderQuestions();
       if (draft.view === "review") renderReview();
       show(draft.view, { replace: true });
+      showInterrupted();
     } else {
       renderChoose();
       show("choose", { replace: true });
     }
+  }
+
+  // The tab was reloaded while a report was being generated: the server
+  // finished it anyway and emailed it if there was an address.
+  function showInterrupted(){
+    var pending = load(PENDING_KEY);
+    store(PENDING_KEY, null);
+    if (!pending || draft.view !== "review" || Date.now() - pending.at > PENDING_MAX_AGE_MS) return;
+    var err = $("#submit-error");
+    err.textContent = T.errors.interrupted(pending.email || "");
+    err.classList.add("show");
   }
 
   checkPublic(route);

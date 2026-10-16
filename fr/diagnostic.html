@@ -319,7 +319,8 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     invalid_request: "Certaines réponses n'ont pas pu être validées. Vérifiez que chaque question a une note de 1 à 10, puis réessayez.",
     timeout: "La génération a pris trop de temps. Vos réponses sont conservées : réessayez.",
     network: "Impossible de joindre le serveur. Vérifiez votre connexion; vos réponses sont conservées.",
-    server: "La génération du rapport a échoué. Vos réponses sont conservées : réessayez dans un instant."
+    server: "La génération du rapport a échoué. Vos réponses sont conservées : réessayez dans un instant.",
+    interrupted: function(email){ return email ? "La page a été rechargée pendant la génération. Votre rapport a sans doute été envoyé à " + email + "; sinon, relancez-le ici : vos réponses sont conservées." : "La page a été rechargée pendant la génération. Relancez le rapport ici : vos réponses sont conservées."; }
   },
   gen: {
     elapsed: function(s){ var m = Math.floor(s / 60), r = s % 60; return "Temps écoulé : " + (m ? m + " min " : "") + r + " s"; }
