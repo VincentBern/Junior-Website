@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <script defer src="https://analytics.junior.coach/script.js" data-website-id="924edbc6-ce17-4213-b2d0-e719cdc3e5aa"></script>
+<script defer src="../assets/experiments.js"></script>
 <style>
 :root{
   --paper:#E4E8ED;
@@ -567,7 +568,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
     <nav>
       <a class="lang" href="#suivi">LE SUIVI</a>
       <a class="lang" href="../en/index.html" onclick="try{localStorage.setItem('junior_lang','en')}catch(e){}">EN</a>
-      <a class="btn btn--sm" href="diagnostic.html">Faire mon diagnostic →</a>
+      <a class="btn btn--sm" href="diagnostic.html" data-h1-cta="entete" data-h1-attente="Être avisé de l'ouverture →">Faire mon diagnostic →</a>
     </nav>
   </div>
 </header>
@@ -582,7 +583,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
         <h1>L'aviseur que vous engageriez, si vous en aviez les moyens.</h1>
         <p class="lede">Stratégie et commercialisation, tous les jours, dans le <b>Claude ou le ChatGPT que vous utilisez déjà</b>. Rien à connecter. Rien à migrer. Rien à perdre si vous arrêtez.</p>
         <div class="hero-actions">
-          <a class="btn" href="diagnostic.html">Faire mon diagnostic →</a>
+          <a class="btn" href="diagnostic.html" data-h1-cta="accueil" data-h1-attente="Être avisé de l'ouverture →">Faire mon diagnostic →</a>
           <a class="btn btn--ghost" href="#wiring">Voir ce qu'il y a dedans</a>
         </div>
       </div>
@@ -1044,7 +1045,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
         <span class="closer-mark-dot closer-mark-dot--accent"></span>
       </div>
       <h2>Vous arrêtez quand vous voulez.<br>Les plans restent à&nbsp;vous.</h2>
-      <a class="btn" href="diagnostic.html">Faire mon diagnostic →</a>
+      <a class="btn" href="diagnostic.html" data-h1-cta="fin" data-h1-attente="Être avisé de l'ouverture →">Faire mon diagnostic →</a>
     </div>
   </section>
 
