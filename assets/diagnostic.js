@@ -64,13 +64,13 @@
   if (draft.offer && !OFFERS[draft.offer]) draft = emptyDraft();
   var report = load(REPORT_KEY);
   var accessCode = load(ACCESS_KEY);
-  // §94 in the Junior repo: once the diagnostic is public, the server says
+  // §95 in the Junior repo: once the diagnostic is public, the server says
   // so (GET /diagnostics/access) and nobody is asked for a code.
   var isPublic = false;
   function hasAccess(){ return isPublic || !!accessCode; }
   function saveDraft(){ store(DRAFT_KEY, draft); }
 
-  // The H1 test's variant (assets/experiments.js, Junior repo §94) rides
+  // The H1 test's variant (assets/experiments.js, Junior repo §95) rides
   // along on every diagnostic event, so the funnel reads per entry offer.
   function track(name, data){
     var d = data || {};
@@ -196,13 +196,13 @@
     });
   });
   // Optional and unticked by default: the respondent's yes to a few emails
-  // about their report (the follow-ups, Junior repo §94). Sent only as a
+  // about their report (the follow-ups, Junior repo §95). Sent only as a
   // boolean; the server records it in the team copy, nowhere else.
   $("#p-followup").addEventListener("change", function(){
     draft.participant.followUpConsent = $("#p-followup").checked;
     saveDraft();
   });
-  // Optional company size and stage (Junior repo §94, approved 2026-10-16):
+  // Optional company size and stage (Junior repo §95, approved 2026-10-16):
   // coarse buckets that let the market sizing use real answers. Sent only
   // when chosen; the server puts them in the team copy, nowhere else.
   var COMPANY_SELECTS = { size: "companySize", stage: "companyStage" };

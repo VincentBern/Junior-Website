@@ -1,4 +1,4 @@
-/* The H1 test (Junior repo, roadmap §94): which entry offer a visitor sees.
+/* The H1 test (Junior repo, roadmap §95): which entry offer a visitor sees.
  *
  * Half the visitors get « Faire mon diagnostic » (variant "diagnostic"),
  * half « Être avisé de l'ouverture » (variant "attente", the waitlist page).
