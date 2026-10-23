@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notify me when it opens · Junior</title>
+<meta name="description" content="The Junior diagnostic opens to the public soon. Leave your email: we'll write on opening day.">
+<link rel="icon" type="image/png" href="../assets/logo.png">
+<link rel="canonical" href="https://www.junior.coach/en/waitlist.html">
+<link rel="alternate" hreflang="fr" href="https://www.junior.coach/fr/waitlist.html">
+<link rel="alternate" hreflang="en" href="https://www.junior.coach/en/waitlist.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/legal.css">
+<script defer src="https://analytics.junior.coach/script.js" data-website-id="924edbc6-ce17-4213-b2d0-e719cdc3e5aa"></script>
+<script defer src="../assets/experiments.js"></script>
+<style>
+/* The waitlist form (H1 test, Junior repo §95), on the legal pages' sheet. */
+.wl{margin-top:1.6rem;border:1px solid var(--ink);background:var(--sheet);padding:1.4rem 1.4rem 1.6rem;display:grid;gap:1rem}
+.wl label{display:block;font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite);margin-bottom:.35rem}
+.wl input[type=text],.wl input[type=email]{width:100%;font:inherit;font-size:1rem;padding:.6rem .7rem;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:0}
+.wl input:focus-visible,.wl button:focus-visible{outline:2px solid var(--revision);outline-offset:2px}
+.wl .check{display:flex;gap:.65rem;align-items:flex-start;font-size:.95rem}
+.wl[hidden]{display:none}
+.wl .check input{margin-top:.25rem;flex:none;width:1.05rem;height:1.05rem;accent-color:var(--blueprint)}
+.wl .check label{all:unset;cursor:pointer}
+.wl .err{display:none;color:var(--revision);font-size:.85rem;margin-top:.35rem}
+.wl .invalid .err{display:block}
+.wl .invalid input{border-color:var(--revision)}
+.wl button{justify-self:start;font-family:"IBM Plex Mono",monospace;font-size:.82rem;letter-spacing:.06em;padding:.8rem 1.2rem;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;border-radius:0}
+.wl button[disabled]{opacity:.5;cursor:default}
+.wl .help{font-size:.85rem;color:var(--graphite)}
+.wl-status{margin-top:1rem;padding:.9rem 1rem;border-left:3px solid var(--blueprint);background:var(--sheet)}
+.wl-status.bad{border-left-color:var(--revision)}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img class="brand-logo" src="../assets/logo.png" alt="">
+      <span class="mark">JUNIOR</span>
+    </a>
+    <span class="tagline">Diagnostic opening</span>
+    <nav>
+      <a class="lang" href="privacy.html">PRIVACY</a>
+      <a class="lang" href="../fr/waitlist.html" onclick="try{localStorage.setItem('junior_lang','fr')}catch(e){}">FR</a>
+    </nav>
+  </div>
+</header>
+
+<main class="doc">
+  <div class="wrap">
+
+    <p class="eyebrow">Fig. 00 · Waitlist</p>
+    <h1>Notify me when it opens</h1>
+    <p class="lede">The Junior diagnostic opens to the public soon: 25 to 55 questions on your strategy and your go-to-market, and a structured report that tells you where to start. Leave your email: we'll write once, on opening day.</p>
+
+    <form class="wl" id="wl-form" novalidate aria-label="Waitlist form">
+      <div class="field">
+        <label for="wl-name">Your first name (optional)</label>
+        <input type="text" id="wl-name" autocomplete="given-name" maxlength="120">
+      </div>
+      <div class="field" id="f-email">
+        <label for="wl-email">Your email</label>
+        <input type="email" id="wl-email" autocomplete="email" inputmode="email" required maxlength="254">
+        <div class="err">Enter a valid email.</div>
+      </div>
+      <div class="field">
+        <label for="wl-company">Company (optional)</label>
+        <input type="text" id="wl-company" autocomplete="organization" maxlength="160">
+      </div>
+      <div class="field" id="f-consent">
+        <div class="check">
+          <input type="checkbox" id="wl-consent" required>
+          <label for="wl-consent">I agree that Junior may email me when the diagnostic opens. I can unsubscribe at any time by replying to an email.</label>
+        </div>
+        <div class="err">Tick the box so we can write to you.</div>
+      </div>
+      <button type="submit" id="wl-submit">Notify me</button>
+      <p class="help">A copy goes to the Junior team. No newsletter. See our <a href="privacy.html">privacy policy</a>.</p>
+    </form>
+    <p class="wl-status" id="wl-status" role="status" hidden></p>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Junior.Coach inc.</span>
+    <span><a href="index.html">Home</a> · <a href="terms.html">Terms of use</a> · <a href="privacy.html">Privacy</a></span>
+    <span>junior.coach</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var LANG = "en";
+  var API_BASE = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    ? "http://localhost:8787"
+    : "https://api.junior.coach";
+  var MSG = {
+    done: "You're on the list. A confirmation email is on its way to ",
+    doneNoConfirm: "You're on the list. We'll write on opening day.",
+    network: "That didn't go through. Please try again in a moment.",
+    rate: "Too many attempts from this device. Please try again later."
+  };
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function $(id){ return document.getElementById(id); }
+  function track(name, data){
+    try { if (window.umami && window.umami.track) window.umami.track(name, data); } catch (e) {}
+  }
+  function variant(){ return (window.JUNIOR_EXP && window.JUNIOR_EXP.h1) || undefined; }
+  function status(text, bad){
+    var s = $("wl-status");
+    s.textContent = text;
+    s.className = "wl-status" + (bad ? " bad" : "");
+    s.hidden = false;
+  }
+  $("wl-email").addEventListener("input", function(){ $("f-email").classList.remove("invalid"); });
+  $("wl-consent").addEventListener("change", function(){ $("f-consent").classList.remove("invalid"); });
+
+  $("wl-form").addEventListener("submit", function(e){
+    e.preventDefault();
+    var email = $("wl-email").value.trim();
+    var okEmail = EMAIL_RE.test(email);
+    var okConsent = $("wl-consent").checked;
+    $("f-email").classList.toggle("invalid", !okEmail);
+    $("f-consent").classList.toggle("invalid", !okConsent);
+    if (!okEmail) { $("wl-email").focus(); return; }
+    if (!okConsent) { $("wl-consent").focus(); return; }
+    var body = { email: email, lang: LANG, consent: true };
+    var name = $("wl-name").value.trim();
+    var company = $("wl-company").value.trim();
+    if (name) body.name = name;
+    if (company) body.company = company;
+    if (variant()) body.variant = variant();
+    var btn = $("wl-submit");
+    btn.disabled = true;
+    fetch(API_BASE + "/diagnostics/waitlist", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body)
+    })
+      .then(function(res){
+        if (res.status === 429) throw { code: "rate" };
+        if (!res.ok) throw { code: "network" };
+        return res.json();
+      })
+      .then(function(data){
+        track("waitlist_envoi", { h1: variant() });
+        $("wl-form").hidden = true;
+        status(data && data.confirmed ? MSG.done + email + "." : MSG.doneNoConfirm, false);
+      })
+      .catch(function(err){
+        track("waitlist_erreur", { h1: variant() });
+        status(err && err.code === "rate" ? MSG.rate : MSG.network, true);
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
+
+</body>
+</html>

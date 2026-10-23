@@ -129,10 +129,35 @@
         <div class="err">Company is required.</div>
       </div>
       <div class="field">
+        <label for="p-size">Company size (optional)</label>
+        <select id="p-size">
+          <option value="">Choose</option>
+          <option value="1">Just me</option>
+          <option value="2-4">2 to 4 people</option>
+          <option value="5-19">5 to 19 people</option>
+          <option value="20-49">20 to 49 people</option>
+          <option value="50-99">50 to 99 people</option>
+          <option value="100+">100 people or more</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="p-stage">Company stage (optional)</label>
+        <select id="p-stage">
+          <option value="">Choose</option>
+          <option value="pre-revenue">Before first revenue</option>
+          <option value="revenue">After first revenue</option>
+        </select>
+        <p class="help">These two answers only help us understand which companies take the diagnostic.</p>
+      </div>
+      <div class="field">
         <label for="p-email">Your email</label>
         <input type="email" id="p-email" autocomplete="email" inputmode="email" required>
         <div class="err">Enter a valid email: that's where your report is sent.</div>
         <p class="help">Your report is sent to this address. A copy goes to the Junior team. No newsletter. See our <a href="privacy.html" target="_blank" rel="noopener">privacy policy</a>.</p>
+      </div>
+      <div class="field field-check">
+        <input type="checkbox" id="p-followup">
+        <label for="p-followup">I agree that Junior may email me about my report (a few emails, unsubscribe at any time). Optional.</label>
       </div>
 
       <div class="btn-row">
@@ -292,6 +317,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     incomplete: function(n){ return n === 1 ? "One question is still unanswered." : n + " questions are still unanswered."; }
   },
   errors: {
+    daily_cap: "The diagnostic has reached its maximum number of reports for today. Your answers are saved. Come back tomorrow.",
     rate_limited: "Too many reports were requested from your connection in the last hour. Your answers are saved. Try again a bit later.",
     invalid_request: "Some answers couldn't be validated. Check that every question has a rating from 1 to 10, then try again.",
     timeout: "Generating the report took too long. Your answers are saved. Please try again.",
@@ -320,6 +346,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
 <script src="../diagnostic-questions/en.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.12/marked.min.js" integrity="sha384-948ahk4ZmxYVYOc+rxN1H2gM1EJ2Duhp7uHtZ4WSLkV4Vtx5MUqnV+l7u9B+jFv+" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js" integrity="sha384-JEyTNhjM6R1ElGoJns4U2Ln4ofPcqzSsynQkmEc/KGy6336qAZl70tDLufbkla+3" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="../assets/experiments.js"></script>
 <script src="../assets/diagnostic.js"></script>
 
 </body>

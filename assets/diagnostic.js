@@ -64,10 +64,18 @@
   if (draft.offer && !OFFERS[draft.offer]) draft = emptyDraft();
   var report = load(REPORT_KEY);
   var accessCode = load(ACCESS_KEY);
+  // §95 in the Junior repo: once the diagnostic is public, the server says
+  // so (GET /diagnostics/access) and nobody is asked for a code.
+  var isPublic = false;
+  function hasAccess(){ return isPublic || !!accessCode; }
   function saveDraft(){ store(DRAFT_KEY, draft); }
 
+  // The H1 test's variant (assets/experiments.js, Junior repo §95) rides
+  // along on every diagnostic event, so the funnel reads per entry offer.
   function track(name, data){
-    try { if (window.umami && window.umami.track) window.umami.track(name, data); } catch (e) {}
+    var d = data || {};
+    if (window.JUNIOR_EXP && window.JUNIOR_EXP.h1) d.h1 = window.JUNIOR_EXP.h1;
+    try { if (window.umami && window.umami.track) window.umami.track(name, d); } catch (e) {}
   }
 
   // ---------- helpers ----------
@@ -129,7 +137,7 @@
     if (busy) { history.pushState({ view: "generating" }, ""); return; }
     var s = e.state;
     if (!s || !s.view) return;
-    if (!accessCode && s.view !== "report") { showAccess(); return; }
+    if (!hasAccess() && s.view !== "report") { showAccess(); return; }
     if (s.view === "report" && !report) return;
     if (s.view === "questions") { draft.page = s.page || 0; renderQuestions(); }
     if (s.view === "review") renderReview();
@@ -187,10 +195,32 @@
       saveDraft();
     });
   });
+  // Optional and unticked by default: the respondent's yes to a few emails
+  // about their report (the follow-ups, Junior repo §95). Sent only as a
+  // boolean; the server records it in the team copy, nowhere else.
+  $("#p-followup").addEventListener("change", function(){
+    draft.participant.followUpConsent = $("#p-followup").checked;
+    saveDraft();
+  });
+  // Optional company size and stage (Junior repo §95, approved 2026-10-16):
+  // coarse buckets that let the market sizing use real answers. Sent only
+  // when chosen; the server puts them in the team copy, nowhere else.
+  var COMPANY_SELECTS = { size: "companySize", stage: "companyStage" };
+  Object.keys(COMPANY_SELECTS).forEach(function(id){
+    var select = $("#p-" + id);
+    select.addEventListener("change", function(){
+      draft.participant[COMPANY_SELECTS[id]] = select.value;
+      saveDraft();
+    });
+  });
   function renderInfo(){
     $("#chosen-offer").textContent = T.offerTitle[draft.offer];
     $("#chosen-meta").textContent = T.offerMeta[draft.offer];
     FIELDS.forEach(function(f){ $("#p-" + f).value = draft.participant[f] || ""; });
+    $("#p-followup").checked = draft.participant.followUpConsent === true;
+    Object.keys(COMPANY_SELECTS).forEach(function(id){
+      $("#p-" + id).value = draft.participant[COMPANY_SELECTS[id]] || "";
+    });
   }
   $("#change-offer").addEventListener("click", function(){ renderChoose(); show("choose"); });
   $("#info-back").addEventListener("click", function(){ renderChoose(); show("choose"); });
@@ -446,7 +476,11 @@
         name: draft.participant.name.trim(),
         title: draft.participant.title.trim(),
         company: draft.participant.company.trim(),
-        email: (draft.participant.email || "").trim()
+        email: (draft.participant.email || "").trim(),
+        followUpConsent: draft.participant.followUpConsent === true,
+        // Left out of the JSON when not chosen (undefined is dropped).
+        companySize: draft.participant.companySize || undefined,
+        companyStage: draft.participant.companyStage || undefined
       },
       answers: answers,
       notes: notes
@@ -508,7 +542,9 @@
         return res.json().catch(function(){ return {}; }).then(function(data){
           if (!res.ok) {
             var e = new Error("http_" + res.status);
-            e.code = res.status === 401 ? "access_denied" : res.status === 429 ? "rate_limited" : res.status === 400 ? "invalid_request" : "server";
+            e.code = res.status === 401 ? "access_denied"
+              : res.status === 429 ? (data && data.error === "daily_cap" ? "daily_cap" : "rate_limited")
+              : res.status === 400 ? "invalid_request" : "server";
             throw e;
           }
           if (!data || !Array.isArray(data.parts) || typeof data.presentation !== "string") {
@@ -537,7 +573,9 @@
         var code = e && e.code ? e.code : (e && e.name === "AbortError" ? "timeout" : "network");
         track("diagnostic_error", { offer: draft.offer, code: code });
         if (code === "access_denied") {
-          // Code rotated or revoked: ask again, answers stay in the draft.
+          // Code rotated or revoked, or the diagnostic closed again: ask for
+          // the code, answers stay in the draft.
+          isPublic = false;
           accessCode = null;
           store(ACCESS_KEY, null);
           showAccess(T.access.expired, { replace: true });
@@ -676,7 +714,7 @@
     store(REPORT_KEY, null);
     draft = emptyDraft();
     saveDraft();
-    if (!accessCode) { showAccess(); return; }
+    if (!hasAccess()) { showAccess(); return; }
     renderChoose();
     show("choose");
   });
@@ -684,7 +722,7 @@
   // ---------- access code ----------
   function apiHeaders(code){
     var h = { "content-type": "application/json" };
-    h[ACCESS_HEADER] = code;
+    if (code) h[ACCESS_HEADER] = code;
     return h;
   }
 
@@ -737,11 +775,23 @@
     if (report && report.response) {
       renderReport();
       show("report", { replace: true });
-    } else if (!accessCode) {
+    } else if (!hasAccess()) {
       showAccess(null, { replace: true });
     } else {
       resume();
     }
+  }
+
+  // Asks the server whether the diagnostic is public before routing; on any
+  // failure or after 4 seconds, falls back to the tester code as before.
+  function checkPublic(done){
+    var finished = false;
+    function finish(open){ if (finished) return; finished = true; isPublic = open; done(); }
+    setTimeout(function(){ finish(false); }, 4000);
+    fetch(API_BASE + "/diagnostics/access")
+      .then(function(res){ return res.ok ? res.json() : { public: false }; })
+      .then(function(data){ finish(!!(data && data.public === true)); })
+      .catch(function(){ finish(false); });
   }
 
   function resume(){
@@ -772,5 +822,5 @@
     err.classList.add("show");
   }
 
-  route();
+  checkPublic(route);
 })();
