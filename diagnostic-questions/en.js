@@ -435,7 +435,7 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q21",
             "title": "Turning customers into a source of growth",
-            "text": "How far do your current customers actively contribute to your growth (through referrals, testimonials, renewals or expanded mandates)?",
+            "text": "How far do your current customers actively contribute to your growth (through referrals, testimonials, renewals or additional purchases)?",
             "rationale": "The easiest customer to sell to is the one who already trusted you. Organizations that systematize customer-led growth reduce their dependence on constantly acquiring new prospects."
           }
         ]

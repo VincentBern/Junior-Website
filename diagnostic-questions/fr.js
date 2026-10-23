@@ -293,7 +293,7 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q4",
             "title": "La cohérence du message commercial",
-            "text": "À quel point tous les membres de votre équipe commerciale articulent-ils le même message (même problème adressé, même différenciation, même proposition de valeur)?",
+            "text": "À quel point tous les membres de votre équipe commerciale articulent-ils le même message (même problème résolu, même différenciation, même proposition de valeur)?",
             "rationale": "Un message commercial incohérent crée de la confusion chez le prospect et dilue la crédibilité de l'organisation. L'alignement du message est un multiplicateur de performance commercial souvent sous-estimé."
           }
         ]
@@ -365,14 +365,14 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q12",
             "title": "La structure du pipeline de vente",
-            "text": "Dans quelle mesure votre pipeline de vente est-il structuré, avec des stages clairement définis, des critères de progression explicites entre chaque étape et une probabilité de conversion associée à chaque stage?",
+            "text": "Dans quelle mesure votre pipeline de vente est-il structuré, avec des étapes clairement définies, des critères de progression explicites entre chaque étape et une probabilité de conversion associée à chaque étape?",
             "rationale": "Un pipeline sans structure ne peut pas être piloté. Sans critères de progression explicites, les deals avancent sur la base de l'optimisme plutôt que sur des signaux concrets d'acheteur, ce qui rend le forecast impossible."
           },
           {
             "id": "Q13",
-            "title": "La mesure des taux de conversion par stage",
+            "title": "La mesure des taux de conversion par étape",
             "text": "Avec quelle rigueur mesurez-vous vos taux de conversion à chaque étape du cycle de vente, du premier contact jusqu'à la signature, pour identifier où les opportunités se perdent et comment y remédier?",
-            "rationale": "Les taux de conversion par stage sont le système de diagnostic de votre machine commerciale. Un taux anormalement bas à une étape précise pointe vers un problème spécifique et traitable : un ICP mal défini, un message qui ne convainc pas, ou une proposition sans ROI clair."
+            "rationale": "Les taux de conversion par étape sont le système de diagnostic de votre machine commerciale. Un taux anormalement bas à une étape précise pointe vers un problème spécifique et traitable : un ICP mal défini, un message qui ne convainc pas, ou une proposition sans ROI clair."
           },
           {
             "id": "Q14",
@@ -391,7 +391,7 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q15",
             "title": "Le suivi des métriques commerciales",
-            "text": "Avec quelle régularité votre organisation mesure-t-elle ses métriques commerciales clés (leads générés, taux de conversion, durée du cycle de vente, coût d'acquisition, valeur des transactions)?",
+            "text": "Avec quelle régularité votre organisation mesure-t-elle ses métriques commerciales clés (prospects générés, taux de conversion, durée du cycle de vente, coût d'acquisition, valeur des transactions)?",
             "rationale": "Ce qu'on ne mesure pas, on ne peut pas améliorer. Les organisations qui pilotent avec des données prennent de meilleures décisions plus vite et évitent de perpétuer des approches qui ne fonctionnent pas."
           },
           {
@@ -423,7 +423,7 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q19",
             "title": "La qualification des opportunités",
-            "text": "Avec quelle constance votre équipe applique-t-elle une grille de qualification structurée pour évaluer chaque opportunité commerciale (fit avec l'ICP, problème réel et urgent, budget disponible, décideur identifié)?",
+            "text": "Avec quelle constance votre équipe applique-t-elle une grille de qualification structurée pour évaluer chaque opportunité commerciale (adéquation avec l'ICP, problème réel et urgent, budget disponible, décideur identifié)?",
             "rationale": "Poursuivre les mauvaises opportunités est l'une des principales sources de gaspillage de ressources commerciales. Une grille de qualification disciplinée protège le temps de l'équipe et concentre l'énergie sur les deals qui ont le plus de chances de se conclure."
           },
           {
@@ -435,7 +435,7 @@ window.JUNIOR_DIAGNOSTIC_CONTENT = {
           {
             "id": "Q21",
             "title": "La transformation des clients en source de croissance",
-            "text": "Jusqu'à quel point vos clients actuels contribuent-ils activement à votre croissance (par des références, des témoignages, des renouvellements ou des expansions de mandats)?",
+            "text": "Jusqu'à quel point vos clients actuels contribuent-ils activement à votre croissance (par des références, des témoignages, des renouvellements ou des achats additionnels)?",
             "rationale": "Le client le plus facile à vendre est celui qui vous a déjà fait confiance. Les organisations qui systématisent la croissance par le client réduisent leur dépendance à l'acquisition constante de nouveaux prospects."
           }
         ]
