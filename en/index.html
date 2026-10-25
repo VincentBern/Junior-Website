@@ -935,7 +935,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
         <div>
           <span class="count">Commercial engine · 11 tools</span>
           <h3>A go-to-market that survives contact with a buyer.</h3>
-          <p>ICP, value proposition, competitive audit, customer journey, pricing, activation, sales cycle, tracking. From target to customer, in one learning loop.</p>
+          <p>ICP and value proposition, competitive marketing audit, customer journey, pricing, go-to-market strategy, signals and activation, sales pipeline, sales dashboard, opportunity assessment, client onboarding, partnership program. From target to customer, in one learning loop.</p>
         </div>
         <div>
           <span class="count">On demand</span>
@@ -1075,22 +1075,22 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
 
 (() => {
   // Staged demo state for Chantio inc., the fictional company the welcome guide uses.
-  // Only canevas names already public on the homepage are named; the rest stay unnamed.
+  // The 11 commercialization tools carry their real names, also listed on the homepage (Luc, 2026-10-25).
   const W = [90,60,150,120,45,90,180,120,60,90,150,60,240,120,90,60,120,180,90,60,120];
   const sp = W.map((m, k) => ({ minutes: m, status: k < 8 ? "ready" : k === 8 ? "revisit" : k < 10 ? "ready" : k < 15 ? "todo" : "locked" }));
   sp[5].status = "ready";
   const cm = [
     { name: "ICP + Value proposition", minutes: 180, status: "ready" },
-    { name: "Competitive audit", minutes: 120, status: "ready" },
+    { name: "Competitive marketing audit", minutes: 120, status: "ready" },
     { name: "Customer journey", minutes: 90, status: "ready" },
     { name: "Pricing", minutes: 150, status: "progress", pct: 60 },
-    { name: "Activation", minutes: 120, status: "locked" },
-    { name: "Sales cycle", minutes: 150, status: "locked" },
-    { name: "", minutes: 90, status: "locked" },
-    { name: "", minutes: 120, status: "locked" },
-    { name: "", minutes: 60, status: "locked" },
-    { name: "", minutes: 90, status: "locked" },
-    { name: "Tracking", minutes: 120, status: "locked" },
+    { name: "Go-to-market strategy", minutes: 120, status: "locked" },
+    { name: "Signals & activation", minutes: 150, status: "locked" },
+    { name: "Sales pipeline", minutes: 90, status: "locked" },
+    { name: "Sales dashboard", minutes: 120, status: "locked" },
+    { name: "Opportunity assessment", minutes: 60, status: "locked" },
+    { name: "Client onboarding", minutes: 90, status: "locked" },
+    { name: "Partnership program", minutes: 120, status: "locked" },
   ];
   const suites = [
     { label: "Strategic planning", canevas: sp },
@@ -1144,7 +1144,7 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
     el("span", { class: "bars", "aria-hidden": "true" }, [el("i", { class: "on" }), el("i", { class: "on" }), el("i")]),
     el("span", { text: "Medium · ≈ 1 h left" })]);
   effort.dataset.z = "3";
-  const why = el("p", { class: "why", text: "It builds on ICP + Value proposition and Competitive audit. Finishing it opens Activation and Sales cycle." });
+  const why = el("p", { class: "why", text: "It builds on ICP + Value proposition and Competitive marketing audit. Finishing it opens Go-to-market strategy and Signals & activation." });
   why.dataset.z = "4";
   const bar = el("div", { class: "bar", role: "img", "aria-label": "60% answered" }, [el("span")]);
   bar.firstChild.style.width = "60%";
@@ -1161,14 +1161,14 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
     el("h4", { text: "Pick up where you left off" }),
     el("h3", { text: "Pricing" }),
     el("p", { class: "meta", text: "Commercialization · canevas 4 · 60% answered · ≈ 1 h left" }),
-    el("div", { class: "next-actions" }, [el("span", { class: "p-btn", text: "Continue in Claude" }), el("span", { class: "then", text: "Then: Activation" })]),
+    el("div", { class: "next-actions" }, [el("span", { class: "p-btn", text: "Continue in Claude" }), el("span", { class: "then", text: "Then: Go-to-market strategy" })]),
   ]);
   const rows = [
     ["ready", 1, "ICP + Value proposition", "Confirmed ★★", "Ready"],
-    ["ready", 2, "Competitive audit", "", "Ready"],
+    ["ready", 2, "Competitive marketing audit", "", "Ready"],
     ["ready", 3, "Customer journey", "", "Ready"],
     ["progress", 4, "Pricing", "60% answered · Medium", "In progress"],
-    ["locked", 5, "Activation", "Opens after Pricing", "Locked"],
+    ["locked", 5, "Go-to-market strategy", "Opens after Pricing", "Locked"],
   ];
   portal.append(
     el("p", { class: "company", "data-z": "1", text: "Chantio inc." }),
