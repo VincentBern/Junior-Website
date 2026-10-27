@@ -878,7 +878,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
                 <div class="u-msg">Where am I?</div>
                 <div class="toolrow"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.4"/><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2M3.6 3.6l1.4 1.4M11 11l1.4 1.4M3.6 12.4 5 11M11 5l1.4-1.4"/></svg><span>junior</span><b>show_progress</b><svg class="chev" viewBox="0 0 16 16"><path d="m6 4 4 4-4 4"/></svg></div>
                 <div class="pc" id="card"></div>
-                <p class="a-msg">You're halfway through Prix. Shall we finish it?</p>
+                <p class="a-msg">You're halfway through Pricing. Shall we finish it?</p>
               </div>
               <div class="composer2">
                 <span class="ph">Reply…</span>
@@ -935,7 +935,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-bet
         <div>
           <span class="count">Commercial engine · 11 tools</span>
           <h3>A go-to-market that survives contact with a buyer.</h3>
-          <p>ICP, value proposition, competitive audit, customer journey, pricing, activation, sales cycle, tracking. From target to customer, in one learning loop.</p>
+          <p>ICP and value proposition, competitive marketing audit, customer journey, pricing, go-to-market strategy, signals and activation, sales pipeline, sales dashboard, opportunity assessment, client onboarding, partnership program. From target to customer, in one learning loop.</p>
         </div>
         <div>
           <span class="count">On demand</span>
@@ -1076,26 +1076,26 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
 
 (() => {
   // Staged demo state for Chantio inc., the fictional company the welcome guide uses.
-  // Only canevas names already public on the homepage are named; the rest stay unnamed.
+  // The 11 commercialization tools carry their real names, also listed on the homepage (Luc, 2026-10-25).
   const W = [90,60,150,120,45,90,180,120,60,90,150,60,240,120,90,60,120,180,90,60,120];
   const sp = W.map((m, k) => ({ minutes: m, status: k < 8 ? "ready" : k === 8 ? "revisit" : k < 10 ? "ready" : k < 15 ? "todo" : "locked" }));
   sp[5].status = "ready";
   const cm = [
-    { name: "ICP + Proposition de valeur", minutes: 180, status: "ready" },
-    { name: "Audit concurrentiel", minutes: 120, status: "ready" },
-    { name: "Parcours client", minutes: 90, status: "ready" },
-    { name: "Prix", minutes: 150, status: "progress", pct: 60 },
-    { name: "Activation", minutes: 120, status: "locked" },
-    { name: "Cycle de vente", minutes: 150, status: "locked" },
-    { name: "", minutes: 90, status: "locked" },
-    { name: "", minutes: 120, status: "locked" },
-    { name: "", minutes: 60, status: "locked" },
-    { name: "", minutes: 90, status: "locked" },
-    { name: "Suivi", minutes: 120, status: "locked" },
+    { name: "ICP + Value proposition", minutes: 180, status: "ready" },
+    { name: "Competitive marketing audit", minutes: 120, status: "ready" },
+    { name: "Customer journey", minutes: 90, status: "ready" },
+    { name: "Pricing", minutes: 150, status: "progress", pct: 60 },
+    { name: "Go-to-market strategy", minutes: 120, status: "locked" },
+    { name: "Signals & activation", minutes: 150, status: "locked" },
+    { name: "Sales pipeline", minutes: 90, status: "locked" },
+    { name: "Sales dashboard", minutes: 120, status: "locked" },
+    { name: "Opportunity assessment", minutes: 60, status: "locked" },
+    { name: "Client onboarding", minutes: 90, status: "locked" },
+    { name: "Partnership program", minutes: 120, status: "locked" },
   ];
   const suites = [
-    { label: "Planification stratégique", canevas: sp },
-    { label: "Commercialisation", canevas: cm },
+    { label: "Strategic planning", canevas: sp },
+    { label: "Commercialization", canevas: cm },
   ];
   suites.forEach((s) => { s.done = s.canevas.filter((c) => c.status === "ready").length; s.total = s.canevas.length; });
   const done = suites.reduce((a, s) => a + s.done, 0), total = suites.reduce((a, s) => a + s.total, 0);
@@ -1145,31 +1145,31 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
     el("span", { class: "bars", "aria-hidden": "true" }, [el("i", { class: "on" }), el("i", { class: "on" }), el("i")]),
     el("span", { text: "Medium · ≈ 1 h left" })]);
   effort.dataset.z = "3";
-  const why = el("p", { class: "why", text: "It builds on ICP + Proposition de valeur and Audit concurrentiel. Finishing it opens Activation and Cycle de vente." });
+  const why = el("p", { class: "why", text: "It builds on ICP + Value proposition and Competitive marketing audit. Finishing it opens Go-to-market strategy and Signals & activation." });
   why.dataset.z = "4";
   const bar = el("div", { class: "bar", role: "img", "aria-label": "60% answered" }, [el("span")]);
   bar.firstChild.style.width = "60%";
   const actions = el("p", { class: "actions" });
-  actions.append("Your next moves: ", el("span", { class: "act", text: "continue Prix" }), " or ", el("span", { class: "act", text: "work on Indicateurs" }));
+  actions.append("Your next moves: ", el("span", { class: "act", text: "continue Pricing" }), " or ", el("span", { class: "act", text: "work on KPIs" }));
   card.append(el("section", { class: "next" }, [
-    el("p", { class: "kicker", text: "Pick up where you left off · Commercialisation, canevas 4" }),
-    el("h2", { text: "Prix" }), bar, effort, why, actions]));
+    el("p", { class: "kicker", text: "Pick up where you left off · Commercialization, canevas 4" }),
+    el("h2", { text: "Pricing" }), bar, effort, why, actions]));
   
 
   // Fig. 04: the portal, overview, next step, one suite's sequence
   const portal = document.getElementById("portal");
   const nextCard = el("div", { class: "next-card", "data-z": "2" }, [
     el("h4", { text: "Pick up where you left off" }),
-    el("h3", { text: "Prix" }),
-    el("p", { class: "meta", text: "Commercialisation · canevas 4 · 60% answered · ≈ 1 h left" }),
-    el("div", { class: "next-actions" }, [el("span", { class: "p-btn", text: "Continue in Claude" }), el("span", { class: "then", text: "Then: Activation" })]),
+    el("h3", { text: "Pricing" }),
+    el("p", { class: "meta", text: "Commercialization · canevas 4 · 60% answered · ≈ 1 h left" }),
+    el("div", { class: "next-actions" }, [el("span", { class: "p-btn", text: "Continue in Claude" }), el("span", { class: "then", text: "Then: Go-to-market strategy" })]),
   ]);
   const rows = [
-    ["ready", 1, "ICP + Proposition de valeur", "Confirmed ★★", "Ready"],
-    ["ready", 2, "Audit concurrentiel", "", "Ready"],
-    ["ready", 3, "Parcours client", "", "Ready"],
-    ["progress", 4, "Prix", "60% answered · Medium", "In progress"],
-    ["locked", 5, "Activation", "Opens after Prix", "Locked"],
+    ["ready", 1, "ICP + Value proposition", "Confirmed ★★", "Ready"],
+    ["ready", 2, "Competitive marketing audit", "", "Ready"],
+    ["ready", 3, "Customer journey", "", "Ready"],
+    ["progress", 4, "Pricing", "60% answered · Medium", "In progress"],
+    ["locked", 5, "Go-to-market strategy", "Opens after Pricing", "Locked"],
   ];
   portal.append(
     el("p", { class: "company", "data-z": "1", text: "Chantio inc." }),
@@ -1177,14 +1177,14 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
     el("p", { class: "subline", "data-z": "1", text: (total - done) + " to go, about 35 h 30 min of thinking." }),
     strip(() => "1 4"), legend(),
     nextCard,
-    el("div", { class: "suite-head", "data-z": "3", style: "margin-top:30px" }, [el("h3", { text: "Commercialisation" }), el("p", { text: "3 of 11 done · 6 h 30 min" })]),
+    el("div", { class: "suite-head", "data-z": "3", style: "margin-top:30px" }, [el("h3", { text: "Commercialization" }), el("p", { text: "3 of 11 done · 6 h 30 min" })]),
     el("ul", { class: "ch-list" }, rows.map(([s, n, nm, sub, lab]) => el("li", { class: "ch" }, [
       el("span", { class: "ico " + s, "aria-hidden": "true", "data-z": "4" }),
       el("span", { class: "n", "data-z": "3", text: String(n) }),
       el("span", { class: "nm", "data-z": "3", text: nm }, sub ? [el("span", { class: "sub", text: sub })] : []),
       el("span", { class: "st", "data-z": "4", text: lab }),
     ]))),
-    el("p", { "data-z": "3", style: "color:var(--w-soft);font-size:13px;margin-top:12px", text: "+ 6 canevas, locked until Prix" }));
+    el("p", { "data-z": "3", style: "color:var(--w-soft);font-size:13px;margin-top:12px", text: "+ 6 canevas, locked until Pricing" }));
   portal.querySelector(".legend").dataset.z = "1 4";
 
   // Reading a figure: hover (desktop) or a stepper (touch / narrow) lights one zone and fades the rest.
