@@ -9,6 +9,7 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
   - Attention : sur `localhost`, `assets/diagnostic.js` appelle l'API sur `http://localhost:8787` (server-remote local). Sans ce serveur, le diagnostic échoue à l'étape du code d'accès. C'est normal.
 - Resynchroniser les questions du diagnostic : `python3 scripts/sync-diagnostic-content.py <chemin/vers/le/repo/junior>` (requiert PyYAML). Ce chemin est celui du repo source Junior (qui contient `content/diagnostics/`), **pas** celui du site; chez Luc : `~/projects/junior`. Toujours le passer explicitement : le défaut `../junior` peut tomber sur un autre dossier sur un disque macOS insensible à la casse (le script refuse alors de s'exécuter).
 - Vidéo : `cd video/junior-101 && node render.js` (Playwright + ffmpeg), ou `node render.js stills 3,12` pour des images fixes.
+- Référencement : chaque page publique a sa balise canonical, ses hreflang `fr` et `en` (plus `x-default` vers la racine pour les accueils), son aperçu de partage (`og:*`, images `assets/og-fr.jpg` et `assets/og-en.jpg`) et sa ligne dans `sitemap.xml`. Une nouvelle page publique reçoit tout ça dans la même PR. Les données structurées (JSON-LD) des accueils ne disent que ce que la page montre.
 
 ## Carte du repo
 
@@ -22,6 +23,8 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 | `fr/confidentialite.html`, `en/privacy.html` | Politique de confidentialité. Le nom de fichier diffère par langue; le contenu reste en parité. |
 | `fr/conditions.html`, `en/terms.html` | Conditions d'utilisation. Même règle de parité. |
 | `assets/legal.css` | Style des quatre pages légales et des deux pages de liste d'attente, **partagé** par les deux langues. |
+| `robots.txt`, `sitemap.xml` | Tout le site reste ouvert aux moteurs et aux IA. `sitemap.xml` liste à la main les pages publiques (pas le diagnostic, en `noindex`, ni les liens courts `ig/` et `tt/`); les mémos ont leur propre sitemap. |
+| `assets/og-fr.jpg`, `assets/og-en.jpg` | Aperçus de partage (1200 × 630) des pages françaises et anglaises. |
 | `assets/experiments.js` | Test H1 (repo Junior, §95) : tire une fois par navigateur la variante d'entrée (`diagnostic` ou `attente`), gardée dans `junior_exp_h1_v1`, l'applique aux boutons `data-h1-cta` de l'accueil et l'ajoute aux événements Umami. Interrupteur `H1_ACTIVE`, à `false` tant que le diagnostic n'est pas public. |
 | `fr/waitlist.html`, `en/waitlist.html` | « Être avisé de l'ouverture », l'autre bras du test H1 : formulaire avec consentement obligatoire, envoyé à `POST /diagnostics/waitlist`. Même nom de fichier dans les deux langues. |
 | `diagnostic-questions/fr.js` | **Généré** depuis le repo Junior. Ne jamais modifier à la main. |
