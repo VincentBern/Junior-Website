@@ -3,12 +3,12 @@
 # (and as /CLAUDE.md), and the scripts and video sources were public too.
 # Keep the repo's working files here; the pages themselves are plain HTML and
 # are copied as they are. The GitHub repo itself is public: a file left out of
-# the site can still be read on github.com.
+# the site can still be read on github.com. Product images (screenshots of
+# Junior in Claude or ChatGPT, mock-ups) stay published: never list them here.
 exclude:
   - CLAUDE.md
   - scripts/
   - video/junior-101/render.js
   - video/junior-101/junior101.html
-  - video/junior-101/chat.png
   # Memo sources (FR and EN in one file), built into fr/memos/ and en/memos/.
   - memos-src/
