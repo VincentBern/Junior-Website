@@ -5,7 +5,7 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 ## Stack et commandes
 
 - HTML/CSS/JS statique, **aucun build, aucune dépendance npm**. Servi tel quel (GitHub Pages, domaine dans `CNAME`). Ne pas introduire de framework, de bundler ni de `package.json` pour le site.
-- GitHub Pages publie **tout le repo** (Jekyll), sauf ce que liste `exclude:` dans `_config.yml`. Tout nouveau fichier de travail (notes, scripts, sources) s'y ajoute dans la même PR; sinon il devient public, comme CLAUDE.md l'a été sous `/CLAUDE.html` avant ce correctif.
+- GitHub Pages publie **tout le repo** (Jekyll), sauf ce que liste `exclude:` dans `_config.yml`. Tout nouveau fichier de travail (notes, scripts, sources) s'y ajoute dans la même PR; sinon il devient public, comme CLAUDE.md l'a été sous `/CLAUDE.html` avant ce correctif. Le repo lui-même est **public** sur GitHub : un fichier exclu du site y reste lisible. Rien de confidentiel (ni brouillon non approuvé) ne s'y pousse.
 - Aperçu local : `python3 -m http.server 8000` à la racine, puis `http://localhost:8000/fr/`.
   - Attention : sur `localhost`, `assets/diagnostic.js` appelle l'API sur `http://localhost:8787` (server-remote local). Sans ce serveur, le diagnostic échoue à l'étape du code d'accès. C'est normal.
 - Resynchroniser les questions du diagnostic : `python3 scripts/sync-diagnostic-content.py <chemin/vers/le/repo/junior>` (requiert PyYAML). Ce chemin est celui du repo source Junior (qui contient `content/diagnostics/`), **pas** celui du site; chez Luc : `~/projects/junior`. Toujours le passer explicitement : le défaut `../junior` peut tomber sur un autre dossier sur un disque macOS insensible à la casse (le script refuse alors de s'exécuter).
