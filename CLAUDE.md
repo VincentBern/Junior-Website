@@ -28,6 +28,10 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 | `diagnostic-questions/en.js` | Traduction anglaise maintenue à la main; même structure exacte que `fr.js`. |
 | `scripts/sync-diagnostic-content.py` | Régénère `fr.js` et vérifie que `en.js` a les mêmes dimensions/questions/niveaux. |
 | `video/junior-101/` | Vidéo explicative FR 9:16 de 30 s : source HTML, script de rendu, MP4 rendu. |
+| `memos-src/` | Sources des mémos (`AAAA-MM-JJ-sujet.md`, le français puis l'anglais dans le même fichier). Modèle : `memos-src/_modele.md`. Jamais publiées. |
+| `scripts/build-memos.py` | Construit les mémos à partir de leurs sources (section 8). Python seul, aucune dépendance. |
+| `fr/memos/`, `en/memos/`, `sitemap-memos.xml` | **Générés** par `scripts/build-memos.py` : pages des mémos, liste, flux RSS, sitemap. Ne jamais modifier à la main. |
+| `assets/memo.css` | Style des mémos, chargé après `assets/legal.css` dont il reprend les jetons, l'en-tête et le pied de page. |
 
 ## Règles non négociables
 
@@ -81,6 +85,17 @@ Le ton est celui d'un cabinet de conseil sobre, pas d'un SaaS. À respecter dans
 
 ### 7. Vidéo
 - `junior101.html` est la source; le `.mp4` est un rendu. Toute modification de la source (ou d'un chiffre ou d'une formulation qu'elle reprend du site) implique de relancer le rendu et de committer le nouveau MP4.
+
+### 8. Mémos (`fr/memos/`, `en/memos/`)
+Les mémos sont de courts articles (300 à 600 mots), tirés des publications de Junior, pour être trouvés dans Google et cités par les assistants IA (plan accepté par Luc le 2026-10-28). Chacun répond à une seule question que des dirigeants cherchent vraiment.
+- **Source** : un fichier par mémo dans `memos-src/`, au format de `memos-src/_modele.md`. Les fichiers qui commencent par `_` sont ignorés.
+- **Construire** : `python3 scripts/build-memos.py`. Le script écrit `fr/memos/`, `en/memos/` et `sitemap-memos.xml`, et retire ce qui ne correspond plus à une source. `python3 scripts/build-memos.py --check` dit si tout est à jour. Les fichiers générés portent la mention « Built by scripts/build-memos.py ».
+- **Le script refuse** un mémo dont l'En bref ne nomme pas « Junior (junior.coach) » ou parle de Chantio, un chiffre de Chantio sans « (entreprise fictive) » dans la même phrase, un tiret cadratin ou demi-cadratin, ou un anglais qui n'a pas les mêmes sections que le français. Il avertit quand l'En bref (40 à 60 mots) ou le mémo (300 à 600 mots) sort des longueurs visées.
+- **Typographie** : le script pose les espaces insécables du français (« », :, %, $) et retire l'espace avant `?`, `!` et `;`.
+- **Appel à l'action** : vers la liste d'attente tant que `H1_ACTIVE` vaut `false` dans `assets/experiments.js`, puis vers l'accueil, pour ne pas fausser le test H1. Le script lit l'interrupteur : le relancer quand il change.
+- **Contenu** : seulement les canevas et les liens déjà montrés sur l'accueil (section 3); Chantio toujours présentée comme fictive; le site vouvoie; chaque mémo est signé par Luc et dit « Rédigé avec l'aide de l'IA, révisé par Luc Goudreault. ».
+- **Une PR de mémo** ne touche que `memos-src/`, `fr/memos/`, `en/memos/` et `sitemap-memos.xml`, et une seule est ouverte à la fois (la liste, le flux et le sitemap changent à chaque mémo). Avant de l'ouvrir : `--check` sans écart, rendu vérifié à 375 px et sur grand écran.
+- **Fusion** : rien ne sort sans l'approbation de Luc dans la page « Marketing Junior ». Exception proposée à Vince : sur le go écrit de Luc du jeudi, Claude fusionne la PR du mémo sans attendre sa revue. Tant que Vince ne l'a pas acceptée, les PR de mémos attendent sa revue comme les autres.
 
 ## Façon de travailler
 
