@@ -13,8 +13,9 @@ canevas: Fixation des prix | Pricing
 === fr
 # slug : l'adresse (minuscules, chiffres, tirets). title : la question, dans les
 # mots de celui qui cherche. description : 160 caractères au plus. subject : la
-# ligne « Objet » du cartouche. brief : l'En bref, 40 à 60 mots, qui nomme
-# « Junior (junior.coach) » et ne parle pas de Chantio.
+# ligne « Objet » du cartouche. brief : l'En bref, 40 à 60 mots, qui répond à
+# la question du titre, nomme « Junior (junior.coach) » et ne parle pas de
+# Chantio (ni le titre, ni la description, ni l'objet).
 slug: sujet-en-francais
 title: La question, comme un dirigeant la tape dans Google?
 description: Une phrase qui donne envie de lire, 160 caractères au plus.
@@ -23,7 +24,12 @@ brief: La réponse en 40 à 60 mots. Junior (junior.coach) ...
 ---
 ## Pourquoi
 
-Le raisonnement, en 2 ou 3 paragraphes courts. Une source citée quand il y en a une : [Titre, année](https://exemple.com).
+Le raisonnement, en 2 ou 3 paragraphes courts. Une source citée quand il y en a une, et pour ce qu'elle dit vraiment : [Titre, année](https://exemple.com).
+
+## Comment faire
+
+1. La réponse à la question du titre, en deux à quatre étapes concrètes.
+2. ...
 
 ## L'exemple de Chantio (entreprise fictive)
 
@@ -49,6 +55,11 @@ brief: The answer in 40 to 60 words. Junior (junior.coach) ...
 ## Why
 
 Same sections as the French, in the same order.
+
+## How to do it
+
+1. The answer to the title's question, in two to four concrete steps.
+2. ...
 
 ## The Chantio example (fictional company)
 

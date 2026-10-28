@@ -43,11 +43,11 @@ T = {
         "section": "Mémos", "all": "TOUS LES MÉMOS", "switch": "EN",
         "eyebrow": "Mémo", "to": "À", "to_v": "Dirigeants de PME", "from": "De",
         "from_v": "Luc Goudreault, fondateur de Junior", "subject": "Objet", "canevas": "Canevas",
-        "date": "Date", "brief": "En bref", "related": "Autres mémos",
+        "date": "Date", "updated": "mis à jour le", "brief": "En bref", "related": "Autres mémos",
         "job": "Aviseur d'entreprise",
         "author_role": "Aviseur d'entreprise et fondateur de Junior",
-        "author_bio": "Plus de 12 ans à diriger des entreprises, en hypercroissance notamment, "
-                      "et deux ventes d'entreprise auxquelles il a contribué. eMBA de l'Université Laval.",
+        "author_bio": "Plus de 12 ans en postes de direction, dont des périodes d'hypercroissance; "
+                      "a contribué à deux ventes d'entreprise. eMBA de l'Université Laval.",
         "author_site": "https://www.lucgoudreault.com/fr/",
         "ai": "Rédigé avec l'aide de l'IA, révisé par Luc Goudreault.",
         "pitch": "Junior (junior.coach) est un aviseur en stratégie et en commercialisation qui travaille "
@@ -74,11 +74,11 @@ T = {
         "section": "Memos", "all": "ALL MEMOS", "switch": "FR",
         "eyebrow": "Memo", "to": "To", "to_v": "Small business leaders", "from": "From",
         "from_v": "Luc Goudreault, founder of Junior", "subject": "Subject", "canevas": "Canevas",
-        "date": "Date", "brief": "In short", "related": "More memos",
+        "date": "Date", "updated": "updated", "brief": "In short", "related": "More memos",
         "job": "Business advisor",
         "author_role": "Business advisor and founder of Junior",
-        "author_bio": "More than 12 years leading companies, including through hypergrowth, "
-                      "and two company sales he contributed to. eMBA from Université Laval.",
+        "author_bio": "More than 12 years in leadership roles, including hypergrowth; "
+                      "contributed to two exits. eMBA from Université Laval.",
         "author_site": "https://www.lucgoudreault.com/en/",
         "ai": "Written with the help of AI, reviewed by Luc Goudreault.",
         "pitch": "Junior (junior.coach) is a strategy and commercialization advisor that works inside "
@@ -97,6 +97,23 @@ T = {
         "empty": "The first memo is coming soon.",
         "image_alt": "Junior: the advisor you'd hire if you could afford one.",
     },
+}
+
+# The canevas a memo may name: the 11 Commercialization tools, public under these names
+# (CLAUDE.md, section 3). A Strategic planning canevas is added here only once the home
+# page already names it.
+CANEVAS = {
+    "ICP + Proposition de valeur": "ICP + Value proposition",
+    "Audit marketing concurrentiel": "Competitive marketing audit",
+    "Customer journey": "Customer journey",
+    "Fixation des prix": "Pricing",
+    "Stratégie GTM": "Go-to-market strategy",
+    "Signaux & activation": "Signals & activation",
+    "Pipeline de vente": "Sales pipeline",
+    "Tableau de pilotage commercial": "Sales dashboard",
+    "Évaluation des opportunités": "Opportunity assessment",
+    "Onboarding client": "Client onboarding",
+    "Programme de partenariat": "Partnership program",
 }
 
 errors, warnings = [], []
@@ -126,7 +143,7 @@ def typo_fr(s):
     s = re.sub(r"\s*»", " »", s)
     s = re.sub(r"(?<=[\w»)])\s*:(?=\s|$)", " :", s)
     s = re.sub(r"(?<=\d)\s*%", " %", s)
-    s = re.sub(r"(?<=\d)\s+\$", " $", s)
+    s = re.sub(r"(?<=\d)\s*\$", " $", s)
     s = re.sub(r"[  ]+([?!;])", r"\1", s)
     return s
 
@@ -142,17 +159,18 @@ def span(s):
 
 
 def inline(text, lang, where):
-    if lang == "fr":
-        text = typo_fr(text)
+    # French typography applies to the text and the link labels, never to the URLs
+    # (it would put a space inside "2024%20", and the link would no longer parse).
+    fix = typo_fr if lang == "fr" else (lambda x: x)
     out, pos = [], 0
     for m in LINK.finditer(text):
-        out.append(span(text[pos:m.start()]))
+        out.append(span(fix(text[pos:m.start()])))
         url = m.group(2)
         if not re.match(r"^(https://|\.\./|#|mailto:)", url):
             fail(where, f"link must be https://, ../, # or mailto: ({url})")
-        out.append(f'<a href="{attr(url)}">{span(m.group(1))}</a>')
+        out.append(f'<a href="{attr(url)}">{span(fix(m.group(1)))}</a>')
         pos = m.end()
-    out.append(span(text[pos:]))
+    out.append(span(fix(text[pos:])))
     return "".join(out)
 
 
@@ -161,6 +179,12 @@ def plain(md):
     t = LINK.sub(r"\1", md)
     t = re.sub(r"^#+ |^- |^\d+\. |^> ", "", t, flags=re.M)
     return t.replace("**", "").replace("*", "")
+
+
+def meta(s, lang):
+    """Plain text for <title>, meta tags, JSON-LD and RSS, with the French typography."""
+    t = plain(s)
+    return typo_fr(t) if lang == "fr" else t
 
 
 def words(s):
@@ -243,6 +267,9 @@ def parse(path):
     if len(parts) != 5 or parts[1] != "fr" or parts[3] != "en":
         fail(name, "expected a header, then '=== fr', then '=== en'")
         return None
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}-[a-z0-9]+(-[a-z0-9]+)*\.md", name):
+        fail(name, "file name: YYYY-MM-DD-topic.md (lowercase letters, digits and dashes)")
+        return None
     memo = {"id": name[:-3], "file": name, "fr": {}, "en": {}}
     memo.update(fields(parts[0], name))
     for lang, block in (("fr", parts[2]), ("en", parts[4])):
@@ -276,11 +303,22 @@ def check(memo):
     for k in ("date", "updated"):
         if memo.get(k):
             try:
+                if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", memo[k]):
+                    raise ValueError
                 dt.date.fromisoformat(memo[k])
             except ValueError:
                 fail(w, f"{k} must be YYYY-MM-DD")
+                memo.pop(k)
     if " | " not in memo.get("canevas", ""):
         fail(w, "canevas: 'Nom français | English name'")
+    else:
+        fr_name, en_name = memo["canevas"].split(" | ", 1)
+        if CANEVAS.get(fr_name) != en_name:
+            fail(w, f"canevas not in the public list (CLAUDE.md, section 3): {memo['canevas']}")
+    for lang in LANGS:
+        post = memo.get(f"post_{lang}")
+        if post and not re.match(r"^https://", post):
+            fail(w, f"post_{lang} must be an https:// link")
     counts = {}
     for lang in LANGS:
         m, where = memo[lang], f"{w} ({lang})"
@@ -294,15 +332,16 @@ def check(memo):
         brief = m.get("brief", "")
         if "Junior (junior.coach)" not in brief:
             fail(where, "the brief names 'Junior (junior.coach)'")
-        if "Chantio" in brief:
-            fail(where, "no Chantio in the brief: an AI could quote it as a market fact")
+        for k in ("brief", "title", "description", "subject"):
+            if "Chantio" in m.get(k, ""):
+                fail(where, f"no Chantio in the {k}: search engines and AI assistants quote it as a market fact")
         bw = words(brief)
-        if not 35 <= bw <= 75:
+        if not 40 <= bw <= 60:
             warn(where, f"brief is {bw} words (aim for 40 to 60)")
         total = bw + words(plain(m.get("body", "")))
-        if not 300 <= total <= 650:
+        if not 300 <= total <= 600:
             warn(where, f"memo is {total} words (aim for 300 to 600)")
-        tag = "fictive" if lang == "fr" else "fictional"
+        tag = "entreprise fictive" if lang == "fr" else "fictional company"
         for sentence in re.split(r"(?<=[.!?])\s+", plain(m.get("body", ""))):
             if "Chantio" in sentence and re.search(r"\d", sentence) and tag not in sentence:
                 fail(where, f"a Chantio figure needs '({'entreprise fictive' if lang == 'fr' else 'fictional company'})' "
@@ -311,7 +350,10 @@ def check(memo):
         img = memo.get(f"image_{lang}")
         if img:
             p = os.path.join(ROOT, img)
-            if not os.path.isfile(p):
+            if not re.fullmatch(r"memos-src/img/[A-Za-z0-9_-]+\.(png|jpe?g)", img):
+                fail(where, f"image must be a .png or .jpg file in memos-src/img/ ({img})")
+                memo.pop(f"image_{lang}")
+            elif not os.path.isfile(p):
                 fail(where, f"image not found: {img}")
             elif not image_size(p):
                 fail(where, "image must be PNG or JPEG")
@@ -413,13 +455,13 @@ def json_ld(memo, lang):
         "@type": "BlogPosting",
         "@id": url + "#memo",
         "mainEntityOfPage": url,
-        "headline": m["title"][:110],
-        "description": m["description"],
+        "headline": meta(m["title"], lang)[:110],
+        "description": meta(m["description"], lang),
         "inLanguage": t["inlang"],
         "datePublished": memo["date"],
         "dateModified": memo.get("updated") or memo["date"],
         "image": f"{SITE}/assets/og-{lang}.jpg",
-        "about": memo["canevas"].split(" | ")[0 if lang == "fr" else 1],
+        "about": {"@type": "Thing", "name": memo["canevas"].split(" | ")[0 if lang == "fr" else 1]},
         "author": {
             "@type": "Person",
             "name": "Luc Goudreault",
@@ -450,12 +492,16 @@ def memo_page(memo, lang, memos, h1_active):
     rss = f'<link rel="alternate" type="application/rss+xml" title="{attr(t["list_title"])} · Junior" href="{SITE}/{lang}/memos/rss.xml">'
     extra = "\n".join([
         f'<meta property="article:published_time" content="{memo["date"]}">',
-        f'<meta property="article:author" content="Luc Goudreault">',
+        f'<meta property="article:author" content="{t["author_site"]}">',
         rss,
         json_ld(memo, lang),
     ])
     canevas = memo["canevas"].split(" | ")[0 if lang == "fr" else 1]
     day = long_date(memo["date"], lang)
+    day_row = f'<time datetime="{memo["date"]}">{day}</time>'
+    if memo.get("updated") and memo["updated"] != memo["date"]:
+        # dateModified in the JSON-LD says what the page shows.
+        day_row += f' · {t["updated"]} <time datetime="{memo["updated"]}">{long_date(memo["updated"], lang)}</time>'
     img = ""
     if memo.get(f"image_{lang}"):
         src = memo[f"image_{lang}"]
@@ -467,11 +513,11 @@ def memo_page(memo, lang, memos, h1_active):
     else:
         origin = t["follow"].format(li=LINKEDIN, ig=INSTAGRAM)
     if h1_active:
-        cta = f'<a class="cta-btn" href="../../" data-umami-event="memo_cta" data-umami-event-memo="{memo["id"]}">{t["cta_home"]}</a>'
+        cta = f'<a class="cta-btn" href="../../" data-umami-event="memo_cta" data-umami-event-memo="{attr(memo["id"])}">{t["cta_home"]}</a>'
         soon = ""
     else:
         cta = (f'<a class="cta-btn" href="../../waitlist.html" data-umami-event="memo_cta" '
-               f'data-umami-event-memo="{memo["id"]}">{t["cta_wait"]}</a>')
+               f'data-umami-event-memo="{attr(memo["id"])}">{t["cta_wait"]}</a>')
         soon = f"\n    <p>{inline(t['soon'], lang, where)}</p>"
     others = [o for o in memos if o["id"] != memo["id"]][:2]
     related = ""
@@ -485,7 +531,7 @@ def memo_page(memo, lang, memos, h1_active):
 {items}
     </ul>
   </nav>"""
-    return f"""{head(lang, m['title'] + ' · Junior', m['description'], url, alts, 3, 'article', extra)}
+    return f"""{head(lang, meta(m['title'], lang) + ' · Junior', meta(m['description'], lang), url, alts, 3, 'article', extra)}
 </head>
 <body>
 
@@ -502,7 +548,7 @@ def memo_page(memo, lang, memos, h1_active):
       <div class="tb-row"><dt>{t['from']}</dt><dd>{t['from_v']}</dd></div>
       <div class="tb-row"><dt>{t['subject']}</dt><dd>{inline(m['subject'], lang, where)}</dd></div>
       <div class="tb-row"><dt>{t['canevas']}</dt><dd>{esc(canevas)}</dd></div>
-      <div class="tb-row"><dt>{t['date']}</dt><dd><time datetime="{memo['date']}">{day}</time></dd></div>
+      <div class="tb-row"><dt>{t['date']}</dt><dd>{day_row}</dd></div>
     </dl>
 
     <section class="brief" aria-labelledby="brief">
@@ -588,11 +634,11 @@ def list_page(lang, memos):
 def rss(lang, memos):
     t = T[lang]
     items = "\n".join(f"""  <item>
-    <title>{esc(m[lang]['title'])}</title>
+    <title>{esc(meta(m[lang]['title'], lang))}</title>
     <link>{memo_url(m, lang)}</link>
     <guid isPermaLink="true">{memo_url(m, lang)}</guid>
     <pubDate>{rfc822(m['date'])}</pubDate>
-    <description>{esc(plain(m[lang]['brief']))}</description>
+    <description>{esc(meta(m[lang]['brief'], lang))}</description>
   </item>""" for m in memos)
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <!-- {MARKER}. Do not edit by hand. -->
@@ -655,19 +701,29 @@ def build():
     return files, copies
 
 
+def has_marker(p):
+    return os.path.isfile(p) and MARKER in open(p, encoding="utf-8", errors="ignore").read(400)
+
+
 def generated_on_disk():
-    """Every file this script wrote before (it carries the marker), plus copied images next to them."""
+    """Every file this script wrote before: pages and feeds carry the marker; a copied image
+    sits in a memo folder whose index.html carries it. Dotfiles (.DS_Store) and files placed
+    by hand elsewhere are left alone."""
     found = set()
     for lang in LANGS:
         base = os.path.join(ROOT, lang, "memos")
-        for dirpath, _, filenames in os.walk(base):
+        for dirpath, dirnames, filenames in os.walk(base):
+            dirnames[:] = [d for d in dirnames if not d.startswith(".")]
+            memo_dir = dirpath != base and has_marker(os.path.join(dirpath, "index.html"))
             for f in filenames:
+                if f.startswith("."):
+                    continue
                 p = os.path.join(dirpath, f)
                 rel = os.path.relpath(p, ROOT)
                 if f.endswith((".html", ".xml")):
-                    if MARKER in open(p, encoding="utf-8", errors="ignore").read(400):
+                    if has_marker(p):
                         found.add(rel)
-                else:
+                elif memo_dir:
                     found.add(rel)
     sm = os.path.join(ROOT, "sitemap-memos.xml")
     if os.path.isfile(sm):
@@ -714,6 +770,9 @@ def main():
         os.makedirs(os.path.dirname(p), exist_ok=True)
         shutil.copyfile(os.path.join(ROOT, src), p)
     for rel in sorted(stale):
+        if rel.endswith("/index.html") and rel.count("/") == 3:
+            print(f"warning: removed {rel}. If that memo was online, its address now gives a 404: "
+                  "keep the old slug, or tell Luc.")
         os.remove(os.path.join(ROOT, rel))
         d = os.path.dirname(os.path.join(ROOT, rel))
         if d.count(os.sep) > ROOT.count(os.sep) + 2 and not os.listdir(d):
