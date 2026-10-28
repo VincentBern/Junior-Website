@@ -1,0 +1,68 @@
+/* Memos (fr|en/memos/), built by scripts/build-memos.py. Loaded after legal.css,
+   whose tokens, masthead, sheet and footer they reuse: no new token here. */
+
+.memo .wrap{width:min(760px,100% - 2.6rem)}
+.memo h1{margin-bottom:1.3rem;font-size:clamp(1.9rem,4.4vw,2.8rem)}
+.memo .titleblock{margin-bottom:2rem}
+
+/* the answer first: the passage search engines and assistants quote */
+.brief{border:1px solid var(--ink);background:var(--sheet);padding:1.1rem 1.25rem 1.2rem;margin:0 0 2.4rem}
+.brief h2{
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:500;letter-spacing:.19em;
+  text-transform:uppercase;color:var(--graphite);margin-bottom:.55rem;font-variation-settings:normal;
+}
+.brief p{font-size:1.08rem;line-height:1.55}
+
+.memo-figure{margin:0 0 2.4rem}
+.memo-figure img{display:block;width:100%;height:auto;border:1px solid var(--line);background:var(--sheet)}
+
+.memo-body h2{border-top:1px solid var(--line);padding-top:1.5rem;margin:2.4rem 0 .9rem}
+.memo-body h2:first-child{border-top:0;padding-top:0;margin-top:0}
+.memo-body h3{margin:1.6rem 0 .5rem}
+.memo-body p+p,.memo-body p+ul,.memo-body p+ol,.memo-body ul+p,.memo-body ol+p,
+.memo-body blockquote+p,.memo-body p+blockquote{margin-top:.85rem}
+.memo-body ul,.memo-body ol{margin:0;padding-left:1.25rem}
+.memo-body li{margin-bottom:.45rem}
+.memo-body li:last-child{margin-bottom:0}
+.memo-body blockquote{margin:1.2rem 0;border-left:3px solid var(--blueprint);background:var(--sheet);padding:.85rem 1.1rem}
+.memo-body blockquote p+p{margin-top:.4rem;font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--graphite)}
+.memo-body strong{font-weight:600}
+
+/* who wrote it, and how */
+.author{border-top:1px solid var(--ink);margin-top:3rem;padding-top:1.4rem;display:grid;gap:.35rem;font-size:.95rem}
+.author-name{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.1rem;font-variation-settings:"wdth" 94}
+.author-role{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite)}
+.ai-note{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--graphite);margin-top:.4rem}
+
+.cta{background:var(--blueprint);color:#fff;padding:1.4rem 1.4rem 1.5rem;margin-top:2.2rem;display:grid;gap:.7rem;justify-items:start}
+.cta p{color:#fff}
+.doc .cta a.cta-btn{
+  display:inline-block;margin-top:.3rem;padding:.75rem 1.2rem;background:#fff;color:var(--blueprint);
+  text-decoration:none;font-weight:600;border-radius:4px;
+}
+.doc .cta a.cta-btn:hover{background:var(--sheet);color:var(--blueprint-deep)}
+
+.origin{margin-top:1.4rem;font-size:.92rem;color:var(--graphite)}
+
+.related{border-top:1px solid var(--line);margin-top:2.4rem;padding-top:1.3rem}
+.related h2{font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:500;letter-spacing:.19em;text-transform:uppercase;color:var(--graphite);margin-bottom:.7rem;font-variation-settings:normal}
+.related ul{margin:0;padding-left:1.1rem}
+.related li{margin-bottom:.4rem}
+
+/* the list of memos */
+.memo-index{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.memo-index li{padding:1.3rem 0;border-bottom:1px solid var(--line);display:grid;gap:.35rem}
+.memo-index time{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite)}
+.doc .memo-index a[href]{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.25rem;line-height:1.2;color:var(--ink);text-decoration:none;font-variation-settings:"wdth" 94}
+.doc .memo-index a[href]:hover{color:var(--blueprint);text-decoration:underline}
+.memo-index p{color:#2A323C;font-size:.98rem}
+
+/* phones: the title block keeps its two columns, it is short */
+@media (max-width:760px){
+  .memo .tb-row{grid-template-columns:5.6rem 1fr}
+  .memo .tb-row dt{border-right:1px solid var(--line);border-bottom:0}
+}
+
+@media print{
+  .cta,.related{display:none}
+}
