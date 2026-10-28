@@ -1,0 +1,12 @@
+# GitHub Pages builds this repo with Jekyll and publishes every file it holds.
+# Without this list, CLAUDE.md was served as https://www.junior.coach/CLAUDE.html
+# (and as /CLAUDE.md), and the scripts and video sources were public too.
+# Keep the repo's working files here; the pages themselves are plain HTML and
+# are copied as they are.
+exclude:
+  - CLAUDE.md
+  - scripts/
+  - video/junior-101/render.js
+  - video/junior-101/junior101.html
+  # Memo sources (FR and EN in one file), built into fr/memos/ and en/memos/.
+  - memos-src/
