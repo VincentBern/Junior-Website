@@ -1,0 +1,8 @@
+# junior.coach : every public page stays open to search engines and AI assistants.
+# The repo's working files are kept out of the site by _config.yml, not here.
+User-agent: *
+Allow: /
+
+Sitemap: https://www.junior.coach/sitemap.xml
+# Built by scripts/build-memos.py from the first memo on.
+Sitemap: https://www.junior.coach/sitemap-memos.xml

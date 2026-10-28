@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Public pages of junior.coach, kept by hand: a new public page is added here in the same PR.
+     Memos have their own sitemap, built by scripts/build-memos.py (sitemap-memos.xml). -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.junior.coach/fr/</loc></url>
+  <url><loc>https://www.junior.coach/en/</loc></url>
+  <url><loc>https://www.junior.coach/fr/installer.html</loc></url>
+  <url><loc>https://www.junior.coach/en/install.html</loc></url>
+  <url><loc>https://www.junior.coach/fr/waitlist.html</loc></url>
+  <url><loc>https://www.junior.coach/en/waitlist.html</loc></url>
+  <url><loc>https://www.junior.coach/fr/conditions.html</loc></url>
+  <url><loc>https://www.junior.coach/en/terms.html</loc></url>
+  <url><loc>https://www.junior.coach/fr/confidentialite.html</loc></url>
+  <url><loc>https://www.junior.coach/en/privacy.html</loc></url>
+</urlset>
