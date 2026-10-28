@@ -9,7 +9,7 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
   - Attention : sur `localhost`, `assets/diagnostic.js` appelle l'API sur `http://localhost:8787` (server-remote local). Sans ce serveur, le diagnostic échoue à l'étape du code d'accès. C'est normal.
 - Resynchroniser les questions du diagnostic : `python3 scripts/sync-diagnostic-content.py <chemin/vers/le/repo/junior>` (requiert PyYAML). Ce chemin est celui du repo source Junior (qui contient `content/diagnostics/`), **pas** celui du site; chez Luc : `~/projects/junior`. Toujours le passer explicitement : le défaut `../junior` peut tomber sur un autre dossier sur un disque macOS insensible à la casse (le script refuse alors de s'exécuter).
 - Vidéo : `cd video/junior-101 && node render.js` (Playwright + ffmpeg), ou `node render.js stills 3,12` pour des images fixes.
-- Référencement : chaque page publique a sa balise canonical, ses hreflang `fr` et `en` (plus `x-default` vers la racine pour les accueils), son aperçu de partage (`og:*`, images `assets/og-fr.jpg` et `assets/og-en.jpg`) et sa ligne dans `sitemap.xml`. Une nouvelle page publique reçoit tout ça dans la même PR. Les données structurées (JSON-LD) des accueils ne disent que ce que la page montre.
+- Référencement : chaque page publique a sa balise canonical, ses hreflang `fr` et `en` (plus `x-default` vers la racine pour les accueils), son aperçu de partage (`og:*`, images `assets/og-fr.jpg` et `assets/og-en.jpg`) et sa ligne dans `sitemap.xml`. Une nouvelle page publique reçoit tout ça dans la même PR. Les données structurées (JSON-LD) des accueils ne disent que ce que la page montre; seule exception, `sameAs`, qui liste les comptes officiels de Junior (LinkedIn, Instagram).
 
 ## Carte du repo
 
