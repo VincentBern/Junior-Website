@@ -5,6 +5,7 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 ## Stack et commandes
 
 - HTML/CSS/JS statique, **aucun build, aucune dépendance npm**. Servi tel quel (GitHub Pages, domaine dans `CNAME`). Ne pas introduire de framework, de bundler ni de `package.json` pour le site.
+- GitHub Pages publie **tout le repo** (Jekyll), sauf ce que liste `exclude:` dans `_config.yml`. Tout nouveau fichier de travail (notes, scripts, sources) s'y ajoute dans la même PR; sinon il devient public, comme CLAUDE.md l'a été sous `/CLAUDE.html` avant ce correctif. Le repo lui-même est **public** sur GitHub : un fichier exclu du site y reste lisible. Rien de confidentiel (ni brouillon non approuvé) ne s'y pousse. On n'exclut que des fichiers de travail (sources, scripts, notes) : les images du produit (captures de Junior dans Claude ou ChatGPT, maquettes) restent publiées, toujours (Luc, 2026-10-28).
 - Aperçu local : `python3 -m http.server 8000` à la racine, puis `http://localhost:8000/fr/`.
   - Attention : sur `localhost`, `assets/diagnostic.js` appelle l'API sur `http://localhost:8787` (server-remote local). Sans ce serveur, le diagnostic échoue à l'étape du code d'accès. C'est normal.
 - Resynchroniser les questions du diagnostic : `python3 scripts/sync-diagnostic-content.py <chemin/vers/le/repo/junior>` (requiert PyYAML). Ce chemin est celui du repo source Junior (qui contient `content/diagnostics/`), **pas** celui du site; chez Luc : `~/projects/junior`. Toujours le passer explicitement : le défaut `../junior` peut tomber sur un autre dossier sur un disque macOS insensible à la casse (le script refuse alors de s'exécuter).
@@ -16,6 +17,7 @@ Site vitrine de **Junior**, un aviseur en stratégie et en commercialisation qui
 |---|---|
 | `index.html` | Redirection vers `fr/` ou `en/` (localStorage `junior_lang`, sinon langue du navigateur). |
 | `diagnostic.html` | Redirection vers `fr/diagnostic.html`. |
+| `_config.yml` | Seule configuration de GitHub Pages : la liste des fichiers du repo qui ne sont **pas** publiés (CLAUDE.md, `scripts/`, sources de la vidéo et des mémos). |
 | `fr/index.html`, `en/index.html` | Pages d'accueil. CSS et JS **inline**, fichiers autonomes (~1160 lignes). |
 | `fr/diagnostic.html`, `en/diagnostic.html` | Gabarit du diagnostic + chaînes d'interface (`window.JUNIOR_DIAGNOSTIC_I18N`). |
 | `assets/diagnostic.js`, `assets/diagnostic.css` | Logique et style du diagnostic, **partagés** par les deux langues. |
@@ -47,6 +49,7 @@ Ces valeurs apparaissent en dur à plusieurs endroits. Si l'une change, on les m
 ### 3. Confidentialité de la méthode
 Principe de marque : « Les canevas sont publics. Leurs liens et leur boucle d'apprentissage, non. » (remplace « Les cadres sont publics. Le câblage ne l'est pas. » le 2026-10-12)
 - Ne jamais publier sur le site le contenu des cadres, les règles de complétion, le graphe complet ni les noms des canevas qui ne sont pas déjà publics. Les 11 outils de la suite Commercialisation sont publics sous leur vrai nom, listés dans les livrables de l'accueil et nommés dans la maquette (décision de Luc, 2026-10-25; les publications les nomment depuis le 2026-10-16). Les canevas de la Planification stratégique qui ne sont pas déjà visibles sur l'accueil restent sans nom.
+- Le plus critique (Luc, 2026-10-28) : le mapping des champs de chaque canevas et la façon dont les canevas s'attachent les uns aux autres, surtout d'une suite à l'autre (Planification stratégique → Commercialisation). Ça ne se montre jamais. Montrer à quoi Junior ressemble dans Claude ou ChatGPT (captures, carte de progression, maquettes) est normal et voulu.
 - Le script de synchronisation n'importe jamais `reportInstructions` ni `ctaText` : ils restent côté serveur. Ne pas contourner.
 - Le code d'accès testeurs n'est **jamais** écrit dans le code source; il est saisi par l'utilisateur et envoyé en en-tête `x-diagnostic-access-code`.
 - Les démos utilisent l'entreprise fictive **Chantio inc.** (logiciel de soumission et de planification de chantier pour entrepreneurs en rénovation résidentielle). Sa fiche complète est dans le repo Junior, `docs/demo/chantio.md` : chiffres, personnes, ton. Elle remplace Cornets Boréal inc. (décision du 2026-10-12, §81 du repo Junior); le guide d'accueil passe aussi à Chantio. Aucune donnée de client réel.
