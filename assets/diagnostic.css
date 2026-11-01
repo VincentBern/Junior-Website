@@ -108,6 +108,9 @@ p.page-sub{ color:var(--graphite); font-size:.95rem; line-height:1.7; margin:0 0
   font-size:.84rem; color:var(--graphite); max-width:640px;
 }
 .notice strong{ color:var(--ink); }
+/* Links inside notices and the tester-code page's waitlist link (Junior repo §100). */
+.notice a, .access-alt a{ color:var(--blueprint); text-underline-offset:3px; }
+.page-sub.access-alt{ margin-top:1.6rem; font-size:.92rem; }
 
 /* ---------- step 2: participant ---------- */
 .form-narrow{ max-width:560px; }

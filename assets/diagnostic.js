@@ -27,6 +27,10 @@
     commercialisation: { key: "diagnostic-commercialisation-v3", parts: ["commercialisation"] },
     double: { key: "diagnostic-double-v1", parts: ["strategique", "commercialisation"] }
   };
+  // The feedback form at the end of the report (Junior repo §100): one minute,
+  // five questions, no name or email. The diagnostic taken is filled in.
+  var FEEDBACK_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfCZian8ljhAXl_fJre_YUyWbXAhYTTHm6AqT2813x5L4GQ8Q/viewform?usp=pp_url&entry.1929558787=";
+  var FEEDBACK_OFFER = { strategique: "Stratégique · Strategy", commercialisation: "Commercialisation · Go-to-market", double: "Double · Both" };
   // diagnostic-double-v1 answer ids are prefixed per volet ("S-Q1", "C-Q1").
   var DOUBLE_PREFIX = { strategique: "S-", commercialisation: "C-" };
 
@@ -680,6 +684,7 @@
     if (res.emailed === true) emailed.textContent = T.report.emailed(report.participant.email || "");
     else if (res.emailed === false) emailed.textContent = T.report.emailFailed;
     emailed.hidden = typeof res.emailed !== "boolean";
+    $("#report-feedback-link").setAttribute("href", FEEDBACK_URL + encodeURIComponent(FEEDBACK_OFFER[report.offer] || ""));
 
     // A report with a recommendation ends on its own next step (priority,
     // plan de match, « Commencer avec Junior »), printed with it: its link
@@ -705,6 +710,10 @@
   $("#report-presentation").addEventListener("click", function(e){
     var link = e.target && e.target.closest ? e.target.closest("a.report-cta") : null;
     if (link) track("diagnostic_next_step", { offer: report && report.offer });
+  });
+
+  $("#report-feedback-link").addEventListener("click", function(){
+    track("diagnostic_feedback", { offer: report && report.offer });
   });
 
   $("#print-btn").addEventListener("click", function(){ window.print(); });
