@@ -29,6 +29,9 @@
   };
   // The feedback form at the end of the report (Junior repo §100): one minute,
   // five questions, no name or email. The diagnostic taken is filled in.
+  // The three labels must match the form's choices exactly, and the server's
+  // copy in the Junior repo (apps/server-remote/src/diagnostic-email.ts,
+  // FEEDBACK_ANSWERS): change all three places together.
   var FEEDBACK_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfCZian8ljhAXl_fJre_YUyWbXAhYTTHm6AqT2813x5L4GQ8Q/viewform?usp=pp_url&entry.1929558787=";
   var FEEDBACK_OFFER = { strategique: "Stratégique · Strategy", commercialisation: "Commercialisation · Go-to-market", double: "Double · Both" };
   // diagnostic-double-v1 answer ids are prefixed per volet ("S-Q1", "C-Q1").
@@ -684,7 +687,8 @@
     if (res.emailed === true) emailed.textContent = T.report.emailed(report.participant.email || "");
     else if (res.emailed === false) emailed.textContent = T.report.emailFailed;
     emailed.hidden = typeof res.emailed !== "boolean";
-    $("#report-feedback-link").setAttribute("href", FEEDBACK_URL + encodeURIComponent(FEEDBACK_OFFER[report.offer] || ""));
+    var feedback = $("#report-feedback-link");
+    if (feedback) feedback.setAttribute("href", FEEDBACK_URL + encodeURIComponent(FEEDBACK_OFFER[report.offer] || ""));
 
     // A report with a recommendation ends on its own next step (priority,
     // plan de match, « Commencer avec Junior »), printed with it: its link
@@ -712,7 +716,9 @@
     if (link) track("diagnostic_next_step", { offer: report && report.offer });
   });
 
-  $("#report-feedback-link").addEventListener("click", function(){
+  // Guarded: a page cached from before §100 has no feedback link.
+  var feedbackLink = $("#report-feedback-link");
+  if (feedbackLink) feedbackLink.addEventListener("click", function(){
     track("diagnostic_feedback", { offer: report && report.offer });
   });
 

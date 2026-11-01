@@ -13,11 +13,19 @@
  * Before the opening (Luc, 2026-11-01, Junior repo §100): with the test off,
  * every call to action on the homepage leads to the waitlist, and goes back
  * to the diagnostic by itself once the server says the diagnostic is public
- * (GET /diagnostics/access). A failed or slow check keeps the waitlist.
+ * (GET /diagnostics/access). A failed or slow check keeps the waitlist. The
+ * last answer is kept in localStorage (junior_diag_public_v1), so a returning
+ * visitor sees the right button before the check answers.
+ *
+ * On opening day, set DIAGNOSTIC_OPEN to true in its own commit: no more
+ * check, no more waitlist, even once the H1 test is over. The memo script
+ * (scripts/build-memos.py) reads this switch too.
  */
 (function(){
   var H1_ACTIVE = false;
+  var DIAGNOSTIC_OPEN = false;
   var H1_KEY = "junior_exp_h1_v1";
+  var OPEN_KEY = "junior_diag_public_v1";
   var VARIANTS = ["diagnostic", "attente"];
   var API_BASE = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
     ? "http://localhost:8787"
@@ -47,15 +55,26 @@
     for (var i = 0; i < ctas.length; i++) {
       var a = ctas[i];
       originals.push({ a: a, text: a.textContent, href: a.getAttribute("href") });
-      a.textContent = a.getAttribute("data-h1-attente");
-      a.setAttribute("href", "waitlist.html");
+      a.addEventListener("click", (function(link, where){
+        return function(){
+          track("accueil_clic", { cta: where, vers: link.getAttribute("href") === "waitlist.html" ? "attente" : "diagnostic" });
+        };
+      })(a, a.getAttribute("data-h1-cta")));
     }
+    function waitlist(){
+      originals.forEach(function(o){ o.a.textContent = o.a.getAttribute("data-h1-attente"); o.a.setAttribute("href", "waitlist.html"); });
+    }
+    function diagnostic(){
+      originals.forEach(function(o){ o.a.textContent = o.text; o.a.setAttribute("href", o.href); });
+    }
+    if (load(OPEN_KEY) !== "1") waitlist();
     try {
       fetch(API_BASE + "/diagnostics/access")
         .then(function(res){ return res.ok ? res.json() : null; })
         .then(function(data){
-          if (!data || data.public !== true) return;
-          originals.forEach(function(o){ o.a.textContent = o.text; o.a.setAttribute("href", o.href); });
+          if (!data || typeof data.public !== "boolean") return;
+          save(OPEN_KEY, data.public ? "1" : "0");
+          if (data.public) diagnostic(); else waitlist();
         })
         .catch(function(){});
     } catch (e) {}
@@ -64,7 +83,7 @@
   function applyHome(){
     var ctas = document.querySelectorAll("a[data-h1-cta]");
     if (!ctas.length) return;
-    if (!variant) { beforeOpening(ctas); return; }
+    if (!variant) { if (!DIAGNOSTIC_OPEN) beforeOpening(ctas); return; }
     for (var i = 0; i < ctas.length; i++) {
       var a = ctas[i];
       if (variant === "attente") {

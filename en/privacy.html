@@ -98,6 +98,7 @@
       <h2><span class="num">03</span>The website</h2>
       <p>The junior.coach pages are static files. We measure audience with Umami, a tool we host ourselves at analytics.junior.coach: it records the page viewed, the referrer, the device type and the approximate country, <strong>with no cookie, no advertising identifier and no individual profile</strong>. We sell nothing to anyone and we do not run targeted advertising.</p>
       <p>The pages also load fonts from Google Fonts and two libraries from cdnjs. Those providers see your IP address, as does any server your browser requests a file from.</p>
+      <p>Until the diagnostic opens to the public, the homepage asks our server (api.junior.coach) whether it is open, and keeps the answer in your browser's local storage. The request carries no information about you; like any server, ours sees your IP address, which may appear in its technical logs.</p>
     </section>
 
     <section class="s" id="diagnostic">
@@ -106,11 +107,11 @@
       <ul>
         <li>Your answers go to our server, which computes your scores and has the report written by an Anthropic Claude model.</li>
         <li>The report is emailed to you, and a copy goes to the Junior team: that is how we know a diagnostic was completed and can follow up with you.</li>
-        <li><strong>Our server keeps neither your answers, nor your report, nor your address.</strong> Your address is passed to the email provider for that one send. The copies that remain are the ones in mailboxes: yours and ours.</li>
+        <li><strong>Our server keeps neither your answers, nor your report, nor your address.</strong> Your address is passed to the email provider for that one send and, if you accept the follow-ups, for our contact list at that provider. The copies that remain are the ones in mailboxes: yours and ours.</li>
         <li>Your draft and your report are kept in your browser's local storage, on your device, so you can resume or reprint. Clearing the site's data erases them.</li>
       </ul>
-      <p>Completing a diagnostic puts you in our business contacts: we may write to you about your report and about what Junior can do next. An optional box lets you say yes to these emails. If you do, your email and your name are added to our contact list at our email provider (Resend), for these follow-ups only; our server itself does not keep them. Every email has a link to unsubscribe, and you can also ask us to stop with a single email.</p>
-      <p>Before the diagnostic opens to the public, you may also leave your email, and if you wish your first name and company, to be notified when the diagnostic opens, then when Junior launches. This information is used for these two notices only: it lands in the Junior team's inbox, and your email and first name are added to our contact list at our email provider (Resend). Our server does not keep it. Every notice has a link to unsubscribe.</p>
+      <p>Completing a diagnostic puts you in our business contacts: we may write to you about your report and about what Junior can do next. An optional box lets you say yes to follow-up emails about your report. If you do, your email and your first name are added to our follow-up list at our email provider (Resend), used for these emails only, for at most 12 months; our server itself does not keep them. Emails sent to this list have a link to unsubscribe; for any other email from Junior, reply "unsubscribe", or write to us.</p>
+      <p>Before the diagnostic opens to the public, you may also leave your email, and if you wish your first name and company, to be notified when the diagnostic opens, then when Junior launches. This information is used for these two notices only: it lands in the Junior team's inbox, and your email and first name are added to our contact list at our email provider (Resend). Our server does not keep it. Every notice sent to the list has a link to unsubscribe, and you can also reply "unsubscribe" to any email from Junior. People who signed up before version 1.2 of this policy agreed to one notice only, the opening: we will write to them at launch only if they confirm it.</p>
       <p>At the end of the report, an optional link leads to a short questionnaire about the diagnostic (Google Forms). It asks for neither your name nor your email; your answers are used only to improve the diagnostic.</p>
     </section>
 
@@ -198,7 +199,9 @@
       <ul>
         <li><strong>Your canevas answers and deliverables</strong>: never kept by us. They live in your project space, for as long as you want.</li>
         <li><strong>Diagnostic</strong>: nothing is kept by the server. The email copies remain in mailboxes; we delete ours on request.</li>
-        <li><strong>Waitlist and diagnostic follow-up</strong>: at Resend, until you unsubscribe. For the waitlist, no later than six months after Junior launches.</li>
+        <li><strong>Waitlist</strong>: at Resend, until six months after Junior's launch notice, then deleted. The sign-up copies in the Junior team's inbox follow the same period.</li>
+        <li><strong>Diagnostic follow-up</strong>: at Resend, at most 12 months after your diagnostic.</li>
+        <li><strong>Unsubscribing</strong>: Resend keeps only your address, marked "unsubscribed", so that no send reaches you; we delete it on request.</li>
         <li><strong>Questionnaire about the diagnostic</strong>: up to 24 months, to track how the diagnostic evolves.</li>
         <li><strong>Account and progress</strong>: for the duration of the relationship, then up to 12 months, so that resuming stays possible.</li>
         <li><strong>Technical logs and usage metering</strong>: up to 24 months, for billing and trend analysis.</li>

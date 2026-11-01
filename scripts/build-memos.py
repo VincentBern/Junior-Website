@@ -686,7 +686,8 @@ def build():
         return None, None
     memos.sort(key=lambda m: (m["date"], m["id"]), reverse=True)
     exp = open(os.path.join(ROOT, "assets", "experiments.js"), encoding="utf-8").read()
-    h1_active = bool(re.search(r"H1_ACTIVE\s*=\s*true", exp))
+    # Either switch on means the diagnostic is reachable: the call to action goes to the homepage.
+    h1_active = bool(re.search(r"(H1_ACTIVE|DIAGNOSTIC_OPEN)\s*=\s*true", exp))
     files, copies = {}, {}
     for lang in LANGS:
         files[f"{lang}/memos/index.html"] = list_page(lang, memos)
