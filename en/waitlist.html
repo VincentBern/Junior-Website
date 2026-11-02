@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notify me when it opens · Junior</title>
-<meta name="description" content="The Junior diagnostic opens to the public soon. Leave your email: we'll write on opening day.">
+<meta name="description" content="The free Junior diagnostic opens to the public soon. Leave your email: we'll write when it opens, then when Junior launches.">
 <link rel="icon" type="image/png" href="../assets/logo.png">
 <link rel="canonical" href="https://www.junior.coach/en/waitlist.html">
 <link rel="alternate" hreflang="fr" href="https://www.junior.coach/fr/waitlist.html">
@@ -14,7 +14,7 @@
 <meta property="og:locale" content="en_CA">
 <meta property="og:locale:alternate" content="fr_CA">
 <meta property="og:title" content="Notify me when it opens · Junior">
-<meta property="og:description" content="The Junior diagnostic opens to the public soon. Leave your email: we'll write on opening day.">
+<meta property="og:description" content="The free Junior diagnostic opens to the public soon. Leave your email: we'll write when it opens, then when Junior launches.">
 <meta property="og:url" content="https://www.junior.coach/en/waitlist.html">
 <meta property="og:image" content="https://www.junior.coach/assets/og-en.jpg">
 <meta property="og:image:width" content="1200">
@@ -43,6 +43,7 @@
 .wl button{justify-self:start;font-family:"IBM Plex Mono",monospace;font-size:.82rem;letter-spacing:.06em;padding:.8rem 1.2rem;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;border-radius:0}
 .wl button[disabled]{opacity:.5;cursor:default}
 .wl .help{font-size:.85rem;color:var(--graphite)}
+.wl .check .id-line{display:block;margin-top:.35rem;font-size:.8rem;color:var(--graphite)}
 .wl-status{margin-top:1rem;padding:.9rem 1rem;border-left:3px solid var(--blueprint);background:var(--sheet)}
 .wl-status.bad{border-left-color:var(--revision)}
 </style>
@@ -68,7 +69,7 @@
 
     <p class="eyebrow">Fig. 00 · Waitlist</p>
     <h1>Notify me when it opens</h1>
-    <p class="lede">The Junior diagnostic opens to the public soon: 25 to 55 questions on your strategy and your go-to-market, and a structured report that tells you where to start. Leave your email: we'll write once, on opening day.</p>
+    <p class="lede">The free Junior diagnostic opens to the public soon: 25 to 55 questions on your strategy and your go-to-market, and a structured report that tells you where to start. Leave your email: we'll write when the diagnostic opens, then when Junior launches. Nothing else.</p>
 
     <form class="wl" id="wl-form" novalidate aria-label="Waitlist form">
       <div class="field">
@@ -87,12 +88,12 @@
       <div class="field" id="f-consent">
         <div class="check">
           <input type="checkbox" id="wl-consent" required>
-          <label for="wl-consent">I agree that Junior may email me when the diagnostic opens. I can unsubscribe at any time by replying to an email.</label>
+          <label for="wl-consent">I agree that Junior.Coach Inc. (junior.coach) may email me when the diagnostic opens and when Junior launches. I can unsubscribe at any time, from any of these emails.<span class="id-line" data-nosnippet>Junior.Coach Inc. · 776 Boulevard des Chutes, Québec, QC G1E 2C3, Canada · junior.coach</span></label>
         </div>
         <div class="err">Tick the box so we can write to you.</div>
       </div>
       <button type="submit" id="wl-submit">Notify me</button>
-      <p class="help">A copy goes to the Junior team. No newsletter. See our <a href="privacy.html">privacy policy</a>.</p>
+      <p class="help">Your email and first name go to our contact list at Resend (United States), and a copy to the Junior team. No newsletter. See our <a href="privacy.html">privacy policy</a>.</p>
     </form>
     <p class="wl-status" id="wl-status" role="status" hidden></p>
 
@@ -115,7 +116,7 @@
     : "https://api.junior.coach";
   var MSG = {
     done: "You're on the list. A confirmation email is on its way to ",
-    doneNoConfirm: "You're on the list. We'll write on opening day.",
+    doneNoConfirm: "You're on the list. We'll write when the diagnostic opens, then when Junior launches.",
     network: "That didn't go through. Please try again in a moment.",
     rate: "Too many attempts from this device. Please try again later."
   };
@@ -143,7 +144,8 @@
     $("f-consent").classList.toggle("invalid", !okConsent);
     if (!okEmail) { $("wl-email").focus(); return; }
     if (!okConsent) { $("wl-consent").focus(); return; }
-    var body = { email: email, lang: LANG, consent: true };
+    // consentVersion 2: the box covers two notices, the opening and the launch (Junior repo §100).
+    var body = { email: email, lang: LANG, consent: true, consentVersion: 2 };
     var name = $("wl-name").value.trim();
     var company = $("wl-company").value.trim();
     if (name) body.name = name;

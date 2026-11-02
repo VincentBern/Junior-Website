@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Être avisé de l'ouverture · Junior</title>
-<meta name="description" content="Le diagnostic Junior ouvre bientôt au public. Laissez votre courriel : nous vous écrirons le jour de l'ouverture.">
+<meta name="description" content="Le diagnostic Junior, gratuit, ouvre bientôt au public. Laissez votre courriel : nous vous écrirons à l'ouverture, puis au lancement de Junior.">
 <link rel="icon" type="image/png" href="../assets/logo.png">
 <link rel="canonical" href="https://www.junior.coach/fr/waitlist.html">
 <link rel="alternate" hreflang="fr" href="https://www.junior.coach/fr/waitlist.html">
@@ -14,7 +14,7 @@
 <meta property="og:locale" content="fr_CA">
 <meta property="og:locale:alternate" content="en_CA">
 <meta property="og:title" content="Être avisé de l'ouverture · Junior">
-<meta property="og:description" content="Le diagnostic Junior ouvre bientôt au public. Laissez votre courriel : nous vous écrirons le jour de l'ouverture.">
+<meta property="og:description" content="Le diagnostic Junior, gratuit, ouvre bientôt au public. Laissez votre courriel : nous vous écrirons à l'ouverture, puis au lancement de Junior.">
 <meta property="og:url" content="https://www.junior.coach/fr/waitlist.html">
 <meta property="og:image" content="https://www.junior.coach/assets/og-fr.jpg">
 <meta property="og:image:width" content="1200">
@@ -43,6 +43,7 @@
 .wl button{justify-self:start;font-family:"IBM Plex Mono",monospace;font-size:.82rem;letter-spacing:.06em;padding:.8rem 1.2rem;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;border-radius:0}
 .wl button[disabled]{opacity:.5;cursor:default}
 .wl .help{font-size:.85rem;color:var(--graphite)}
+.wl .check .id-line{display:block;margin-top:.35rem;font-size:.8rem;color:var(--graphite)}
 .wl-status{margin-top:1rem;padding:.9rem 1rem;border-left:3px solid var(--blueprint);background:var(--sheet)}
 .wl-status.bad{border-left-color:var(--revision)}
 </style>
@@ -68,7 +69,7 @@
 
     <p class="eyebrow">Fig. 00 · Liste d'attente</p>
     <h1>Être avisé de l'ouverture</h1>
-    <p class="lede">Le diagnostic Junior ouvre bientôt au public : 25 à 55 questions sur votre stratégie et votre commercialisation, et un rapport structuré qui vous dit par où commencer. Laissez votre courriel : nous vous écrirons une seule fois, le jour de l'ouverture.</p>
+    <p class="lede">Le diagnostic Junior, gratuit, ouvre bientôt au public : 25 à 55 questions sur votre stratégie et votre commercialisation, et un rapport structuré qui vous dit par où commencer. Laissez votre courriel : nous vous écrirons à l'ouverture du diagnostic, puis au lancement de Junior. Rien d'autre.</p>
 
     <form class="wl" id="wl-form" novalidate aria-label="Formulaire de la liste d'attente">
       <div class="field">
@@ -87,12 +88,12 @@
       <div class="field" id="f-consent">
         <div class="check">
           <input type="checkbox" id="wl-consent" required>
-          <label for="wl-consent">J'accepte que Junior m'écrive pour m'aviser de l'ouverture du diagnostic. Je peux me désabonner en tout temps, en répondant à un courriel.</label>
+          <label for="wl-consent">J'accepte que Junior.Coach inc. (junior.coach) m'écrive pour m'aviser de l'ouverture du diagnostic et du lancement de Junior. Je peux me désabonner en tout temps, à partir de n'importe lequel de ces courriels.<span class="id-line" data-nosnippet>Junior.Coach inc. · 776, boulevard des Chutes, Québec (Québec) G1E 2C3 · junior.coach</span></label>
         </div>
         <div class="err">Cochez la case pour que nous puissions vous écrire.</div>
       </div>
       <button type="submit" id="wl-submit">M'aviser de l'ouverture</button>
-      <p class="help">Une copie va à l'équipe Junior. Aucune infolettre. Voir notre <a href="confidentialite.html">politique de confidentialité</a>.</p>
+      <p class="help">Votre courriel et votre prénom vont à notre liste de contacts chez Resend (États-Unis), et une copie à l'équipe Junior. Aucune infolettre. Voir notre <a href="confidentialite.html">politique de confidentialité</a>.</p>
     </form>
     <p class="wl-status" id="wl-status" role="status" hidden></p>
 
@@ -115,7 +116,7 @@
     : "https://api.junior.coach";
   var MSG = {
     done: "C'est noté. Un courriel de confirmation est en route vers ",
-    doneNoConfirm: "C'est noté. Nous vous écrirons le jour de l'ouverture.",
+    doneNoConfirm: "C'est noté. Nous vous écrirons à l'ouverture du diagnostic, puis au lancement de Junior.",
     network: "L'envoi n'a pas fonctionné. Réessayez dans un instant.",
     rate: "Trop d'envois depuis cet appareil. Réessayez plus tard."
   };
@@ -143,7 +144,8 @@
     $("f-consent").classList.toggle("invalid", !okConsent);
     if (!okEmail) { $("wl-email").focus(); return; }
     if (!okConsent) { $("wl-consent").focus(); return; }
-    var body = { email: email, lang: LANG, consent: true };
+    // consentVersion 2: the box covers two notices, the opening and the launch (Junior repo §100).
+    var body = { email: email, lang: LANG, consent: true, consentVersion: 2 };
     var name = $("wl-name").value.trim();
     var company = $("wl-company").value.trim();
     if (name) body.name = name;

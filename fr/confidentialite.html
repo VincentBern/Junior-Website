@@ -56,8 +56,8 @@
       <div class="tb-row"><dt>Responsable</dt><dd>Junior.Coach inc., Québec, Canada</dd></div>
       <div class="tb-row"><dt>Contact</dt><dd><a href="mailto:info@lucgoudreault.com">info@lucgoudreault.com</a></dd></div>
       <div class="tb-row"><dt>Portée</dt><dd>junior.coach, my.junior.coach, le diagnostic, la trousse Junior</dd></div>
-      <div class="tb-row"><dt>En vigueur</dt><dd>23 octobre 2026</dd></div>
-      <div class="tb-row"><dt>Version</dt><dd>1.1</dd></div>
+      <div class="tb-row"><dt>En vigueur</dt><dd>2 novembre 2026</dd></div>
+      <div class="tb-row"><dt>Version</dt><dd>1.2</dd></div>
     </dl>
 
     <nav class="toc" aria-label="Sommaire">
@@ -98,6 +98,7 @@
       <h2><span class="num">03</span>Le site web</h2>
       <p>Les pages de junior.coach sont des fichiers statiques. Nous mesurons l'audience avec Umami, un outil que nous hébergeons nous-mêmes sur analytics.junior.coach : il enregistre la page vue, la provenance, le type d'appareil et le pays approximatif, <strong>sans témoin, sans identifiant publicitaire et sans profil individuel</strong>. Nous ne vendons rien à personne et nous ne faisons pas de publicité ciblée.</p>
       <p>Les pages chargent aussi des polices depuis Google Fonts et deux bibliothèques depuis cdnjs. Ces fournisseurs voient votre adresse IP, comme tout serveur à qui votre navigateur demande un fichier.</p>
+      <p>Tant que le diagnostic n'est pas ouvert au public, la page d'accueil demande à notre serveur (api.junior.coach) s'il l'est, et retient la réponse dans le stockage local de votre navigateur. Cette demande ne contient aucun renseignement sur vous; comme tout serveur, le nôtre voit votre adresse IP, qui peut figurer dans ses journaux techniques.</p>
     </section>
 
     <section class="s" id="diagnostic">
@@ -106,11 +107,12 @@
       <ul>
         <li>Vos réponses sont envoyées à notre serveur, qui calcule vos scores et fait rédiger le rapport par un modèle Claude d'Anthropic.</li>
         <li>Le rapport vous est envoyé par courriel, et une copie va à l'équipe Junior : c'est ainsi que nous savons qu'un diagnostic a été fait et que nous pouvons vous rappeler.</li>
-        <li><strong>Notre serveur ne conserve ni vos réponses, ni votre rapport, ni votre adresse.</strong> Votre adresse n'est transmise qu'au fournisseur de courriel, pour cet envoi. Les copies qui subsistent sont celles des boîtes de courriel : la vôtre et la nôtre.</li>
+        <li><strong>Notre serveur ne conserve ni vos réponses, ni votre rapport, ni votre adresse.</strong> Votre adresse n'est transmise qu'au fournisseur de courriel, pour cet envoi et, si vous acceptez les suivis, pour notre liste de contacts chez ce fournisseur. Les copies qui subsistent sont celles des boîtes de courriel : la vôtre et la nôtre.</li>
         <li>Votre brouillon et votre rapport sont gardés dans le stockage local de votre navigateur, sur votre appareil, pour que vous puissiez reprendre ou réimprimer. Vider les données du site les efface.</li>
       </ul>
-      <p>Un diagnostic rempli vous place dans nos contacts d'affaires : nous pouvons vous écrire au sujet de votre rapport et de ce que Junior peut faire ensuite. Une case facultative vous permet de dire oui à ces courriels; votre réponse voyage avec la copie destinée à l'équipe Junior, et notre serveur ne la conserve pas. Vous pouvez nous demander d'arrêter en tout temps, par un seul courriel.</p>
-      <p>Avant l'ouverture du diagnostic au public, vous pouvez aussi laisser votre courriel, et si vous le voulez votre prénom et votre entreprise, pour être avisé de l'ouverture. Ces renseignements servent à cet avis seulement : ils sont transmis au fournisseur de courriel, arrivent dans la boîte de l'équipe Junior et ne sont pas conservés sur notre serveur.</p>
+      <p>Un diagnostic rempli vous place dans nos contacts d'affaires : nous pouvons vous écrire au sujet de votre rapport et de ce que Junior peut faire ensuite. Une case facultative vous permet de dire oui à des courriels de suivi au sujet de votre rapport. Si vous dites oui, votre courriel et votre prénom sont ajoutés à notre liste de suivi chez notre fournisseur de courriel (Resend), qui sert seulement à ces courriels, pendant au plus 12 mois; notre serveur, lui, ne les conserve pas. Les courriels envoyés à cette liste contiennent un lien pour vous désabonner; pour tout autre courriel de Junior, répondez « désabonner », ou écrivez-nous.</p>
+      <p>Avant l'ouverture du diagnostic au public, vous pouvez aussi laisser votre courriel, et si vous le voulez votre prénom et votre entreprise, pour être avisé de l'ouverture du diagnostic, puis du lancement de Junior. Ces renseignements servent à ces deux avis seulement : ils arrivent dans la boîte de l'équipe Junior, et votre courriel et votre prénom sont ajoutés à notre liste de contacts chez notre fournisseur de courriel (Resend). Notre serveur ne les conserve pas. Chaque avis envoyé à la liste contient un lien pour vous désabonner, et vous pouvez aussi répondre « désabonner » à n'importe quel courriel de Junior. Les personnes inscrites avant la version 1.2 de cette politique ont accepté un seul avis, celui de l'ouverture : nous ne leur écrirons au lancement que si elles nous le confirment.</p>
+      <p>À la fin du rapport, un lien facultatif mène à un court questionnaire sur le diagnostic (Google Forms). Il ne demande ni votre nom ni votre courriel; vos réponses servent seulement à améliorer le diagnostic.</p>
     </section>
 
     <section class="s" id="service">
@@ -159,7 +161,7 @@
       <h2><span class="num">08</span>Pourquoi nous utilisons ces renseignements</h2>
       <ul>
         <li><strong>Fournir le service</strong> : vous authentifier, vérifier vos droits d'accès, répondre à vos demandes, afficher votre avancement, livrer vos rapports.</li>
-        <li><strong>Vous joindre</strong> : lien de connexion, rapport de diagnostic, suivi d'un diagnostic, avis de service importants.</li>
+        <li><strong>Vous joindre</strong> : lien de connexion, rapport de diagnostic, suivi d'un diagnostic, avis d'ouverture du diagnostic et de lancement de Junior pour les personnes inscrites à la liste d'attente, avis de service importants.</li>
         <li><strong>Facturer et administrer</strong> : mesurer l'usage des modèles et tenir nos comptes.</li>
         <li><strong>Maintenir et améliorer</strong> : repérer les pannes, comprendre où le parcours bloque, mesurer l'audience du site.</li>
         <li><strong>Respecter la loi</strong> : conserver ce que nous devons conserver et répondre à une demande légale valide.</li>
@@ -176,7 +178,8 @@
           <tbody>
             <tr><td>Google Cloud</td><td>Hébergement, base de données, journaux, entreposage</td><td>Compte, avancement, journaux techniques, trousses d'installation</td></tr>
             <tr><td>Anthropic</td><td>Modèles Claude</td><td>Le contenu d'une demande, le temps de produire la réponse</td></tr>
-            <tr><td>Resend</td><td>Envoi des courriels</td><td>Adresse du destinataire et contenu du message</td></tr>
+            <tr><td>Resend</td><td>Envoi des courriels, liste de contacts (liste d'attente, suivis du diagnostic)</td><td>Adresse du destinataire, prénom ou nom, contenu du message</td></tr>
+            <tr><td>Google Forms</td><td>Questionnaire facultatif sur le diagnostic</td><td>Vos réponses au questionnaire, sans nom ni courriel</td></tr>
             <tr><td>GitHub Pages</td><td>Hébergement du site vitrine</td><td>Requêtes web</td></tr>
             <tr><td>Google Fonts, cdnjs</td><td>Polices et bibliothèques</td><td>Requêtes web</td></tr>
           </tbody>
@@ -196,6 +199,10 @@
       <ul>
         <li><strong>Réponses et livrables de vos canevas</strong> : jamais conservés par nous. Ils vivent dans votre espace de projet, aussi longtemps que vous le voulez.</li>
         <li><strong>Diagnostic</strong> : rien n'est conservé par le serveur. Les copies par courriel restent dans nos boîtes; nous les supprimons sur demande.</li>
+        <li><strong>Liste d'attente</strong> : chez Resend, jusqu'à six mois après l'avis de lancement de Junior, puis supprimée. Les copies d'inscription dans la boîte de l'équipe Junior suivent la même durée.</li>
+        <li><strong>Suivis du diagnostic</strong> : chez Resend, au plus 12 mois après votre diagnostic.</li>
+        <li><strong>Désabonnement</strong> : Resend garde seulement votre adresse, marquée « désabonnée », pour qu'aucun envoi ne vous joigne; nous la supprimons sur demande.</li>
+        <li><strong>Questionnaire sur le diagnostic</strong> : jusqu'à 24 mois, pour suivre l'évolution du diagnostic.</li>
         <li><strong>Compte et avancement</strong> : pendant la durée de la relation, puis jusqu'à 12 mois, le temps qu'une reprise reste possible.</li>
         <li><strong>Journaux techniques et mesure d'usage</strong> : jusqu'à 24 mois, pour la facturation et l'analyse des tendances.</li>
         <li><strong>Liens de connexion</strong> : 15 minutes. <strong>Sessions du portail</strong> : 30 jours.</li>
