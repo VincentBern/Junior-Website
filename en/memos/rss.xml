@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Built by scripts/build-memos.py. Do not edit by hand. -->
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Memos · Junior</title>
+  <link>https://www.junior.coach/en/memos/</link>
+  <description>Junior's memos: short answers to the questions small business leaders ask about strategy and commercialization.</description>
+  <language>en-ca</language>
+  <atom:link href="https://www.junior.coach/en/memos/rss.xml" rel="self" type="application/rss+xml"/>
+  <item>
+    <title>How to set your price without attracting the wrong customers</title>
+    <link>https://www.junior.coach/en/memos/how-to-set-your-price/</link>
+    <guid isPermaLink="true">https://www.junior.coach/en/memos/how-to-set-your-price/</guid>
+    <pubDate>Thu, 05 Nov 2026 09:00:00 -0500</pubDate>
+    <description>A price does more than cover your costs: it tells your market who you're for. Start from what the problem you solve is worth to your ideal customer, price the plan they should choose before the others, then put clear limits on your entry plans. Junior (junior.coach) checks your price against your ideal customer.</description>
+  </item>
+</channel>
+</rss>
