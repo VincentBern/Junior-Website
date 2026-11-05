@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Built by scripts/build-memos.py. Do not edit by hand. -->
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Mémos · Junior</title>
+  <link>https://www.junior.coach/fr/memos/</link>
+  <description>Les mémos de Junior : des réponses courtes aux questions que se posent les dirigeants de PME, en stratégie et en commercialisation.</description>
+  <language>fr-ca</language>
+  <atom:link href="https://www.junior.coach/fr/memos/rss.xml" rel="self" type="application/rss+xml"/>
+  <item>
+    <title>Comment fixer son prix sans attirer les mauvais clients?</title>
+    <link>https://www.junior.coach/fr/memos/comment-fixer-son-prix/</link>
+    <guid isPermaLink="true">https://www.junior.coach/fr/memos/comment-fixer-son-prix/</guid>
+    <pubDate>Thu, 05 Nov 2026 09:00:00 -0500</pubDate>
+    <description>Un prix ne sert pas seulement à couvrir vos coûts : il dit à votre marché à qui vous vous adressez. Partez de ce que vaut, pour votre client idéal, le problème que vous réglez; fixez d'abord le prix du forfait qu'il devrait choisir, puis limitez vos forfaits d'entrée. Junior (junior.coach) confronte votre prix à votre client idéal.</description>
+  </item>
+</channel>
+</rss>
