@@ -570,6 +570,8 @@
           offer: draft.offer,
           participant: body.participant,
           createdAt: new Date().toISOString(),
+          // The page's language when the report was asked for (§103 of the Junior repo).
+          lang: body.lang,
           response: data
         };
         store(REPORT_KEY, report);
@@ -685,15 +687,17 @@
       pres.innerHTML = "";
       pres.appendChild(el("div", { style: "white-space:pre-wrap", text: res.presentation }));
     }
-    // The report's own language (§103 of the Junior repo): English from the
-    // English page, or French when its translation didn't pass (or from a
-    // server before §103, which has no lang), said above it.
+    // The report's own language (§103 of the Junior repo), said above it
+    // when it isn't the page's: « couldn't be produced » only for a report
+    // asked from this page's language (its translation didn't pass, or the
+    // server is from before §103); a report from the other page, plainly.
     var reportLang = res.lang === "en" ? "en" : "fr";
     pres.setAttribute("lang", reportLang);
     var langNote = $("#report-lang");
     if (langNote) langNote.parentNode.removeChild(langNote);
     if (reportLang !== LANG && T.report.otherLanguage) {
-      pres.parentNode.insertBefore(el("p", { class: "notice", id: "report-lang", text: T.report.otherLanguage }), pres);
+      var noteText = report.lang === LANG ? T.report.otherLanguage : T.report.otherLanguageNeutral;
+      if (noteText) pres.parentNode.insertBefore(el("p", { class: "notice", id: "report-lang", text: noteText }), pres);
     }
     $("#report-truncated").hidden = !res.truncated;
     var emailed = $("#report-emailed");
