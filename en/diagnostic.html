@@ -107,7 +107,7 @@
       </button>
     </div>
 
-    <p class="notice">There are no right or wrong answers: <strong>an honest self-assessment</strong> is what makes the diagnostic useful. Your answers are only used to produce your report. <strong>Note:</strong> the written analysis in the report is currently delivered in French; scores and charts are shown in English.</p>
+    <p class="notice">There are no right or wrong answers: <strong>an honest self-assessment</strong> is what makes the diagnostic useful. Your answers are only used to produce your report.</p>
   </section>
 
   <!-- 2. Participant -->
@@ -266,9 +266,8 @@
 
     <p class="notice" id="report-truncated" hidden>The report was cut off before the end. The scores above are complete; only the end of the text is missing.</p>
     <p class="notice" id="report-emailed" hidden></p>
-    <p class="notice">The written analysis below is currently delivered in French.</p>
 
-    <article class="presentation" id="report-presentation" lang="fr"></article>
+    <article class="presentation" id="report-presentation"></article>
 
     <p class="notice no-print" id="report-feedback"><strong>Got a minute to tell us what you thought?</strong> Your answers help us improve the diagnostic. <a id="report-feedback-link" href="#" target="_blank" rel="noopener">Share my feedback →</a></p>
 
@@ -348,6 +347,7 @@ window.JUNIOR_DIAGNOSTIC_I18N = {
     startHereText: "It's the weakest dimension in your diagnostic. Junior starts there, then builds what's missing with you, one canevas at a time, right inside your Claude or ChatGPT.",
     emailed: function(email){ return "Your report was sent to " + email + ". Keep that email: it's your copy."; },
     emailFailed: "Sending by email didn't work. Keep a copy with \u201cPrint / PDF\u201d before you leave this page.",
+    otherLanguage: "The written analysis below is in French: its English version could not be produced this time.",
     participant: "Respondent",
     company: "Company",
     date: "Date",

@@ -685,6 +685,16 @@
       pres.innerHTML = "";
       pres.appendChild(el("div", { style: "white-space:pre-wrap", text: res.presentation }));
     }
+    // The report's own language (§103 of the Junior repo): English from the
+    // English page, or French when its translation didn't pass (or from a
+    // server before §103, which has no lang), said above it.
+    var reportLang = res.lang === "en" ? "en" : "fr";
+    pres.setAttribute("lang", reportLang);
+    var langNote = $("#report-lang");
+    if (langNote) langNote.parentNode.removeChild(langNote);
+    if (reportLang !== LANG && T.report.otherLanguage) {
+      pres.parentNode.insertBefore(el("p", { class: "notice", id: "report-lang", text: T.report.otherLanguage }), pres);
+    }
     $("#report-truncated").hidden = !res.truncated;
     var emailed = $("#report-emailed");
     if (res.emailed === true) emailed.textContent = T.report.emailed(report.participant.email || "");
