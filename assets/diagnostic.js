@@ -490,7 +490,10 @@
         companyStage: draft.participant.companyStage || undefined
       },
       answers: answers,
-      notes: notes
+      notes: notes,
+      // The report and its email in the page's language (§103 of the
+      // Junior repo). A server from before §103 ignores it.
+      lang: LANG === "en" ? "en" : "fr"
     };
   }
 
