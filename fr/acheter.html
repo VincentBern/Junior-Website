@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commencer avec Junior · Junior</title>
+<meta name="description" content="Choisissez la suite par laquelle commencer avec Junior : Planification stratégique, Commercialisation, ou les deux. Au mois, sans engagement.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../assets/logo.png">
+<link rel="canonical" href="https://www.junior.coach/fr/acheter.html">
+<link rel="alternate" hreflang="fr" href="https://www.junior.coach/fr/acheter.html">
+<link rel="alternate" hreflang="en" href="https://www.junior.coach/en/buy.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Junior">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:title" content="Commencer avec Junior · Junior">
+<meta property="og:description" content="Choisissez la suite par laquelle commencer avec Junior : Planification stratégique, Commercialisation, ou les deux. Au mois, sans engagement.">
+<meta property="og:url" content="https://www.junior.coach/fr/acheter.html">
+<meta property="og:image" content="https://www.junior.coach/assets/og-fr.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Junior : l'aviseur que vous engageriez, si vous en aviez les moyens.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,80..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/legal.css">
+<script defer src="https://analytics.junior.coach/script.js" data-website-id="924edbc6-ce17-4213-b2d0-e719cdc3e5aa"></script>
+<style>
+/* The purchase page (Junior repo §115), on the legal pages' sheet. Prices come from GET /checkout/offer, never from here. */
+.buy{margin-top:1.6rem;border:1px solid var(--ink);background:var(--sheet);padding:1.4rem 1.4rem 1.6rem;display:grid;gap:1.2rem}
+.buy[hidden]{display:none}
+.buy .lbl{display:block;font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite);margin-bottom:.35rem}
+.suites{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.8rem}
+.suite{display:grid;grid-template-columns:auto 1fr;gap:.25rem .7rem;align-items:start;border:1px solid var(--line);background:#fff;padding:1rem;cursor:pointer}
+.suite:has(input:checked){border-color:var(--blueprint);box-shadow:inset 3px 0 0 var(--blueprint)}
+.suite input{margin-top:.3rem;width:1.05rem;height:1.05rem;accent-color:var(--blueprint)}
+.suite b{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 94;font-size:1.05rem}
+.suite .what{grid-column:2;font-size:.92rem;color:var(--graphite)}
+.suite .price{grid-column:2;font-family:"IBM Plex Mono",monospace;font-size:.8rem;margin-top:.3rem}
+.buy input[type=text],.buy input[type=email]{width:100%;font:inherit;font-size:1rem;padding:.6rem .7rem;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:0}
+.buy input:focus-visible,.buy button:focus-visible{outline:2px solid var(--revision);outline-offset:2px}
+.buy .err{display:none;color:var(--revision);font-size:.85rem;margin-top:.35rem}
+.buy .invalid .err{display:block}
+.buy .invalid input[type=text],.buy .invalid input[type=email]{border-color:var(--revision)}
+.buy .hint{font-size:.85rem;color:var(--graphite);margin-top:.35rem}
+.total{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+.total:empty{display:none}
+.buy button{justify-self:start;font-family:"IBM Plex Mono",monospace;font-size:.82rem;letter-spacing:.06em;padding:.8rem 1.2rem;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;border-radius:0}
+.buy button[disabled]{opacity:.5;cursor:default}
+.buy .help{font-size:.85rem;color:var(--graphite)}
+.buy-status{margin-top:1rem;padding:.9rem 1rem;border-left:3px solid var(--blueprint);background:var(--sheet)}
+.buy-status.bad{border-left-color:var(--revision)}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img class="brand-logo" src="../assets/logo.png" alt="">
+      <span class="mark">JUNIOR</span>
+    </a>
+    <span class="tagline">Commencer</span>
+    <nav>
+      <a class="lang" href="confidentialite.html">CONFIDENTIALITÉ</a>
+      <a class="lang" href="../en/buy.html" onclick="try{localStorage.setItem('junior_lang','en')}catch(e){}">EN</a>
+    </nav>
+  </div>
+</header>
+
+<main class="doc">
+  <div class="wrap">
+
+    <p class="eyebrow">Fig. 00 · Commencer</p>
+    <h1>Commencer avec Junior</h1>
+    <p class="lede">Choisissez la suite par laquelle commencer, ou les deux. Junior se paie au mois, sans engagement : vous arrêtez quand vous voulez, et vos livrables restent à vous.</p>
+
+    <form class="buy" id="buy-form" novalidate aria-label="Formulaire d'achat">
+      <fieldset class="field" id="f-suites" style="border:0;padding:0;margin:0">
+        <legend class="lbl">Vos suites</legend>
+        <div class="suites">
+          <label class="suite">
+            <input type="checkbox" name="suite" value="strategic-planning">
+            <b>Planification stratégique</b>
+            <span class="what">Où vous allez : votre ambition, votre identité, votre modèle d'affaires, puis les objectifs et les tableaux de bord pour piloter l'année.</span>
+            <span class="price" data-price="strategic-planning"></span>
+          </label>
+          <label class="suite">
+            <input type="checkbox" name="suite" value="commercialization">
+            <b>Commercialisation</b>
+            <span class="what">À qui vous vendez et comment : votre client idéal, votre offre et votre prix, puis le pipeline et le pilotage des ventes.</span>
+            <span class="price" data-price="commercialization"></span>
+          </label>
+        </div>
+        <div class="err">Choisissez au moins une suite.</div>
+        <p class="total" id="buy-total" aria-live="polite"></p>
+      </fieldset>
+      <div class="field" id="f-company">
+        <label class="lbl" for="buy-company">Nom de l'entreprise</label>
+        <input type="text" id="buy-company" autocomplete="organization" required maxlength="120">
+        <div class="err" id="company-err">Entrez le nom de l'entreprise.</div>
+      </div>
+      <div class="field" id="f-email">
+        <label class="lbl" for="buy-email">Votre courriel</label>
+        <input type="email" id="buy-email" autocomplete="email" inputmode="email" required maxlength="254">
+        <div class="err">Entrez un courriel valide.</div>
+        <p class="hint">L'adresse de votre compte Google : c'est avec elle que vous vous connecterez à Junior. Vous serez l'administrateur de l'entreprise et pourrez inviter vos collègues.</p>
+      </div>
+      <button type="submit" id="buy-submit">Continuer vers le paiement</button>
+      <p class="help">Le paiement se fait chez Stripe; Junior ne voit jamais votre carte. Un code promotionnel s'entre à l'étape suivante. Voir nos <a href="conditions.html">conditions d'utilisation</a> et notre <a href="confidentialite.html">politique de confidentialité</a>.</p>
+    </form>
+    <p class="buy-status" id="buy-status" role="status" hidden></p>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Junior.Coach inc.</span>
+    <span><a href="index.html">Accueil</a> · <a href="conditions.html">Conditions d'utilisation</a> · <a href="confidentialite.html">Confidentialité</a></span>
+    <span>junior.coach</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var LOCAL = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+  var API_BASE = LOCAL ? "http://localhost:8787" : "https://my.junior.coach";
+  var MSG = {
+    perMonth: "\u00a0$ par mois",
+    total: "Total\u00a0: ",
+    taken: "Ce nom d'entreprise est déjà dans Junior. Si c'est la vôtre, demandez à un collègue de vous inviter; sinon, précisez le nom.",
+    closed: "L'achat en ligne n'est pas encore ouvert. Écrivez-nous à support@junior.coach.",
+    network: "L'envoi n'a pas fonctionné. Réessayez dans un instant.",
+    rate: "Trop d'essais depuis cet appareil. Réessayez plus tard."
+  };
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var prices = {};
+  function $(id){ return document.getElementById(id); }
+  function boxes(){ return Array.prototype.slice.call(document.querySelectorAll('input[name="suite"]')); }
+  function chosen(){ return boxes().filter(function(b){ return b.checked; }).map(function(b){ return b.value; }); }
+  function money(cents){ return (cents / 100).toLocaleString("fr-CA", { minimumFractionDigits: cents % 100 ? 2 : 0 }); }
+  function track(name, data){
+    try { if (window.umami && window.umami.track) window.umami.track(name, data); } catch (e) {}
+  }
+  function status(text, bad){
+    var s = $("buy-status");
+    s.textContent = text;
+    s.className = "buy-status" + (bad ? " bad" : "");
+    s.hidden = !text;
+  }
+  function showTotal(){
+    var sum = 0, known = true;
+    chosen().forEach(function(k){ if (prices[k] == null) known = false; else sum += prices[k]; });
+    $("buy-total").textContent = chosen().length > 1 && known ? MSG.total + money(sum) + MSG.perMonth : "";
+  }
+
+  // Preselect from the link: ?suite=commercialization, ?email=… (the portal's « Ajouter une entreprise »).
+  var q = new URLSearchParams(location.search);
+  boxes().forEach(function(b){ if (q.getAll("suite").indexOf(b.value) > -1) b.checked = true; });
+  if (q.get("email")) $("buy-email").value = q.get("email");
+
+  // Prices as Stripe has them (GET /checkout/offer); the page never carries a number of its own.
+  fetch(API_BASE + "/checkout/offer")
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(o){
+      if (!o || !o.monthly) return;
+      prices = o.monthly;
+      Array.prototype.forEach.call(document.querySelectorAll("[data-price]"), function(el){
+        var c = prices[el.getAttribute("data-price")];
+        if (c != null) el.textContent = money(c) + MSG.perMonth;
+      });
+      showTotal();
+    })
+    .catch(function(){});
+
+  boxes().forEach(function(b){ b.addEventListener("change", function(){ $("f-suites").classList.remove("invalid"); showTotal(); }); });
+  $("buy-company").addEventListener("input", function(){ $("f-company").classList.remove("invalid"); });
+  $("buy-email").addEventListener("input", function(){ $("f-email").classList.remove("invalid"); });
+
+  $("buy-form").addEventListener("submit", function(e){
+    e.preventDefault();
+    status("");
+    var suites = chosen();
+    var company = $("buy-company").value.replace(/\s+/g, " ").trim();
+    var email = $("buy-email").value.trim();
+    $("company-err").textContent = "Entrez le nom de l'entreprise.";
+    $("f-suites").classList.toggle("invalid", !suites.length);
+    $("f-company").classList.toggle("invalid", !company);
+    $("f-email").classList.toggle("invalid", !EMAIL_RE.test(email));
+    if (!suites.length) { boxes()[0].focus(); return; }
+    if (!company) { $("buy-company").focus(); return; }
+    if (!EMAIL_RE.test(email)) { $("buy-email").focus(); return; }
+    var btn = $("buy-submit");
+    btn.disabled = true;
+    fetch(API_BASE + "/checkout/mandate", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ entreprise: company, email: email, suites: suites, cancelUrl: location.href })
+    })
+      .then(function(res){ return res.json().then(function(d){ return { status: res.status, data: d }; }); })
+      .then(function(r){
+        if (r.status === 200 && r.data.url) {
+          track("achat_vers_paiement", { suites: suites.join(",") });
+          location.href = r.data.url;
+          return;
+        }
+        btn.disabled = false;
+        if (r.data.error === "name_taken") {
+          $("company-err").textContent = MSG.taken;
+          $("f-company").classList.add("invalid");
+          $("buy-company").focus();
+          return;
+        }
+        status(r.status === 429 ? MSG.rate : r.status === 503 ? MSG.closed : MSG.network, true);
+      })
+      .catch(function(){
+        btn.disabled = false;
+        status(MSG.network, true);
+      });
+  });
+})();
+</script>
+
+</body>
+</html>
