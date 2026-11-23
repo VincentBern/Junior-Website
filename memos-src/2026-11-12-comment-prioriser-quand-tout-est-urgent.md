@@ -38,7 +38,7 @@ Au moment du diagnostic, sa propre note l'expliquait déjà : les entrepreneurs 
 
 ## Le canevas en cause
 
-Pour la vente, ce point de départ est souvent le canevas ICP + Proposition de valeur, l'un des 11 outils de la suite Commercialisation de Junior : le prix et la stratégie go-to-market s'appuient sur lui. Junior le remplit avec vous, dans le Claude ou le ChatGPT que vous utilisez déjà, puis vous dit quoi bâtir ensuite, et pourquoi celui-là.
+Pour la vente, ce point de départ est souvent le canevas ICP + Proposition de valeur, l'un des 11 outils de la suite Commercialisation de Junior : le prix et la stratégie go-to-market s'appuient sur lui. Junior le remplit avec vous, dans le Claude, le Copilot ou le ChatGPT que vous utilisez déjà, puis vous dit quoi bâtir ensuite, et pourquoi celui-là.
 
 === en
 slug: how-to-prioritize-when-everything-is-urgent
@@ -77,4 +77,4 @@ At the time of the diagnostic, her own note already explained it: contractors wh
 
 ## The canevas behind it
 
-For sales, that starting point is often the ICP + Value proposition canevas, one of the 11 tools in Junior's Commercialization suite: pricing and the go-to-market strategy build on it. Junior fills it in with you, in the Claude or ChatGPT you already use, then tells you what to build next, and why that one.
+For sales, that starting point is often the ICP + Value proposition canevas, one of the 11 tools in Junior's Commercialization suite: pricing and the go-to-market strategy build on it. Junior fills it in with you, in the Claude, Copilot or ChatGPT you already use, then tells you what to build next, and why that one.

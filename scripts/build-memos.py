@@ -51,7 +51,7 @@ T = {
         "author_site": "https://www.lucgoudreault.com/fr/",
         "ai": "Rédigé avec l'aide de l'IA, révisé par Luc Goudreault.",
         "pitch": "Junior (junior.coach) est un aviseur en stratégie et en commercialisation qui travaille "
-                 "dans le Claude ou le ChatGPT que vous utilisez déjà. Un mois d'aviseur, pour le prix "
+                 "dans le Claude, le Copilot ou le ChatGPT que vous utilisez déjà. Un mois d'aviseur, pour le prix "
                  "d'une heure de consultation.",
         "soon": "Le diagnostic Junior ouvre bientôt au public.",
         "cta_wait": "Être avisé de l'ouverture →", "cta_home": "Découvrir Junior →",
@@ -82,7 +82,7 @@ T = {
         "author_site": "https://www.lucgoudreault.com/en/",
         "ai": "Written with the help of AI, reviewed by Luc Goudreault.",
         "pitch": "Junior (junior.coach) is a strategy and commercialization advisor that works inside "
-                 "the Claude or ChatGPT you already use. A month with your advisor, for the price of "
+                 "the Claude, Copilot or ChatGPT you already use. A month with your advisor, for the price of "
                  "one hour of consulting.",
         "soon": "The Junior diagnostic opens to the public soon.",
         "cta_wait": "Notify me when it opens →", "cta_home": "Discover Junior →",
