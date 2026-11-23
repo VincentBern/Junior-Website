@@ -55,9 +55,9 @@
     <dl class="titleblock">
       <div class="tb-row"><dt>Controller</dt><dd>Junior.Coach inc., Quebec, Canada</dd></div>
       <div class="tb-row"><dt>Contact</dt><dd><a href="mailto:info@lucgoudreault.com">info@lucgoudreault.com</a></dd></div>
-      <div class="tb-row"><dt>Scope</dt><dd>junior.coach, my.junior.coach, the diagnostic, the Junior kit</dd></div>
-      <div class="tb-row"><dt>Effective</dt><dd>November 20, 2026</dd></div>
-      <div class="tb-row"><dt>Version</dt><dd>1.3</dd></div>
+      <div class="tb-row"><dt>Scope</dt><dd>junior.coach, my.junior.coach, the diagnostic, the Junior connector</dd></div>
+      <div class="tb-row"><dt>Effective</dt><dd>November 23, 2026</dd></div>
+      <div class="tb-row"><dt>Version</dt><dd>1.4</dd></div>
     </dl>
 
     <nav class="toc" aria-label="Contents">
@@ -84,7 +84,7 @@
 
     <section class="s" id="principle">
       <h2><span class="num">01</span>The principle: what stays with you</h2>
-      <p>Junior runs inside the Claude or the ChatGPT you already use. The work you do with it, your canevas answers and the deliverables it produces, is saved in a project space you control: a folder of your own or your own Google Drive. That is not a policy promise, it is how the software is built.</p>
+      <p>Junior runs inside the Claude, Copilot or ChatGPT you already use. The work you do with it, your canevas answers and the deliverables it produces, is saved in your own Google Drive or your own OneDrive, in a Junior folder you control. Nothing is installed on your side: Junior is a connector added to your assistant. That is not a policy promise, it is how the software is built.</p>
       <p>Our servers handle one request at a time: they receive what is needed to answer, synthesize a result, send it back, and do not keep the text. <strong>The text of your answers and of your deliverables is never stored on our servers.</strong> What we do keep is listed below: progress states, counters, dates and identifiers, never your words.</p>
     </section>
 
@@ -144,14 +144,15 @@
     </section>
 
     <section class="s" id="drive">
-      <h2><span class="num">06</span>Google Drive and Google APIs</h2>
-      <p>If your team chooses to keep its Junior project in Google Drive, Junior asks for Drive access on your own device. Precisely what that means:</p>
+      <h2><span class="num">06</span>Google Drive, OneDrive and their APIs</h2>
+      <p>Your business's Junior project lives in the business's Google Drive or OneDrive. An admin of your team grants access once, on my.junior.coach. Precisely what that means:</p>
       <ul>
         <li>Junior uses the <strong>drive.file</strong> scope, the narrowest Google offers. It grants access only to files Junior created itself and to those you explicitly hand it. <strong>Junior cannot read the rest of your Drive</strong>, and cannot even list it.</li>
-        <li>You designate the project folder yourself, once, with Google's file picker. That gesture is what grants access; there is no other way for Junior to reach an existing folder.</li>
-        <li>The access and refresh tokens are written on your device, inside the Junior kit installed with you. <strong>They never pass through our servers and we do not hold them.</strong> Our servers know at most the identifier of the folder agreed with you, never its contents.</li>
-        <li>Junior reads and writes your project files and your exported reports in that folder. It deletes nothing else.</li>
-        <li>You can withdraw this access whenever you want, at <a href="https://myaccount.google.com/permissions" rel="noopener">myaccount.google.com/permissions</a>. Junior then stops seeing the folder; your files remain yours in Drive.</li>
+        <li>Junior creates a <em>Junior</em> folder itself and works in it. To use an existing folder, you designate it with Google's file picker; there is no other way for Junior to reach a folder it did not create.</li>
+        <li>With OneDrive, Microsoft offers no scope limited to one folder: Junior asks for <strong>Files.ReadWrite</strong>, and Microsoft's screen speaks of access to your files. Junior only reads and writes in its <em>Junior</em> folder.</li>
+        <li>The refresh token of the person who granted access is kept on our servers, <strong>encrypted</strong>, so Junior can read and write the project on each request. It is never logged or shown. The folder's content passes through our servers for the length of a request, in memory, and <strong>is never stored there</strong>. We keep the folder's identifier and link, never what it holds.</li>
+        <li>Junior reads and writes your project files and your exported reports in that folder. It deletes nothing else. The members of your team get read access to the folder.</li>
+        <li>You can withdraw this access whenever you want, at <a href="https://myaccount.google.com/permissions" rel="noopener">myaccount.google.com/permissions</a> for Google or <a href="https://account.microsoft.com/privacy/app-access" rel="noopener">account.microsoft.com</a> for Microsoft. Junior then stops seeing the folder; your files remain yours.</li>
       </ul>
       <p class="note calm">Junior's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener">Google API Services User Data Policy</a>, including its Limited Use requirements. Google Workspace data obtained through Google APIs is never used to train artificial intelligence models, never used for advertising, and is neither sold nor transferred to third parties, except to provide the service, at your request, or as required by law.</p>
     </section>
@@ -180,7 +181,7 @@
         <table>
           <thead><tr><th>Provider</th><th>Role</th><th>What it processes</th></tr></thead>
           <tbody>
-            <tr><td>Google Cloud</td><td>Hosting, database, logs, storage</td><td>Account, progress, technical logs, install kits</td></tr>
+            <tr><td>Google Cloud</td><td>Hosting, database, logs, storage</td><td>Account, progress, technical logs, storage access token (encrypted)</td></tr>
             <tr><td>Anthropic</td><td>Claude models</td><td>The content of a request, for the time it takes to answer</td></tr>
             <tr><td>Resend</td><td>Email delivery, contact list (waitlist, diagnostic follow-up)</td><td>Recipient address, first name or name, message content</td></tr>
             <tr><td>Google Forms</td><td>Optional questionnaire about the diagnostic</td><td>Your answers to the questionnaire, without name or email</td></tr>
@@ -268,7 +269,7 @@
   <div class="wrap">
     <span>© 2026 Junior.Coach inc.</span>
     <span><a href="index.html">Home</a> · <a href="terms.html">Terms of use</a> · <a href="privacy.html">Privacy</a></span>
-    <span>Updated: October 23, 2026</span>
+    <span>Updated: November 23, 2026</span>
   </div>
 </footer>
 

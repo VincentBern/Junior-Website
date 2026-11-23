@@ -4,7 +4,7 @@
 # Keep the repo's working files here; the pages themselves are plain HTML and
 # are copied as they are. The GitHub repo itself is public: a file left out of
 # the site can still be read on github.com. Product images (screenshots of
-# Junior in Claude or ChatGPT, mock-ups) stay published: never list them here.
+# Junior in Claude, Copilot or ChatGPT, mock-ups) stay published: never list them here.
 exclude:
   - CLAUDE.md
   - scripts/

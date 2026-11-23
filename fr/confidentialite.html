@@ -55,9 +55,9 @@
     <dl class="titleblock">
       <div class="tb-row"><dt>Responsable</dt><dd>Junior.Coach inc., Québec, Canada</dd></div>
       <div class="tb-row"><dt>Contact</dt><dd><a href="mailto:info@lucgoudreault.com">info@lucgoudreault.com</a></dd></div>
-      <div class="tb-row"><dt>Portée</dt><dd>junior.coach, my.junior.coach, le diagnostic, la trousse Junior</dd></div>
-      <div class="tb-row"><dt>En vigueur</dt><dd>20 novembre 2026</dd></div>
-      <div class="tb-row"><dt>Version</dt><dd>1.3</dd></div>
+      <div class="tb-row"><dt>Portée</dt><dd>junior.coach, my.junior.coach, le diagnostic, le connecteur Junior</dd></div>
+      <div class="tb-row"><dt>En vigueur</dt><dd>23 novembre 2026</dd></div>
+      <div class="tb-row"><dt>Version</dt><dd>1.4</dd></div>
     </dl>
 
     <nav class="toc" aria-label="Sommaire">
@@ -84,7 +84,7 @@
 
     <section class="s" id="principe">
       <h2><span class="num">01</span>Le principe : ce qui reste chez vous</h2>
-      <p>Junior fonctionne dans le Claude ou le ChatGPT que vous utilisez déjà. Le travail que vous faites avec lui, vos réponses aux canevas et les livrables produits, est enregistré dans l'espace de projet que vous contrôlez : un dossier chez vous ou votre propre Google Drive. Ce n'est pas une promesse de politique, c'est la façon dont le logiciel est fait.</p>
+      <p>Junior fonctionne dans le Claude, le Copilot ou le ChatGPT que vous utilisez déjà. Le travail que vous faites avec lui, vos réponses aux canevas et les livrables produits, est enregistré dans votre propre Google Drive ou votre propre OneDrive, dans un dossier Junior que vous contrôlez. Rien n'est installé chez vous : Junior est un connecteur ajouté à votre assistant. Ce n'est pas une promesse de politique, c'est la façon dont le logiciel est fait.</p>
       <p>Nos serveurs traitent une demande à la fois : ils reçoivent ce qui est nécessaire pour répondre, synthétisent un résultat, le renvoient, puis n'en gardent pas le texte. <strong>Le texte de vos réponses et de vos livrables n'est jamais conservé sur nos serveurs.</strong> Ce que nous conservons, nous l'énumérons ci-dessous : ce sont des états d'avancement, des compteurs, des dates et des identifiants, jamais vos mots.</p>
     </section>
 
@@ -144,14 +144,15 @@
     </section>
 
     <section class="s" id="drive">
-      <h2><span class="num">06</span>Google Drive et les API Google</h2>
-      <p>Si votre équipe choisit de garder son projet Junior dans Google Drive, Junior demande l'accès à Drive sur votre propre appareil. Ce que cela veut dire exactement :</p>
+      <h2><span class="num">06</span>Google Drive, OneDrive et les API</h2>
+      <p>Le projet Junior de votre entreprise vit dans le Google Drive ou le OneDrive de l'entreprise. Un administrateur de votre équipe y donne accès une fois, sur my.junior.coach. Ce que cela veut dire exactement :</p>
       <ul>
         <li>Junior utilise la portée <strong>drive.file</strong>, la plus étroite que Google offre. Elle ne donne accès qu'aux fichiers que Junior a créés lui-même et à ceux que vous lui remettez explicitement. <strong>Junior ne peut pas lire le reste de votre Drive</strong>, et ne peut pas en obtenir la liste.</li>
-        <li>Vous désignez vous-même le dossier de projet, une fois, avec le sélecteur de fichiers de Google. C'est ce geste qui donne l'accès; il n'y a pas d'autre façon pour Junior d'atteindre un dossier existant.</li>
-        <li>Le jeton d'accès et le jeton de rafraîchissement sont écrits sur votre appareil, dans la trousse Junior installée chez vous. <strong>Ils ne transitent jamais par nos serveurs et nous ne les détenons pas.</strong> Nos serveurs connaissent au plus l'identifiant du dossier convenu avec vous, jamais son contenu.</li>
-        <li>Junior lit et écrit dans ce dossier les fichiers de votre projet et vos rapports exportés. Il n'en supprime rien d'autre.</li>
-        <li>Vous pouvez retirer cet accès quand vous voulez, depuis <a href="https://myaccount.google.com/permissions" rel="noopener">myaccount.google.com/permissions</a>. Junior cesse alors de voir le dossier; vos fichiers, eux, restent les vôtres dans Drive.</li>
+        <li>Junior crée lui-même un dossier <em>Junior</em> et y travaille. Pour utiliser un dossier existant, vous le désignez avec le sélecteur de fichiers de Google; il n'y a pas d'autre façon pour Junior d'atteindre un dossier qu'il n'a pas créé.</li>
+        <li>Avec OneDrive, Microsoft n'offre pas de portée limitée à un dossier : Junior demande <strong>Files.ReadWrite</strong>, et l'écran de Microsoft parle d'accès à vos fichiers. Junior ne lit et n'écrit que dans son dossier <em>Junior</em>.</li>
+        <li>Le jeton de rafraîchissement de la personne qui a donné l'accès est conservé sur nos serveurs, <strong>chiffré</strong>, pour que Junior puisse lire et écrire le projet à chaque demande. Il n'est jamais journalisé ni montré. Le contenu du dossier passe par nos serveurs le temps d'une demande, en mémoire, et <strong>n'y est jamais conservé</strong>. Nous gardons l'identifiant du dossier et son lien, jamais ce qu'il contient.</li>
+        <li>Junior lit et écrit dans ce dossier les fichiers de votre projet et vos rapports exportés. Il n'en supprime rien d'autre. Les membres de votre équipe reçoivent un accès en lecture au dossier.</li>
+        <li>Vous pouvez retirer cet accès quand vous voulez, depuis <a href="https://myaccount.google.com/permissions" rel="noopener">myaccount.google.com/permissions</a> chez Google ou <a href="https://account.microsoft.com/privacy/app-access" rel="noopener">account.microsoft.com</a> chez Microsoft. Junior cesse alors de voir le dossier; vos fichiers, eux, restent les vôtres.</li>
       </ul>
       <p class="note calm">L'utilisation et le transfert, par Junior, des renseignements reçus des API Google respectent la <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener">Politique relative aux données utilisateur des services API Google</a>, y compris ses exigences d'utilisation limitée. Les données Google Workspace obtenues par les API Google ne servent jamais à entraîner un modèle d'intelligence artificielle, ni à de la publicité, et ne sont ni vendues ni transmises à des tiers, sauf pour fournir le service, à votre demande, ou si la loi l'exige.</p>
     </section>
@@ -180,7 +181,7 @@
         <table>
           <thead><tr><th>Fournisseur</th><th>Rôle</th><th>Ce qu'il traite</th></tr></thead>
           <tbody>
-            <tr><td>Google Cloud</td><td>Hébergement, base de données, journaux, entreposage</td><td>Compte, avancement, journaux techniques, trousses d'installation</td></tr>
+            <tr><td>Google Cloud</td><td>Hébergement, base de données, journaux, entreposage</td><td>Compte, avancement, journaux techniques, jeton d'accès au stockage (chiffré)</td></tr>
             <tr><td>Anthropic</td><td>Modèles Claude</td><td>Le contenu d'une demande, le temps de produire la réponse</td></tr>
             <tr><td>Resend</td><td>Envoi des courriels, liste de contacts (liste d'attente, suivis du diagnostic)</td><td>Adresse du destinataire, prénom ou nom, contenu du message</td></tr>
             <tr><td>Google Forms</td><td>Questionnaire facultatif sur le diagnostic</td><td>Vos réponses au questionnaire, sans nom ni courriel</td></tr>
@@ -268,7 +269,7 @@
   <div class="wrap">
     <span>© 2026 Junior.Coach inc.</span>
     <span><a href="index.html">Accueil</a> · <a href="conditions.html">Conditions d'utilisation</a> · <a href="confidentialite.html">Confidentialité</a></span>
-    <span>Mise à jour : 23 octobre 2026</span>
+    <span>Mise à jour : 23 novembre 2026</span>
   </div>
 </footer>
 
