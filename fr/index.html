@@ -1223,7 +1223,7 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
     el("span", { class: "bars", "aria-hidden": "true" }, [el("i", { class: "on" }), el("i", { class: "on" }), el("i")]),
     el("span", { text: "Moyen · encore ≈ 1 h" })]);
   effort.dataset.z = "3";
-  const why = el("p", { class: "why", text: "Il s'appuie sur ICP + Proposition de valeur et Audit marketing concurrentiel. Le terminer ouvre Stratégie GTM et Signaux & activation." });
+  const why = el("p", { class: "why", text: "Il s'appuie sur deux canevas déjà terminés. Le terminer en ouvre deux autres." });
   why.dataset.z = "4";
   const bar = el("div", { class: "bar", role: "img", "aria-label": "60 % répondu" }, [el("span")]);
   bar.firstChild.style.width = "60%";
@@ -1247,7 +1247,7 @@ document.querySelectorAll('.fig').forEach(f=>figIo.observe(f));
     ["ready", 2, "Audit marketing concurrentiel", "", "Prêt"],
     ["ready", 3, "Customer journey", "", "Prêt"],
     ["progress", 4, "Fixation des prix", "60 % répondu · Moyen", "En cours"],
-    ["locked", 5, "Stratégie GTM", "S'ouvre après Fixation des prix", "Verrouillé"],
+    ["locked", 5, "Stratégie GTM", "S'ouvre plus loin", "Verrouillé"],
   ];
   portal.append(
     el("p", { class: "company", "data-z": "1", text: "Chantio inc." }),

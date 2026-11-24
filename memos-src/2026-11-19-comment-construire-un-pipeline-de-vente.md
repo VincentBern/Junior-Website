@@ -89,6 +89,6 @@ She has now defined her ideal customer. Before judging the rep, she traces her l
 - Do your stages describe what the buyer did, or what your team did?
 - Do you know at which stage you lose the most deals?
 
-## The canevas behind it
+## The canvas behind it
 
-This is the job of the Sales pipeline canevas, one of the 11 tools in Junior's Commercialization suite. Junior fills it in with you, from your real deals, then keeps it up to date when the way you sell changes.
+This is the job of the Sales pipeline canvas, one of the 11 tools in Junior's Commercialization suite. Junior fills it in with you, from your real deals, then keeps it up to date when the way you sell changes.
