@@ -73,7 +73,7 @@ T = {
                    "September", "October", "November", "December"],
         "section": "Memos", "all": "ALL MEMOS", "switch": "FR",
         "eyebrow": "Memo", "to": "To", "to_v": "Small business leaders", "from": "From",
-        "from_v": "Luc Goudreault, founder of Junior", "subject": "Subject", "canevas": "Canevas",
+        "from_v": "Luc Goudreault, founder of Junior", "subject": "Subject", "canevas": "Canvas",
         "date": "Date", "updated": "updated", "brief": "In short", "related": "More memos",
         "job": "Business advisor",
         "author_role": "Business advisor and founder of Junior",

@@ -71,6 +71,6 @@ Chantio (fictional company) ...
 - Second question.
 - Third question.
 
-## The canevas behind it
+## The canvas behind it
 
-The canevas, and only the links already shown on the home page.
+The canvas, and only the links already shown on the home page.

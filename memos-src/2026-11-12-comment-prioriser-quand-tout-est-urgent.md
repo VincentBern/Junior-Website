@@ -75,6 +75,6 @@ At the time of the diagnostic, her own note already explained it: contractors wh
 - Does this week's emergency depend on a decision that hasn't been made yet?
 - What have you decided not to do this quarter, and is it written down anywhere?
 
-## The canevas behind it
+## The canvas behind it
 
-For sales, that starting point is often the ICP + Value proposition canevas, one of the 11 tools in Junior's Commercialization suite: pricing and the go-to-market strategy build on it. Junior fills it in with you, in the Claude, Copilot or ChatGPT you already use, then tells you what to build next, and why that one.
+For sales, that starting point is often the ICP + Value proposition canvas, one of the 11 tools in Junior's Commercialization suite: pricing and the go-to-market strategy build on it. Junior fills it in with you, in the Claude, Copilot or ChatGPT you already use, then tells you what to build next, and why that one.
