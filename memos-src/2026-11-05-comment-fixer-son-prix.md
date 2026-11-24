@@ -91,6 +91,6 @@ Taken one at a time, both decisions made sense. Together, they contradict each o
 
 One tell: if your price has never made anyone say no, it's probably too low.
 
-## The canevas behind it
+## The canvas behind it
 
-This is the job of the Pricing canevas, one of the 11 tools in Junior's Commercialization suite. Junior fills it in with you, then checks it against your ideal customer profile (ICP) every time either one changes.
+This is the job of the Pricing canvas, one of the 11 tools in Junior's Commercialization suite. Junior fills it in with you, then checks it against your ideal customer profile (ICP) every time either one changes.
