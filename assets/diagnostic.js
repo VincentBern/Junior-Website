@@ -16,6 +16,8 @@
   var T = window.JUNIOR_DIAGNOSTIC_I18N;
   var CONTENT = window.JUNIOR_DIAGNOSTIC_CONTENT;
   var LANG = document.documentElement.lang || "fr";
+  // « 45 % » in French, « 45% » in English (Luc, 2026-11-24, roadmap §103 of the Junior repo).
+  function pctText(n){ return LANG === "en" ? n + "%" : n + "\u00a0%"; }
 
   var API_BASE = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
     ? "http://localhost:8787"
@@ -661,9 +663,9 @@
         bars.appendChild(el("div", { class: "dim-bar c-" + d.color }, [
           el("div", { class: "top" }, [
             el("span", { text: localDim ? localDim.title : d.title }),
-            el("span", { class: "v", text: d.scoreRaw + "/" + d.scoreMax + " · " + pct + " %" })
+            el("span", { class: "v", text: d.scoreRaw + "/" + d.scoreMax + " · " + pctText(pct) })
           ]),
-          el("div", { class: "track", role: "img", "aria-label": (localDim ? localDim.title : d.title) + " : " + pct + " %" }, [
+          el("div", { class: "track", role: "img", "aria-label": (localDim ? localDim.title : d.title) + (LANG === "en" ? ": " : "\u00a0: ") + pctText(pct) }, [
             el("span", { class: "fill", style: "width:" + pct + "%" }),
             el("span", { class: "ticks" })
           ])
