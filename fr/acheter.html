@@ -132,6 +132,7 @@
     perMonth: "\u00a0$ par mois",
     total: "Total\u00a0: ",
     taken: "Ce nom d'entreprise est déjà dans Junior. Si c'est la vôtre, demandez à un collègue de vous inviter; sinon, précisez le nom.",
+    held: "Quelqu'un est en train d'acheter ce nom en ce moment. Réessayez dans une demi-heure, ou précisez le nom.",
     closed: "L'achat en ligne n'est pas encore ouvert. Écrivez-nous à support@junior.coach.",
     network: "L'envoi n'a pas fonctionné. Réessayez dans un instant.",
     rate: "Trop d'essais depuis cet appareil. Réessayez plus tard."
@@ -208,8 +209,8 @@
           return;
         }
         btn.disabled = false;
-        if (r.data.error === "name_taken") {
-          $("company-err").textContent = MSG.taken;
+        if (r.data.error === "name_taken" || r.data.error === "name_held") {
+          $("company-err").textContent = r.data.error === "name_held" ? MSG.held : MSG.taken;
           $("f-company").classList.add("invalid");
           $("buy-company").focus();
           return;

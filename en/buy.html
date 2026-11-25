@@ -132,6 +132,7 @@
     perMonth: " per month",
     total: "Total: ",
     taken: "This company name is already in Junior. If it's yours, ask a colleague to invite you; otherwise, make the name more specific.",
+    held: "Someone is buying this name right now. Try again in half an hour, or adjust the name.",
     closed: "Online purchase isn't open yet. Write to us at support@junior.coach.",
     network: "That didn't go through. Try again in a moment.",
     rate: "Too many tries from this device. Try again later."
@@ -208,8 +209,8 @@
           return;
         }
         btn.disabled = false;
-        if (r.data.error === "name_taken") {
-          $("company-err").textContent = MSG.taken;
+        if (r.data.error === "name_taken" || r.data.error === "name_held") {
+          $("company-err").textContent = r.data.error === "name_held" ? MSG.held : MSG.taken;
           $("f-company").classList.add("invalid");
           $("buy-company").focus();
           return;
